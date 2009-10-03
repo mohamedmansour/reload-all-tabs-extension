@@ -1,0 +1,23 @@
+<html>
+<head>
+<script>
+  // Add a listener to the content script so we can know when
+  // to reload all tabs in the current window.
+  chrome.extension.onConnect.addListener(function(port, name) {
+    port.onMessage.addListener(function(result) {
+      chrome.windows.getCurrent(function(win) {
+        chrome.tabs.getAllInWindow(win.id, function reloadTabs(tabs) {
+          // For each tab in the current window, refresh it.
+          for (var i = 0; i < tabs.length; i++) {
+            var url = tabs[i].url;
+            if (url.charAt(0) == "h") {
+              var jsRunner = {"code": "window.location.reload()"};
+              chrome.tabs.executeScript(tabs[i].id, jsRunner);
+            }
+          }
+	});
+      });
+    });
+  });
+</script>
+</html>

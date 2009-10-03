@@ -1,0 +1,18 @@
+{
+  "name": "Reload all tabs",
+  "version": "0.1",
+  "description": "Reload all tabs using quick keyboard shortcut: ctrl + shift + r",
+  "update_url": "http://mohamedmansour.com/chrome/extensions/reload_all_tabs/updates.xml",
+  "permissions": [
+    "tabs",
+    "http://*/*", 
+    "https://*/*"
+  ],
+  "background_page": "background.html",
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["keyboard_handler.js"]
+    }
+  ]
+}
