@@ -1,0 +1,28 @@
+<html>
+<head>
+<script>
+  // Add a listener to the content script so we can know when
+  // to bookmark all tabs in the current window.
+  chrome.extension.onConnect.addListener(function(port, name) {
+    port.onMessage.addListener(function(folderName) {
+      if (folderName) {
+        chrome.windows.getCurrent(function(win) {
+          chrome.tabs.getAllInWindow(win.id, function bookmarkTabs(tabs) {
+            // Create the root folder where all the items will be stored.
+            var folderNode = {"parentId": "1", "title": folderName};
+            chrome.bookmarks.create(folderNode, function(results) {
+              // For each tab in the current window, bookmark it.
+              for (var i = 0; i < tabs.length; i++) {
+                var link = {"parentId": results.id,
+                            "title": tabs[i].title,
+                            "url": tabs[i].url};
+                chrome.bookmarks.create(link);
+              }
+            });
+	  });
+        });
+      }
+    });
+  });
+</script>
+</html>

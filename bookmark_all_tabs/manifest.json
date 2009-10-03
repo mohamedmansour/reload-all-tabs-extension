@@ -1,0 +1,20 @@
+{
+  "name": "Bookmark all tabs",
+  "version": "0.1",
+  "description": "Bookmark all tabs using quick keyboard shortcut.",
+  "permissions": [
+    "http://*/*", 
+    "https://*/*"
+  ],
+  "background_page": "background.html",
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["keyboard_handler.js"]
+    }
+  ],
+  "permissions": [
+    "tabs",
+    "bookmarks"
+  ]
+}
