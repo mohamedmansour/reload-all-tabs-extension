@@ -1,7 +1,8 @@
 {
   "name": "Bookmark all tabs",
-  "version": "0.1",
-  "description": "Bookmark all tabs using quick keyboard shortcut.",
+  "version": "0.2",
+  "description": "Bookmark all tabs using quick keyboard shortcut: ctrl + shift + d",
+  "update_url": "http://mohamedmansour.com/chrome/extensions/bookmark_all_tabs/updates.xml",
   "permissions": [
     "http://*/*", 
     "https://*/*"
