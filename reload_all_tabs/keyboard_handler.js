@@ -9,7 +9,6 @@ if (window == top) {
 function keyListener(e) {
   // Ctrl + Shift + R
   if (e.ctrlKey && e.shiftKey && e.which == 82) {
-    console.log("KeyInputed");
     var port = chrome.extension.connect({name: "ReloadAllTabs"});
     port.postMessage(true);
   }
