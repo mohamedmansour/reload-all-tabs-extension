@@ -1,14 +1,20 @@
 {
-  "name": "Reload all tabs",
-  "version": "0.1",
-  "description": "Reload all tabs using quick keyboard shortcut: ctrl + shift + r",
-  "update_url": "http://mohamedmansour.com/chrome/extensions/reload_all_tabs/updates.xml",
+  "name": "Reload All Tabs",
+  "version": "0.4",
+  "description": "Reload all tabs using quick keyboard shortcut: ctrl + shift + r, as well, you can reload all windows by enabling it in options.",
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "background_page": "background.html",
+  "options_page": "options.html",
   "permissions": [
     "tabs",
-    "http://*/*", 
+    "http://*/*",
     "https://*/*"
   ],
-  "background_page": "background.html",
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],

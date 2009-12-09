@@ -1,4 +1,4 @@
-// Mohamed Mansour 2009 (hello@mohamedmansour.com)
+// Copyright under GPL, Mohamed Mansour 2009 (http://mohamedmansour.com)
 
 // Add a keyboard listener on keyup.
 if (window == top) {
@@ -7,7 +7,7 @@ if (window == top) {
 
 // Keyboard keyup listener callback.
 function keyListener(e) {
-  // CTRL + SHIFT + R
+  // Ctrl + Shift + R
   if (e.ctrlKey && e.shiftKey && e.which == 82) {
     console.log("KeyInputed");
     var port = chrome.extension.connect({name: "ReloadAllTabs"});

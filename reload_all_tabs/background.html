@@ -1,23 +1,85 @@
+<!-- Copyright under GPL, Mohamed Mansour 2009 (http://mohamedmansour.com) -->
 <html>
-<head>
 <script>
+  /*
+  * Reload all |tabs| one by one.
+  */
+  function reloadWindow(win) {
+    chrome.tabs.getAllInWindow(win.id, function reloadTabs(tabs) {
+      // For each tab in the current window, refresh it.
+      for (var i in tabs) {
+        var url = tabs[i].url;
+        // Only http/https can reload. Other pages can not be extensionable.
+        if (url.charAt(0) == 'h') {
+          var jsRunner = {'code': 'window.location.reload()'};
+          chrome.tabs.executeScript(tabs[i].id, jsRunner);
+        }
+      }
+    });
+  }
+
+  /*
+  * Reload all tabs in all windows one by one.
+  */
+  function reloadAllWindows() {
+    chrome.windows.getAll({}, function(windows) {
+      for (var i in windows)
+        reloadWindow(windows[i]);
+    });
+  }
+
+  /*
+  * Get the version number from the manifest.
+  */
+  function getVersion() {
+    var version = 'NaN';
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', chrome.extension.getURL('manifest.json'), false);
+    xhr.onreadystatechange = function() {
+      if (this.readyState == 4) {
+        var manifest = JSON.parse(this.responseText);
+        version = manifest.version;
+      }
+    };
+    xhr.send();
+    return version;
+  }
+
+  // Settings for reload all tabs.
+  var settings = {
+    get version() {
+      return getVersion();
+    },
+    get reloadAllWindows() {
+      return localStorage['reload_all_windows'] === 'true';
+    },
+    set reloadAllWindows(val) {
+      localStorage['reload_all_windows'] = val;
+    }
+  }
+
+  // Check if its the first run, if it is, we need to reload every single tab.
+  if (!localStorage['first_run']) {
+    localStorage['first_run'] = true;
+    reloadAllWindows();
+  }
+
+  // Check if the version has changed. In case we want to do something in the future.
+  var currVersion = getVersion();
+  var prevVersion = localStorage["version"]
+  if (currVersion != prevVersion)
+    localStorage["version"] = currVersion;
+
   // Add a listener to the content script so we can know when
   // to reload all tabs in the current window.
   chrome.extension.onConnect.addListener(function(port, name) {
     port.onMessage.addListener(function(result) {
-      chrome.windows.getCurrent(function(win) {
-        chrome.tabs.getAllInWindow(win.id, function reloadTabs(tabs) {
-          // For each tab in the current window, refresh it.
-          for (var i = 0; i < tabs.length; i++) {
-            var url = tabs[i].url;
-            if (url.charAt(0) == "h") {
-              var jsRunner = {"code": "window.location.reload()"};
-              chrome.tabs.executeScript(tabs[i].id, jsRunner);
-            }
-          }
-	});
-      });
+      if (settings.reloadAllWindows)
+        reloadAllWindows();
+      else
+        chrome.windows.getCurrent(reloadWindow);
     });
   });
+
 </script>
 </html>
