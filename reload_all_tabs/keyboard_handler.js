@@ -2,14 +2,17 @@
 
 // Add a keyboard listener on keyup.
 if (window == top) {
-  window.addEventListener('keyup', keyListener, false);
+  window.addEventListener("keyup", keyListener, false);
 }
 
 // Keyboard keyup listener callback.
 function keyListener(e) {
-  // Ctrl + Shift + R
-  if (e.ctrlKey && e.shiftKey && e.which == 82) {
-    var port = chrome.extension.connect({name: "ReloadAllTabs"});
-    port.postMessage(true);
+  // Must press ctrl key to validate.
+  if (e.ctrlKey && e.keyCode && !e.metaKey && e.keyCode != 16 && e.keyCode != 17 && e.keyCode != 18) {
+    chrome.extension.sendRequest({
+      code: "" + e.which,
+      alt: "" + e.altKey === 'true',
+      shift: "" + e.shiftKey === 'true'
+    });
   }
 }

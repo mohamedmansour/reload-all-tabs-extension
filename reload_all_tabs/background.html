@@ -1,8 +1,56 @@
 <!-- Copyright under GPL, Mohamed Mansour 2009 (http://mohamedmansour.com) -->
 <html>
 <script>
+
+  // Settings for reload all tabs.
+  settings = {
+    get version() {
+      return getVersion();
+    },
+    get reloadAllWindows() {
+      return localStorage['reload_all_windows'] === 'true';
+    },
+    set reloadAllWindows(val) {
+      localStorage['reload_all_windows'] = val;
+    },
+    get shortcutKeyCode() {
+      var key = localStorage['shortcut_key_code'];
+      return (typeof key == 'undefined') ? 82 : key;
+    },
+    set shortcutKeyCode(val) {
+      localStorage['shortcut_key_code'] = val;
+    },
+    get shortcutKeyAlt() {
+      var key = localStorage['shortcut_key_alt'];
+      return (typeof key == 'undefined') ? false : key === 'true';
+    },
+    set shortcutKeyAlt(val) {
+      localStorage['shortcut_key_alt'] = val;
+    },
+    get shortcutKeyShift() {
+      var key = localStorage['shortcut_key_shift'];
+      return (typeof key == 'undefined') ? true : key === 'true';
+    },
+    set shortcutKeyShift(val) {
+      localStorage['shortcut_key_shift'] = val;
+    },
+    get version() {
+      return localStorage['version'];
+    },
+    set version(val) {
+      localStorage['version'] = val;
+    },
+    get firstRun() {
+      return localStorage['first_run'];
+    },
+    set firstRun(val) {
+      localStorage['first_run'] = val;
+    }
+  }
+
   /*
   * Reload all |tabs| one by one.
+  * @param win Window to reload.
   */
   function reloadWindow(win) {
     chrome.tabs.getAllInWindow(win.id, function reloadTabs(tabs) {
@@ -45,41 +93,51 @@
     return version;
   }
 
-  // Settings for reload all tabs.
-  var settings = {
-    get version() {
-      return getVersion();
-    },
-    get reloadAllWindows() {
-      return localStorage['reload_all_windows'] === 'true';
-    },
-    set reloadAllWindows(val) {
-      localStorage['reload_all_windows'] = val;
-    }
+  /*
+  * Checks if the shortcut key is valid to reload all tabs.
+  * @param keys the list of keys allowed in a json object.
+  */
+  function validShortcutKeys(keys) {
+    return (keys.code == settings.shortcutKeyCode &&
+            keys.alt == settings.shortcutKeyAlt &&
+            keys.shift == settings.shortcutKeyShift);
   }
 
-  // Check if its the first run, if it is, we need to reload every single tab.
-  if (!localStorage['first_run']) {
-    localStorage['first_run'] = true;
-    reloadAllWindows();
-  }
-
-  // Check if the version has changed. In case we want to do something in the future.
-  var currVersion = getVersion();
-  var prevVersion = localStorage["version"]
-  if (currVersion != prevVersion)
-    localStorage["version"] = currVersion;
-
-  // Add a listener to the content script so we can know when
-  // to reload all tabs in the current window.
-  chrome.extension.onConnect.addListener(function(port, name) {
-    port.onMessage.addListener(function(result) {
-      if (settings.reloadAllWindows)
+  function init() {
+    // Check if the version has changed. In case we want to do something in the future.
+    var currVersion = getVersion();
+    var prevVersion = settings.version
+    if (currVersion != prevVersion) {
+      // Check if we just installed this extension.
+      if (typeof prevVersion == 'undefined') {
+        /*
+        var answer = confirm('All opened tabs need to be reloaded to make this extension work? Are you sure you want to continue?\n\n' +
+                             'This is happening because one of the following reasons:\n' +
+                             ' 1- Just installed the extension.\n' +
+                             ' 2- You just cleared your private data.\n');
+        if (answer)
+          reloadAllWindows();
+        */
         reloadAllWindows();
-      else
-        chrome.windows.getCurrent(reloadWindow);
+      }
+      // Do something if we want to.
+      console.log('Upgraded "Reload All Tabs" extension from ' + prevVersion + ' to ' + currVersion);
+      settings.version = currVersion;
+    }
+
+    // Add a listener to the content script can request to.
+    chrome.extension.onRequest.addListener(function(request, sender, response) {
+      if (validShortcutKeys(request)) {
+        if (settings.reloadAllWindows)
+          reloadAllWindows();
+        else
+          chrome.windows.getCurrent(reloadWindow);
+      }
     });
-  });
+  }
+
+  // Lets initialize the Reloader script.
+  init();
 
 </script>
 </html>
