@@ -56,12 +56,8 @@
     chrome.tabs.getAllInWindow(win.id, function reloadTabs(tabs) {
       // For each tab in the current window, refresh it.
       for (var i in tabs) {
-        var url = tabs[i].url;
-        // Only http/https can reload. Other pages can not be extensionable.
-        if (url.charAt(0) == 'h') {
-          var jsRunner = {'code': 'window.location.reload()'};
-          chrome.tabs.executeScript(tabs[i].id, jsRunner);
-        }
+        var tab = tabs[i];
+        chrome.tabs.update(tab.id, {url: tab.url, selected: tab.selected}, null);
       }
     });
   }
@@ -98,6 +94,7 @@
   * @param keys the list of keys allowed in a json object.
   */
   function validShortcutKeys(keys) {
+    // TODO - maybe cache these settings.
     return (keys.code == settings.shortcutKeyCode &&
             keys.alt == settings.shortcutKeyAlt &&
             keys.shift == settings.shortcutKeyShift);
@@ -110,20 +107,14 @@
     if (currVersion != prevVersion) {
       // Check if we just installed this extension.
       if (typeof prevVersion == 'undefined') {
-        /*
-        var answer = confirm('All opened tabs need to be reloaded to make this extension work? Are you sure you want to continue?\n\n' +
-                             'This is happening because one of the following reasons:\n' +
-                             ' 1- Just installed the extension.\n' +
-                             ' 2- You just cleared your private data.\n');
-        if (answer)
-          reloadAllWindows();
-        */
-        reloadAllWindows();
+        // Do nothing now.
       }
-      // Do something if we want to.
-      console.log('Upgraded "Reload All Tabs" extension from ' + prevVersion + ' to ' + currVersion);
+      // Update the version incase we want to do something in future.
       settings.version = currVersion;
     }
+
+    // Initializing, reloading all tabs to inject keyboard handling.
+    reloadAllWindows();
 
     // Add a listener to the content script can request to.
     chrome.extension.onRequest.addListener(function(request, sender, response) {

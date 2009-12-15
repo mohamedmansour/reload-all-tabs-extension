@@ -1,7 +1,7 @@
 {
   "name": "Reload All Tabs",
-  "version": "0.5",
-  "description": "Reload all tabs using quick keyboard shortcut: ctrl + shift + r. As well, there are settings in 'Options' that can be modified.",
+  "version": "0.6",
+  "description": "Reload all tabs using quick keyboard shortcut: ctrl + shift + r. There are settings in 'Options' that can be modified.",
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",
@@ -10,14 +10,10 @@
   },
   "background_page": "background.html",
   "options_page": "options.html",
-  "permissions": [
-    "tabs",
-    "http://*/*",
-    "https://*/*"
-  ],
+  "permissions": ["tabs"],
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*"],
+      "matches": ["http://*/*", "https://*/*", "ftp://*/*"],
       "js": ["keyboard_handler.js"],
       "run_at": "document_start",
       "all_frames": true

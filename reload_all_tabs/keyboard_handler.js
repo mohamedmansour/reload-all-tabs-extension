@@ -10,9 +10,9 @@ function keyListener(e) {
   // Must press ctrl key to validate.
   if (e.ctrlKey && e.keyCode && !e.metaKey && e.keyCode != 16 && e.keyCode != 17 && e.keyCode != 18) {
     chrome.extension.sendRequest({
-      code: "" + e.which,
-      alt: "" + e.altKey === 'true',
-      shift: "" + e.shiftKey === 'true'
+      code: e.keyCode,
+      alt: e.altKey,
+      shift: e.shiftKey
     });
   }
 }
