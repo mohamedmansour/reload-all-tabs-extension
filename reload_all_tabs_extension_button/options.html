@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <title>Reload All Tabs Options</title>
+    <script>
+      var bkg = chrome.extension.getBackgroundPage();
+      var options_url = ("chrome-extension://" + bkg.main_extension_id + "/options.html");
+      chrome.windows.getCurrent(function(win) {
+        chrome.tabs.getAllInWindow(win.id, function(tabs) {
+          // Check if the options page is already open.
+          for (var i = 0; i < tabs.length; i++) {
+            if (tabs[i].url.indexOf(options_url) == 0) {
+              chrome.tabs.update(tabs[i].id, {selected:true});
+              window.close();
+              return;
+            }
+          }
+          document.location.href = options_url;
+        });
+      });
+    </script>
+  </head>
+</html>

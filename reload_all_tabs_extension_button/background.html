@@ -1,0 +1,15 @@
+<!-- Copyright under GPL, Mohamed Mansour 2009 (http://mohamedmansour.com) -->
+<html>
+<script>
+  // The main extension id that hosts reload all tabs.
+  var main_extension_id = "midkcinmplflbiflboepnahkboeonkam";
+  
+  // Once a page action has been clicked, reload tabs.
+  chrome.browserAction.onClicked.addListener(
+    function(tab) {
+      chrome.extension.sendRequest( main_extension_id, {method: "reload"});
+    }
+  );
+
+</script>
+</html>

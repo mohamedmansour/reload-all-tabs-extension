@@ -1,0 +1,18 @@
+{
+  "name": "Reload All Tabs - Browser Action",
+  "version": "0.1",
+  "description": "If you have already installed Reload All Tabs and want a browser action button, install this too.",
+  "background_page": "background.html",
+  "browser_action": {
+    "default_icon": "icon19.png",
+    "default_title": "Reload All Tabs Options"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "options_page": "options.html",
+  "permissions": [ "tabs" ]
+}
