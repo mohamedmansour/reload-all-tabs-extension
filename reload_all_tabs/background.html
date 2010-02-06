@@ -1,9 +1,11 @@
 <!-- Copyright under GPL, Mohamed Mansour 2009 (http://mohamedmansour.com) -->
 <html>
 <script>
-
   // Settings for reload all tabs.
   settings = {
+    get icon_id() {
+      return "ehfhlgpkkmigjmelggcfmnmackehaaji";
+    },
     get version() {
       return getVersion();
     },
@@ -73,6 +75,17 @@
   }
 
   /*
+  * Initiate a main reload. This will take into account of the options set
+  * by the user.
+  */
+  function reload() {
+    if (settings.reloadAllWindows)
+      reloadAllWindows();
+    else
+      chrome.windows.getCurrent(reloadWindow);
+  }
+
+  /*
   * Get the version number from the manifest.
   */
   function getVersion() {
@@ -118,13 +131,22 @@
 
     // Add a listener to the content script can request to.
     chrome.extension.onRequest.addListener(function(request, sender, response) {
-      if (validShortcutKeys(request)) {
-        if (settings.reloadAllWindows)
-          reloadAllWindows();
-        else
-          chrome.windows.getCurrent(reloadWindow);
-      }
+      if (validShortcutKeys(request))
+        reload();
     });
+    
+    // Let us listen to the icon.
+    chrome.extension.onRequestExternal.addListener(
+      function(request, sender, response) {
+        // Verify the request is coming from the browser action.
+        if (sender.id != settings.icon_id)
+          return;
+
+        // Handle reload.
+        if (request.method == 'reload')
+          reload();
+      }
+    );
   }
 
   // Lets initialize the Reloader script.

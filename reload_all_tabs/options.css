@@ -55,11 +55,12 @@ em {
   position: relative;
 }
 
-#extension-template {
+.extension-template {
   border-bottom: 1px solid #cdcdcd;
+  margin: 10px 0;
 }
 
-#extension-header {
+.extension-header {
   background: #ebeff9;
   border-top: 1px solid #b5c7de;
   font-size: 95%;
@@ -67,7 +68,7 @@ em {
   font-weight: bold;
 }
 
-#extension-options {
+.extension-options {
   background: #f4f6fc;
   border-bottom: 1px solid #edeff5;
   font-size: 85%;

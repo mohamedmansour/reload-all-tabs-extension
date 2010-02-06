@@ -1,6 +1,6 @@
 {
   "name": "Reload All Tabs",
-  "version": "0.6",
+  "version": "0.7",
   "description": "Reload all tabs using quick keyboard shortcut: ctrl + shift + r. There are settings in 'Options' that can be modified.",
   "icons": {
     "16": "icon16.png",
