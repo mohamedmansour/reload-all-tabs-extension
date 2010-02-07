@@ -67,6 +67,9 @@
   );
   
   // Ping the extension first. To see if everything is installed correctly.
-  ping();
+  // Before we ping, lets wait 5 seconds to make sure the browser is loaded.
+  setTimeout(function() {
+    ping();
+  }, 5000);
 </script>
 </html>
