@@ -5,7 +5,7 @@
   "background_page": "background.html",
   "browser_action": {
     "default_icon": "icon19.png",
-    "default_title": "Reload All Tabs Options"
+    "default_title": "Reload All Tabs"
   },
   "icons": {
     "16": "icon16.png",
