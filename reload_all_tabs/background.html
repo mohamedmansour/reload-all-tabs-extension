@@ -4,7 +4,7 @@
   // Settings for reload all tabs.
   settings = {
     get icon_id() {
-      return "bfenodnbilondijnaionekngdhadmegk";
+      return 'bfenodnbilondijnaionekngdhadmegk';
     },
     get version() {
       return getVersion();
@@ -50,7 +50,7 @@
     }
   }
 
-  /*
+  /**
   * Reload all |tabs| one by one.
   * @param win Window to reload.
   */
@@ -64,7 +64,7 @@
     });
   }
 
-  /*
+  /**
   * Reload all tabs in all windows one by one.
   */
   function reloadAllWindows() {
@@ -74,7 +74,7 @@
     });
   }
 
-  /*
+  /**
   * Initiate a main reload. This will take into account of the options set
   * by the user.
   */
@@ -85,7 +85,7 @@
       chrome.windows.getCurrent(reloadWindow);
   }
 
-  /*
+  /**
   * Get the version number from the manifest.
   */
   function getVersion() {
@@ -102,7 +102,7 @@
     return version;
   }
 
-  /*
+  /**
   * Checks if the shortcut key is valid to reload all tabs.
   * @param keys the list of keys allowed in a json object.
   */
@@ -113,6 +113,28 @@
             keys.shift == settings.shortcutKeyShift);
   }
 
+  /**
+  * Handles the request coming back from an external extension.
+  * @param request The request that the extension is passing.
+  * @parma response The response that will be sent back.
+  */
+  function handleRequest(request, response) {
+    switch (request.method) {
+      case 'reload':
+        reload();
+        response({alive: 'true'});
+        break;
+      case 'ping':
+        response({response: 'pong'});
+        break;
+      default:
+        console.log('ERROR: Invalid Request - ' + request.method); 
+    }
+  }
+
+  /**
+  * Initialization routine.
+  */
   function init() {
     // Check if the version has changed. In case we want to do something in the future.
     var currVersion = getVersion();
@@ -142,9 +164,8 @@
         if (sender.id != settings.icon_id)
           return;
 
-        // Handle reload.
-        if (request.method == 'reload')
-          reload();
+        // Handle the request.
+        handleRequest(request, response);
       }
     );
   }
