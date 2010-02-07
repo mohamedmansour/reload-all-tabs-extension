@@ -59,7 +59,7 @@ h1 {
 /**
 * Visit the Icon Extension Page.
 */
-function visitIconExtensionPage() {
+function visitExtensionPage() {
   var bkg = chrome.extension.getBackgroundPage();
   var link = "https://chrome.google.com/extensions/detail/" + bkg.main_extension_id;
   chrome.tabs.create({url: link});
