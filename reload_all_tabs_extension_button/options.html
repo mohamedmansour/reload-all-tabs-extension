@@ -3,19 +3,16 @@
     <title>Reload All Tabs Options</title>
     <script>
       var bkg = chrome.extension.getBackgroundPage();
-      var options_url = ("chrome-extension://" + bkg.main_extension_id + "/options.html");
-      chrome.windows.getCurrent(function(win) {
-        chrome.tabs.getAllInWindow(win.id, function(tabs) {
-          // Check if the options page is already open.
-          for (var i = 0; i < tabs.length; i++) {
-            if (tabs[i].url.indexOf(options_url) == 0) {
-              chrome.tabs.update(tabs[i].id, {selected:true});
-              window.close();
-              return;
-            }
-          }
-          document.location.href = options_url;
-        });
+      var main_url = ("chrome-extension://" + bkg.main_extension_id + "/options.html");
+
+      // Ping the main extension to see if its alive. If its not alive, show it will show
+      // the error page.
+      bkg.ping();
+      
+      // Even if an error occurred, let the window open, the user can see an error page,
+      // to believe us that the extension doesn't exist, otherwise refer to the main options.
+      bkg.openSingletonPage(main_url, function (status) {
+        window.close();
       });
     </script>
   </head>

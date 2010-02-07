@@ -1,15 +1,72 @@
 <!-- Copyright under GPL, Mohamed Mansour 2009 (http://mohamedmansour.com) -->
 <html>
 <script>
-  // The main extension id that hosts reload all tabs.
-  var main_extension_id = "midkcinmplflbiflboepnahkboeonkam";
+  var main_extension_id = 'midkcinmplflbiflboepnahkboeonkam';
+  var alive = false;
+
+  /**
+  * Open a singleton page, which means, if a page already exists, it just selects it.
+  * @param url The page which it will navigate to.
+  * @param callback [optional] A callback which single parameter.
+  *                            - if True, opens a new page.
+  *                            - if False, selects the opened page.
+  */
+  function openSingletonPage(url, callback) {
+    if (callback == undefined) callback = function (result) {}
+    chrome.windows.getCurrent(function(win) {
+      chrome.tabs.getAllInWindow(win.id, function(tabs) {
+        // Check if the page is already open.
+        for (var i = 0; i < tabs.length; i++) {
+          // If the page exists, just select it.
+          if (tabs[i].url.indexOf(url) == 0) {
+            chrome.tabs.update(tabs[i].id, {selected: true});
+            callback.call(this, false);
+            return;
+          }
+        }
+        chrome.tabs.create({url: url});
+        callback.call(this, true);
+      });
+    });
+  }
+  
+  /**
+  * If Ping failed, then open the error page.
+  */
+  function ping() {
+    alive = false;
+    chrome.extension.sendRequest(main_extension_id, {method: 'ping'},
+      function (response) {
+        alive = true;
+      }
+    );
+    setTimeout(handleResponse, 1000);
+  }
+  
+  /**
+   * Handle the response if the main extension is alive.
+   */
+  function handleResponse() {
+    if (!alive) {
+      var errorURL = chrome.extension.getURL('error.html');
+      openSingletonPage(errorURL);
+    }
+  }
   
   // Once a page action has been clicked, reload tabs.
   chrome.browserAction.onClicked.addListener(
     function(tab) {
-      chrome.extension.sendRequest( main_extension_id, {method: "reload"});
+      alive = false;
+      chrome.extension.sendRequest(main_extension_id, {method: 'reload'},
+        function (response) {
+          alive = true;
+        }
+      );
+      setTimeout(handleResponse, 1000);
     }
   );
-
+  
+  // Ping the extension first. To see if everything is installed correctly.
+  ping();
 </script>
 </html>
