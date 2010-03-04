@@ -1,6 +1,6 @@
 {
   "name": "Reload All Tabs - Browser Action",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "If you have already installed Reload All Tabs and want a browser action button, install this too.",
   "background_page": "background.html",
   "browser_action": {
