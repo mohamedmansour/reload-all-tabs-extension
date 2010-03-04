@@ -31,7 +31,8 @@
   }
   
   /**
-  * If Ping failed, then open the error page.
+  * Sends a ping event to the main extension to see if its alive. If its not
+  * alive, it will handle the response strictly.
   */
   function ping() {
     alive = false;
@@ -44,7 +45,8 @@
   }
   
   /**
-   * Handle the response if the main extension is alive.
+   * If the main extension is not alive, we redirect the user to the error page
+   * which will inform them that there is an error.
    */
   function handleResponse() {
     if (!alive) {
@@ -53,7 +55,9 @@
     }
   }
   
-  // Once a page action has been clicked, reload tabs.
+  // Once a page action has been clicked, reload tabs. We set a timer right after
+  // to make sure we received a callback. By receiving a callback, we can ensure
+  // the request has been sent successfully. 
   chrome.browserAction.onClicked.addListener(
     function(tab) {
       alive = false;
@@ -65,11 +69,5 @@
       setTimeout(handleResponse, 1000);
     }
   );
-  
-  // Ping the extension first. To see if everything is installed correctly.
-  // Before we ping, lets wait 5 seconds to make sure the browser is loaded.
-  setTimeout(function() {
-    ping();
-  }, 5000);
 </script>
 </html>
