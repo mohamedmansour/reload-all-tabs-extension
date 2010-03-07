@@ -31,17 +31,19 @@
   }
   
   /**
-  * Sends a ping event to the main extension to see if its alive. If its not
-  * alive, it will handle the response strictly.
-  */
-  function ping() {
+   * Send a request to the main extension.
+   * @param methodName The method to execute.
+   * @param timeout Number of milliseconds to timeout and show error.
+   */
+  function sendRequest(methodName, timeout) {
+    if (timeout == undefined) timeout = 2000;
     alive = false;
-    chrome.extension.sendRequest(main_extension_id, {method: 'ping'},
+    chrome.extension.sendRequest(main_extension_id, {method: methodName},
       function (response) {
         alive = true;
       }
     );
-    setTimeout(handleResponse, 1000);
+    setTimeout(handleResponse, timeout);
   }
   
   /**
@@ -60,13 +62,7 @@
   // the request has been sent successfully. 
   chrome.browserAction.onClicked.addListener(
     function(tab) {
-      alive = false;
-      chrome.extension.sendRequest(main_extension_id, {method: 'reload'},
-        function (response) {
-          alive = true;
-        }
-      );
-      setTimeout(handleResponse, 1000);
+      sendRequest('reload');
     }
   );
 </script>

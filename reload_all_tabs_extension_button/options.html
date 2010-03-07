@@ -7,7 +7,7 @@
 
       // Ping the main extension to see if its alive. If its not alive, show it will show
       // the error page.
-      bkg.ping();
+      bkg.sendRequest('ping');
       
       // Even if an error occurred, let the window open, the user can see an error page,
       // to believe us that the extension doesn't exist, otherwise refer to the main options.
