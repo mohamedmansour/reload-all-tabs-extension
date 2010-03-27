@@ -1,6 +1,6 @@
-These are extensions for Google Chrome. Many extensions will be hosted here as
-my sandbox.
+This Google Chrome extension reloads or refreshes all tabs (or windows if
+specified) by using the default quick keyboard shortcut (ctrl+shift+r, which 
+can be customized). As well, there exists an addon to this extension to have
+a refresh button on the toolbar.
 
-You must have Goolge Chrome installed, and double click (or load via chrome://extensions/) the .crx file.
-
-/Mohamed
+Mohamed Mansour - http://www.mohamedmansour.com
