@@ -1,6 +1,10 @@
 <!-- Copyright under GPL, Mohamed Mansour 2009 (http://mohamedmansour.com) -->
 <html>
 <script>
+  // GLOBAL VARIABLES
+  //////////////////////////////////
+  contextMenuID = null;
+  
   // Settings for reload all tabs.
   settings = {
     get icon_id() {
@@ -44,9 +48,17 @@
     },
     set firstRun(val) {
       localStorage['first_run'] = val;
+    },
+    get contextMenu() {
+      return localStorage['context_menu'] === 'true';
+    },
+    set contextMenu(val) {
+      localStorage['context_menu'] = val;
+      setContextMenuVisible(val);
     }
   }
 
+  ////////////////////////////////////////
   /**
   * Reload all |tabs| one by one.
   * @param win Window to reload.
@@ -125,6 +137,29 @@
   }
 
   /**
+  * Handles the request coming back from an external extension.
+  * @param request The request that the extension is passing.
+  * @parma response The response that will be sent back.
+  */
+  function setContextMenuVisible(visible) {
+    if (visible && !contextMenuID) {
+      var contextMenuProperty = {
+        type: 'NORMAL',
+        title: 'Reload all Tabs',
+        contexts: ['ALL'],
+        onclick: reload
+      };
+      chrome.experimental.contextMenu.create(contextMenuProperty, function(id) {
+        contextMenuID = id;
+      });
+    }
+    else if (!visible && contextMenuID) {
+      chrome.experimental.contextMenu.remove(contextMenuID);
+      contextMenuID = null;
+    }
+  }
+  
+  /**
   * Initialization routine.
   */
   function init() {
@@ -160,6 +195,9 @@
         handleRequest(request, response);
       }
     );
+    
+    // Initialize the context menu.
+    setContextMenuVisible(settings.contextMenu);
   }
 
   // Lets initialize the Reloader script.
