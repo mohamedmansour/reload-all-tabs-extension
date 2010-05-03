@@ -17,6 +17,7 @@ function saveOptions() {
   bkg.settings.shortcutKeyShift = document.getElementById('shortcutKeyShift').checked;
   bkg.settings.shortcutKeyAlt = document.getElementById('shortcutKeyAlt').checked;
   bkg.settings.shortcutKeyCode = parseInt(document.getElementById('shortcutKeyCode').value);
+  bkg.settings.shortcutKeyMeta = document.getElementById('shortcutKeyMeta').checked;
 
   // Update status to let user know options were saved.
   var info = document.getElementById('info-message');
@@ -36,6 +37,10 @@ function restoreOptions() {
   document.getElementById('shortcutKeyShift').checked = bkg.settings.shortcutKeyShift;
   document.getElementById('shortcutKeyAlt').checked = bkg.settings.shortcutKeyAlt;
   document.getElementById('shortcutKeyCode').value = bkg.settings.shortcutKeyCode;
+  document.getElementById('shortcutKeyMeta').checked = bkg.settings.shortcutKeyMeta;
+  if (navigator.appVersion.indexOf('Mac') == -1) {
+    document.getElementById('mac-specific').style.display = 'none';
+  }
 }
 
 /**
@@ -104,6 +109,10 @@ function visitIconExtensionPage() {
               <option value="90">z</option>
             </select>
           </dd>
+        </dl>
+        <dl id="mac-specific">
+          <dt>Switch Ctrl key with the Mac Command key:</dt>
+          <dd><input id="shortcutKeyMeta" type="checkbox" /></dd>
         </dl>
       </div>
       <div id="extension-footer">

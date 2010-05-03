@@ -33,6 +33,13 @@
     set shortcutKeyShift(val) {
       localStorage['shortcut_key_shift'] = val;
     },
+    get shortcutKeyMeta() {
+      var key = localStorage['shortcut_key_meta'];
+      return (typeof key == 'undefined') ? false : key === 'true';
+    },
+    set shortcutKeyMeta(val) {
+      localStorage['shortcut_key_meta'] = val;
+    },
     get version() {
       return localStorage['version'];
     },
@@ -102,7 +109,8 @@
     // TODO - maybe cache these settings.
     return (keys.code == settings.shortcutKeyCode &&
             keys.alt == settings.shortcutKeyAlt &&
-            keys.shift == settings.shortcutKeyShift);
+            keys.shift == settings.shortcutKeyShift &&
+            keys.meta == settings.shortcutKeyMeta);
   }
 
   /**
