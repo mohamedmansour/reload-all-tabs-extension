@@ -1,10 +1,6 @@
 <!-- Copyright under GPL, Mohamed Mansour 2009 (http://mohamedmansour.com) -->
 <html>
 <script>
-  // GLOBAL VARIABLES
-  //////////////////////////////////
-  contextMenuID = null;
-  
   // Settings for reload all tabs.
   settings = {
     get icon_id() {
@@ -50,7 +46,8 @@
       localStorage['first_run'] = val;
     },
     get contextMenu() {
-      return localStorage['context_menu'] === 'true';
+      var key = localStorage['context_menu'];
+      return (typeof key == 'undefined') ? true : key === 'true';
     },
     set contextMenu(val) {
       localStorage['context_menu'] = val;
@@ -142,20 +139,17 @@
   * @parma response The response that will be sent back.
   */
   function setContextMenuVisible(visible) {
-    if (visible && !contextMenuID) {
+    if (visible) {
       var contextMenuProperty = {
-        type: 'NORMAL',
+        type: 'normal',
         title: 'Reload all Tabs',
-        contexts: ['ALL'],
+        contexts: ['all'],
         onclick: reload
       };
-      chrome.experimental.contextMenu.create(contextMenuProperty, function(id) {
-        contextMenuID = id;
-      });
+      chrome.contextMenus.create(contextMenuProperty);
     }
-    else if (!visible && contextMenuID) {
-      chrome.experimental.contextMenu.remove(contextMenuID);
-      contextMenuID = null;
+    else if (!visible) {
+      chrome.contextMenus.removeAll();
     }
   }
   

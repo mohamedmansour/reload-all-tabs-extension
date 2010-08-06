@@ -10,7 +10,7 @@
   },
   "background_page": "background.html",
   "options_page": "options.html",
-  "permissions": ["tabs", "experimental"],
+  "permissions": ["tabs", "contextMenus"],
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*", "ftp://*/*"],
