@@ -17,6 +17,7 @@ function saveOptions() {
   bkg.settings.shortcutKeyShift = document.getElementById('shortcutKeyShift').checked;
   bkg.settings.shortcutKeyAlt = document.getElementById('shortcutKeyAlt').checked;
   bkg.settings.shortcutKeyCode = parseInt(document.getElementById('shortcutKeyCode').value);
+  bkg.settings.contextMenu = document.getElementById('contextMenu').checked;
 
   // Update status to let user know options were saved.
   var info = document.getElementById('info-message');
@@ -36,6 +37,7 @@ function restoreOptions() {
   document.getElementById('shortcutKeyShift').checked = bkg.settings.shortcutKeyShift;
   document.getElementById('shortcutKeyAlt').checked = bkg.settings.shortcutKeyAlt;
   document.getElementById('shortcutKeyCode').value = bkg.settings.shortcutKeyCode;
+  document.getElementById('contextMenu').checked = bkg.settings.contextMenu;
 }
 
 /**
@@ -44,6 +46,19 @@ function restoreOptions() {
 function visitIconExtensionPage() {
   var link = "https://chrome.google.com/extensions/detail/" + bkg.settings.icon_id;
   chrome.tabs.create({url: link});
+}
+
+/**
+* Expand Experimental Options
+*/
+function expandExperimental() {
+  var experimental = document.getElementById('experimental');
+  var experimentalBlock = experimental.getElementsByClassName('extension-options')[0];
+  var collapsed = experimentalBlock.style.height == false;
+  console.log(experimentalBlock.style.height)
+  experimentalBlock.style.height = collapsed ? '105px' : null;
+  var expandBlock = experimental.getElementsByClassName('expand')[0];
+  expandBlock.innerText = collapsed ? '-' : '+';
 }
 </script>
 </head>
@@ -65,7 +80,7 @@ function visitIconExtensionPage() {
       </div>
     </div>
     <div class="extension-template">
-      <div class="extension-header">Options</div>
+      <div class="extension-header">Main Options</div>
       <div class="extension-options">
         <dl>
           <dt>Reload all windows:</dt>
@@ -106,11 +121,22 @@ function visitIconExtensionPage() {
           </dd>
         </dl>
       </div>
-      <div id="extension-footer">
-        <span id="info-message">Options saved!</span>
-        <button onclick="saveOptions();">Save</button>
-        <button onclick="window.close();">Close</button>
+    </div>
+    <div class="extension-template" id="experimental">
+      <div class="extension-header"><a href="#" onclick="expandExperimental(); return false;" class="expand">+</a> Experimental Options</div>
+      <div class="extension-options">
+        <p class="note">You have to be subscribed to the <a href="http://www.chromium.org/getting-involved/dev-channel">Dev Channel</a>
+         to use experimental features of Chrome.</p>
+        <dl>
+          <dt>Enable context menu:</dt>
+          <dd><input id="contextMenu" type="checkbox" /></dd>
+        </dl>
       </div>
+    </div>
+    <div id="extension-footer">
+      <span id="info-message">Options saved!</span>
+      <button onclick="saveOptions();">Save</button>
+      <button onclick="window.close();">Close</button>
     </div>
     <div id="credits">
       Extension developed by <a href="http://www.mohamedmansour.com">Mohamed Mansour</a>, 

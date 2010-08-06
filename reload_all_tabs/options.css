@@ -63,7 +63,6 @@ em {
 .extension-header {
   background: #ebeff9;
   border-top: 1px solid #b5c7de;
-  font-size: 95%;
   padding: 3px 5px;
   font-weight: bold;
 }
@@ -94,4 +93,25 @@ em {
   border-radius: 5px;
   padding: 7px 10px;
   margin-right: 30px;
+}
+
+.note {
+  -webkit-border-radius: 10px;
+  background: #c80000;
+  padding: 10px;
+  width: 500px;
+}
+
+.expand {
+  text-decoration: none;
+  background: #000;
+  color: #fff;
+  padding: 0px 4px;
+}
+
+#experimental .extension-options {
+  -webkit-transition: height 500ms ease;
+  overflow: hidden;
+  height: 0;
+  padding: 0 10px;
 }
