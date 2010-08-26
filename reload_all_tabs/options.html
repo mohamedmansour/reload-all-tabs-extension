@@ -47,18 +47,6 @@ function visitIconExtensionPage() {
   chrome.tabs.create({url: link});
 }
 
-/**
-* Expand Experimental Options
-*/
-function expandExperimental() {
-  var experimental = document.getElementById('experimental');
-  var experimentalBlock = experimental.getElementsByClassName('extension-options')[0];
-  var collapsed = experimentalBlock.style.height == false;
-  console.log(experimentalBlock.style.height)
-  experimentalBlock.style.height = collapsed ? '105px' : null;
-  var expandBlock = experimental.getElementsByClassName('expand')[0];
-  expandBlock.innerText = collapsed ? '-' : '+';
-}
 </script>
 </head>
 
@@ -82,6 +70,8 @@ function expandExperimental() {
       <div class="extension-header">Main Options</div>
       <div class="extension-options">
         <dl>
+          <dt>Enable context menu:</dt>
+          <dd><input id="contextMenu" type="checkbox" /></dd>
           <dt>Reload all windows:</dt>
           <dd><input id="reloadAllWindows" type="checkbox" /></dd>
           <dt>Keyboard shortcut:</dt>
@@ -118,17 +108,6 @@ function expandExperimental() {
               <option value="90">z</option>
             </select>
           </dd>
-        </dl>
-      </div>
-    </div>
-    <div class="extension-template" id="experimental">
-      <div class="extension-header"><a href="#" onclick="expandExperimental(); return false;" class="expand">+</a> Experimental Options</div>
-      <div class="extension-options">
-        <p class="note">You have to be subscribed to the <a href="http://www.chromium.org/getting-involved/dev-channel">Dev Channel</a>
-         to use experimental features of Chrome.</p>
-        <dl>
-          <dt>Enable context menu:</dt>
-          <dd><input id="contextMenu" type="checkbox" /></dd>
         </dl>
       </div>
     </div>

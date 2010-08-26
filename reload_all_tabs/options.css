@@ -101,17 +101,3 @@ em {
   padding: 10px;
   width: 500px;
 }
-
-.expand {
-  text-decoration: none;
-  background: #000;
-  color: #fff;
-  padding: 0px 4px;
-}
-
-#experimental .extension-options {
-  -webkit-transition: height 500ms ease;
-  overflow: hidden;
-  height: 0;
-  padding: 0 10px;
-}

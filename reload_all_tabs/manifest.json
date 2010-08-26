@@ -1,6 +1,7 @@
 {
   "name": "Reload All Tabs",
-  "version": "1.0.6",
+  "version": "2",
+  "minimum_chrome_version": "6",
   "description": "Reload all tabs using keyboard shortcut: ctrl + shift + r. The settings in 'Options' allows you to add a refresh all button.",
   "icons": {
     "16": "icon16.png",
