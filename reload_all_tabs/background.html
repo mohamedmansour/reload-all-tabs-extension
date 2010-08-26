@@ -140,6 +140,7 @@
   * @parma response The response that will be sent back.
   */
   function setContextMenuVisible(visible) {
+    chrome.contextMenus.removeAll();
     if (visible) {
       var contextMenuProperty = {
         type: 'normal',
@@ -149,9 +150,23 @@
       };
       chrome.contextMenus.create(contextMenuProperty);
     }
-    else if (!visible) {
-      chrome.contextMenus.removeAll();
-    }
+  }
+  
+  /**
+   * When the extension first installed. We need to update all windows with
+   * the content script.
+   */
+  function onInstall() {
+    chrome.windows.getAll({}, function(windows) {
+      for (var w in windows) {
+        chrome.tabs.getAllInWindow(windows[w].id, function(tabs) {
+          for (var t in tabs) {
+            chrome.tabs.executeScript(tabs[t].id, 
+                {file: 'keyboard_handler', allFrames: true});
+          }
+        });
+      }  
+    });
   }
   
   /**
@@ -164,14 +179,11 @@
     if (currVersion != prevVersion) {
       // Check if we just installed this extension.
       if (typeof prevVersion == 'undefined') {
-        // Do nothing now.
+        onInstall();
       }
       // Update the version incase we want to do something in future.
       settings.version = currVersion;
     }
-
-    // Initializing, reloading all tabs to inject keyboard handling.
-    reloadAllWindows();
 
     // Add a listener to the content script can request to.
     chrome.extension.onRequest.addListener(function(request, sender, response) {
