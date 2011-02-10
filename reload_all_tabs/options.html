@@ -40,13 +40,12 @@ function restoreOptions() {
 }
 
 /**
-* Visit the Icon Extension Page.
-*/
-function visitIconExtensionPage() {
-  var link = "https://chrome.google.com/extensions/detail/" + bkg.settings.icon_id;
-  chrome.tabs.create({url: link});
+ * Opens the extensions page. The reason why we didn't do a simple link, is because
+ * you are not allowed to load that local resource via renderer.
+ */
+function openExtensionPage() {
+  chrome.tabs.create({url: 'chrome://extensions/'});
 }
-
 </script>
 </head>
 
@@ -60,10 +59,11 @@ function visitIconExtensionPage() {
       <div class="extension-header">Browser Action</div>
       <div class="extension-options">
         <img src="browser-action.png" />
-        <p>To show the Reload All Tabs button next to the address bar you would need to click <strong>Install</strong>
-           on the <a href="#" onclick="visitIconExtensionPage(); return false;">Reload All Tabs - Browser Action</a>
-           page. This is a very light weight extension that just communicates to the other extension.</p>
-        <p>To remove the button, right click on the icon and choose <strong>Disable</strong>.</p>
+        <p>To remove the button, right click on the icon and choose
+           <strong>hide</strong>.</p>
+        <p>To show that the button again, visit the 
+           <a href="#" onclick="openExtensionPage(); return false;">chrome://extensions/</a> page, and click on
+           <strong>Show button</strong>.</p>
       </div>
     </div>
     <div class="extension-template">
@@ -119,7 +119,8 @@ function visitIconExtensionPage() {
     <div id="credits">
       Extension developed by <a href="http://www.mohamedmansour.com">Mohamed Mansour</a>, 
       Source Code available in <a href="http://github.com/mohamedmansour/reload-all-tabs-extension">GitHub</a>,
-      Icon by <a href="http://www.mouserunner.net/">Ken Saunders</a>
+      Icon by <a href="http://www.mouserunner.net/">Ken Saunders</a><br/>
+      Follow me on Twitter <a href="http://twitter.com/mohamedmansour">@mohamedmansour</a>
     </div>
   </div>
   </form>
