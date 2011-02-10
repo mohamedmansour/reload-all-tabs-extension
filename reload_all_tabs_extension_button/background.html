@@ -52,19 +52,22 @@
    * which will inform them that there is an error.
    */
   function handleResponse() {
-    if (!alive) {
+    // Remove cross extension communication (commenting it out so users can
+    //  learn how its done)
+    /* if (!alive) { */
       var errorURL = chrome.extension.getURL('error.html');
       openSingletonPage(errorURL);
-    }
+    /* } */
   }
   
   // Once a page action has been clicked, reload tabs. We set a timer right after
   // to make sure we received a callback. By receiving a callback, we can ensure
   // the request has been sent successfully. 
-  chrome.browserAction.onClicked.addListener(
-    function(tab) {
-      sendRequest('reload');
-    }
-  );
+  chrome.browserAction.onClicked.addListener(function(tab) {
+      // NO longer need to send requests. Since the root extension has an icon now.
+      // Just redirect to error page.
+      /* sendRequest('reload'); */
+      handleResponse();
+  });
 </script>
 </html>

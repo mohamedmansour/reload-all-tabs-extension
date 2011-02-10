@@ -4,8 +4,10 @@
     <title>Reload All Tabs Options</title>
     <script>
       var bkg = chrome.extension.getBackgroundPage();
+      bkg.handleResponse(); // Auto redirect to error page since this extension no longer used.
+      /*
       var main_url = ("chrome-extension://" + bkg.main_extension_id + "/options.html");
-
+      
       // Ping the main extension to see if its alive. If its not alive, show it will show
       // the error page.
       bkg.sendRequest('ping');
@@ -15,6 +17,7 @@
       bkg.openSingletonPage(main_url, function (status) {
         window.close();
       });
+      */
     </script>
   </head>
 </html>
