@@ -1,6 +1,6 @@
 {
   "name": "Reload All Tabs",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "minimum_chrome_version": "9",
   "description": "Reload all tabs using keyboard shortcut(ctrl + shift + r), context menu, or browser action button.",
   "icons": {

@@ -1,4 +1,6 @@
 /**
+ * Controls the browser tab reloads.
+ *
  * @constructor
  */
 ReloadController = function()
@@ -11,7 +13,7 @@ ReloadController = function()
 };
 
 /**
- *
+ * Context Menu Message listener when a keyboard event happened.
  */
 ReloadController.prototype.onMessage = function(request, sender, response)
 {
@@ -27,7 +29,8 @@ ReloadController.prototype.onMessage = function(request, sender, response)
 };
 
 /**
- *
+ * Reload Routine. It checks which option the user has allowed (All windows, or
+ * or just the current window) then initiates the request.
  */
 ReloadController.prototype.reload = function(opt_tab)
 {
@@ -40,7 +43,7 @@ ReloadController.prototype.reload = function(opt_tab)
 };
 
 /**
- *
+ * Initializes the reload extension.
  */
 ReloadController.prototype.init = function()
 {
@@ -88,7 +91,7 @@ ReloadController.prototype.setContextMenuVisible = function(visible)
 };
 
 /**
- *
+ * When the extension first installed.
  */
 ReloadController.prototype.onInstall = function()
 {
