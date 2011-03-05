@@ -100,8 +100,11 @@ ReloadController.prototype.onInstall = function()
               {file: 'js/keyboard_handler', allFrames: true});
         }
       });
-    }  
+    }
   });
+    
+  // Show up the options window on first install.
+  chrome.tabs.create({url: 'options.html'});
 };
 
 /**
