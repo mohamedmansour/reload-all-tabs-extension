@@ -2,7 +2,7 @@
 
 // Add a keyboard listener on keyup.
 if (window == top) {
-  window.addEventListener("keyup", keyListener, false);
+  window.addEventListener('keyup', keyListener, false);
 }
 
 /**

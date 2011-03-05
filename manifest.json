@@ -1,16 +1,16 @@
 {
   "name": "Reload All Tabs",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "minimum_chrome_version": "9",
   "description": "Reload all tabs using keyboard shortcut(ctrl + shift + r), context menu, or browser action button.",
   "icons": {
-    "16": "icon16.png",
-    "32": "icon32.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
+    "16": "img/icon16.png",
+    "32": "img/icon32.png",
+    "48": "img/icon48.png",
+    "128": "img/icon128.png"
   },
   "browser_action": {
-    "default_icon": "icon128.png",
+    "default_icon": "img/icon128.png",
     "default_title": "Reload All Tabs"
   },
   "background_page": "background.html",
@@ -19,7 +19,7 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*", "ftp://*/*"],
-      "js": ["keyboard_handler.js"],
+      "js": ["js/keyboard_handler.js"],
       "run_at": "document_start",
       "all_frames": true
     }

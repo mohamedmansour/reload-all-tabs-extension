@@ -1,55 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Reload All Tabs Options</title>
-<link rel="stylesheet" type="text/css" href="options.css">
-<script type="text/javascript" src="keyboard_handler.js"></script>
-<script type="text/javascript">
-var bkg = chrome.extension.getBackgroundPage();
-
-/**
-* Saves options to localStorage.
-*/
-function saveOptions() {
-  // Set the extension settings.
-  bkg.settings.reloadAllWindows = document.getElementById('reloadAllWindows').checked;
-  bkg.settings.shortcutKeyShift = document.getElementById('shortcutKeyShift').checked;
-  bkg.settings.shortcutKeyAlt = document.getElementById('shortcutKeyAlt').checked;
-  bkg.settings.shortcutKeyCode = parseInt(document.getElementById('shortcutKeyCode').value);
-  bkg.settings.contextMenu = document.getElementById('contextMenu').checked;
-
-  // Update status to let user know options were saved.
-  var info = document.getElementById('info-message');
-  info.style.display = 'inline';
-  info.style.opacity = 1;
-  setTimeout(function() {
-    info.style.opacity = 0.0;
-  }, 1000);
-}
-
-/**
-* Restore all options.
-*/
-function restoreOptions() {
-  document.getElementById('version').innerHTML = ' (v' + bkg.settings.version + ')';
-  document.getElementById('reloadAllWindows').checked = bkg.settings.reloadAllWindows;
-  document.getElementById('shortcutKeyShift').checked = bkg.settings.shortcutKeyShift;
-  document.getElementById('shortcutKeyAlt').checked = bkg.settings.shortcutKeyAlt;
-  document.getElementById('shortcutKeyCode').value = bkg.settings.shortcutKeyCode;
-  document.getElementById('contextMenu').checked = bkg.settings.contextMenu;
-}
-
-/**
- * Opens the extensions page. The reason why we didn't do a simple link, is because
- * you are not allowed to load that local resource via renderer.
- */
-function openExtensionPage() {
-  chrome.tabs.create({url: 'chrome://extensions/'});
-}
-</script>
+  <title>Reload All Tabs Options</title>
+  <link rel="stylesheet" type="text/css" href="/css/options.css" />
+  <script type="text/javascript" src="/js/functions.js"></script>
+  <script type="text/javascript" src="/js/keyboard_handler.js"></script>
+  <script type="text/javascript" src="/js/options.js"></script>
 </head>
-
-<body onload="restoreOptions()"> 
+<body> 
   <form onsubmit="return false;">
   <div id="body-container">
     <div id="header">
@@ -70,12 +28,12 @@ function openExtensionPage() {
     <div class="extension-template">
       <div class="extension-header">Browser Action</div>
       <div class="extension-options">
-        <img src="browser-action.png" />
+        <img src="/img/browser-action.png" alt="Reload All Tabs Browser Action" />
         <p>To remove the button, right click on the icon and choose
            <strong>hide</strong>.</p>
         <p>To show that the button again, visit the 
-           <a href="#" onclick="openExtensionPage(); return false;">chrome://extensions/</a> page, and click on
-           <strong>Show button</strong>.</p>
+           <a href="#" id="button-extension">chrome://extensions/</a> page, and
+           click on <strong>Show button</strong>.</p>
       </div>
     </div>
     <div class="extension-template">
@@ -125,8 +83,8 @@ function openExtensionPage() {
     </div>
     <div id="extension-footer">
       <span id="info-message">Options saved!</span>
-      <button onclick="saveOptions();">Save</button>
-      <button onclick="window.close();">Close</button>
+      <button id="button-save">Save</button>
+      <button id="button-close">Close</button>
     </div>
     <div id="credits">
       Extension developed by <a href="http://www.mohamedmansour.com">Mohamed Mansour</a>, 
