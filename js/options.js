@@ -40,6 +40,7 @@ function onSave() {
   bkg.settings.shortcutKeyAlt = $('shortcutKeyAlt').checked;
   bkg.settings.shortcutKeyCode = parseInt($('shortcutKeyCode').value);
   bkg.settings.contextMenu = $('contextMenu').checked;
+  bkg.settings.pinnedOnly = $('pinnedOnly').checked;
   
   // Update the status of the context menu.
   bkg.reloadController.setContextMenuVisible(bkg.settings.contextMenu);
@@ -64,4 +65,5 @@ function onRestore() {
   $('shortcutKeyAlt').checked = bkg.settings.shortcutKeyAlt;
   $('shortcutKeyCode').value = bkg.settings.shortcutKeyCode;
   $('contextMenu').checked = bkg.settings.contextMenu;
+  $('pinnedOnly').checked = bkg.settings.pinnedOnly;
 }

@@ -118,10 +118,12 @@ ReloadController.prototype.onInstall = function()
 ReloadController.prototype.reloadWindow = function(win)
 {
   chrome.tabs.getAllInWindow(win.id, function reloadTabs(tabs) {
-    // For each tab in the current window, refresh it.
+    var pinnedOnly = settings.pinnedOnly;
     for (var i in tabs) {
       var tab = tabs[i];
-      chrome.tabs.update(tab.id, {url: tab.url, selected: tab.selected}, null);
+      if (!pinnedOnly || tab.pinned){
+        chrome.tabs.update(tab.id, {url: tab.url, selected: tab.selected}, null);
+      }
     }
   });
 };

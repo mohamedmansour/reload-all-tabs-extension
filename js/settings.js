@@ -13,6 +13,13 @@ settings = {
   set firstRun(val) {
     localStorage['first_run'] = val;
   },
+  get pinnedOnly() {
+    var key = localStorage['pinned_only'];
+    return (typeof key == 'undefined') ? false : key === 'true';
+  },
+  set pinnedOnly(val) {
+    localStorage['pinned_only'] = val;
+  },
   get reloadAllWindows() {
     return localStorage['reload_all_windows'] === 'true';
   },
