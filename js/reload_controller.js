@@ -95,17 +95,18 @@ ReloadController.prototype.setContextMenuVisible = function(visible)
  */
 ReloadController.prototype.onInstall = function()
 {
-  chrome.windows.getAll({}, function(windows) {
-    for (var w in windows) {
-      chrome.tabs.getAllInWindow(windows[w].id, function(tabs) {
-        for (var t in tabs) {
-          chrome.tabs.executeScript(tabs[t].id, 
-              {file: 'js/keyboard_handler', allFrames: true});
+  chrome.windows.getAll({ populate: true }, function(windows) {
+    for (var w = 0; w < windows.length; w++) {
+      var tabs = windows[w].tabs;
+      for (var t = 0; t < tabs.length; t++) {
+        var tab = tabs[t];
+        if (tab.url.indexOf('http') == 0) { // Only inject in web pages.
+          chrome.tabs.executeScript(tab.id, { file: 'js/keyboard_handler.js', allFrames: true });
         }
-      });
+      }
     }
   });
-    
+ 
   // Show up the options window on first install.
   chrome.tabs.create({url: 'options.html'});
 };
