@@ -1,7 +1,3 @@
-// Extensions pages can all have access to the bacground page.
-var bkg = chrome.extension.getBackgroundPage();
-
-// When the DOM is loaded, make sure all the saved info is restored.
 window.addEventListener('load', onLoad, false);
 
 /**
@@ -34,36 +30,50 @@ function onExtension() {
  * Saves options to localStorage.
  */
 function onSave() {
-  // Save settings.
-  bkg.settings.reloadAllWindows = $('reloadAllWindows').checked;
-  bkg.settings.shortcutKeyShift = $('shortcutKeyShift').checked;
-  bkg.settings.shortcutKeyAlt = $('shortcutKeyAlt').checked;
-  bkg.settings.shortcutKeyCode = parseInt($('shortcutKeyCode').value);
-  bkg.settings.contextMenu = $('contextMenu').checked;
-  bkg.settings.pinnedOnly = $('pinnedOnly').checked;
-  
-  // Update the status of the context menu.
-  bkg.reloadController.setContextMenuVisible(bkg.settings.contextMenu);
-  
-  // Update status to let user know options were saved.
-  var info = $('info-message');
-  info.style.display = 'inline';
-  info.style.opacity = 1;
-  setTimeout(function() {
-    info.style.opacity = 0.0;
-  }, 1000);
+  const settingsToSave = {
+    'reloadAllWindows': $('reloadAllWindows').checked,
+    'shortcutKeyShift': $('shortcutKeyShift').checked,
+    'shortcutKeyAlt': $('shortcutKeyAlt').checked,
+    'shortcutKeyCode': parseInt($('shortcutKeyCode').value),
+    'contextMenu': $('contextMenu').checked,
+    'pinnedOnly': $('pinnedOnly').checked
+  };
+
+  chrome.storage.sync.set(settingsToSave, () => {
+    // Update the status of the context menu.
+    bkg.reloadController.setContextMenuVisible(bkg.settings.contextMenu);
+    
+    // Update status to let user know options were saved.
+    var info = $('info-message');
+    info.style.display = 'inline';
+    info.style.opacity = 1;
+    setTimeout(function() {
+      info.style.opacity = 0.0;
+    });
+  });
 }
 
 /**
 * Restore all options.
 */
 function onRestore() {
-  // Restore settings.
-  $('version').innerHTML = ' (v' + bkg.settings.version + ')';
-  $('reloadAllWindows').checked = bkg.settings.reloadAllWindows;
-  $('shortcutKeyShift').checked = bkg.settings.shortcutKeyShift;
-  $('shortcutKeyAlt').checked = bkg.settings.shortcutKeyAlt;
-  $('shortcutKeyCode').value = bkg.settings.shortcutKeyCode;
-  $('contextMenu').checked = bkg.settings.contextMenu;
-  $('pinnedOnly').checked = bkg.settings.pinnedOnly;
+  const settingsToFetch = [
+    'reloadAllWindows',
+    'shortcutKeyShift',
+    'shortcutKeyAlt',
+    'shortcutKeyCode',
+    'contextMenu',
+    'pinnedOnly',
+    'version'
+  ]
+
+  chrome.storage.sync.get(settingsToFetch, settings => {
+    $('version').innerText = ' (v' + settings.version + ')'
+    $('reloadAllWindows').checked = settings.reloadAllWindows == true;
+    $('pinnedOnly').checked = settings.pinnedOnly == true
+    $('shortcutKeyAlt').checked = settings.shortcutKeyAlt == true
+    $('shortcutKeyCode').value = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
+    $('shortcutKeyShift').checked = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
+    $('contextMenu').checked = (typeof settings.contextMenu == 'undefined') ? true : (settings.contextMenu == true)
+  });
 }
