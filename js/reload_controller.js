@@ -6,7 +6,7 @@
 ReloadController = function()
 {
   // Add a listener to the content script can request to.
-  chrome.extension.onRequest.addListener(this.onMessage.bind(this))
+  chrome.extension.onMessage.addListener(this.onMessage.bind(this))
   
   // Listens on browser action callbacks.
   chrome.browserAction.onClicked.addListener(this.reload.bind(this))
