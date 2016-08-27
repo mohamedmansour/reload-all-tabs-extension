@@ -11,13 +11,15 @@ ReloadController = function()
   // Listens on browser action callbacks.
   chrome.browserAction.onClicked.addListener(this.reload.bind(this))
 
-  this.shortcutKeyShift = null
-  this.shortcutKeyAlt = null
-  this.shortcutKeyCode = null
-  this.version = null
-  this.reloadAllWindows = false;
-  this.contextMenu = true;
-  this.pinnedOnly = false;
+  this.cachedSettings = {
+    shortcutKeyShift: null,
+    shortcutKeyAlt: null,
+    shortcutKeyCode: null,
+    version: null,
+    reloadAllWindows: false,
+    contextMenu: true,
+    pinnedOnly: false
+  }
 
   const settingsToFetch = [
     'shortcutKeyShift',
@@ -30,13 +32,13 @@ ReloadController = function()
   ]
 
   chrome.storage.sync.get(settingsToFetch, settings => {
-    this.version = settings.version
-    this.shortcutKeyAlt = settings.shortcutKeyAlt == true
-    this.reloadAllWindows = settings.reloadAllWindows == true
-    this.pinnedOnly = settings.pinnedOnly == true
-    this.shortcutKeyCode = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
-    this.shortcutKeyShift = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
-    this.contextMenu = (typeof settings.contextMenu == 'undefined') ? true : (settings.contextMenu == true)
+    this.cachedSettings.version = settings.version
+    this.cachedSettings.shortcutKeyAlt = settings.shortcutKeyAlt == true
+    this.cachedSettings.reloadAllWindows = settings.reloadAllWindows == true
+    this.cachedSettings.pinnedOnly = settings.pinnedOnly == true
+    this.cachedSettings.shortcutKeyCode = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
+    this.cachedSettings.shortcutKeyShift = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
+    this.cachedSettings.contextMenu = (typeof settings.contextMenu == 'undefined') ? true : (settings.contextMenu == true)
   })
 }
 
@@ -46,9 +48,9 @@ ReloadController = function()
 ReloadController.prototype.onMessage = function(request, sender, response)
 {
   // Checks if the shortcut key is valid to reload all tabs.
-  var validKeys = (request.code == this.shortcutKeyCode &&
-      request.alt == this.shortcutKeyAlt &&
-      request.shift == this.shortcutKeyShift)
+  var validKeys = (request.code == this.cachedSettings.shortcutKeyCode &&
+      request.alt == this.cachedSettings.shortcutKeyAlt &&
+      request.shift == this.cachedSettings.shortcutKeyShift)
   
   // Once valid, we can choose which reload method is needed.
   if (validKeys) {
@@ -62,7 +64,7 @@ ReloadController.prototype.onMessage = function(request, sender, response)
  */
 ReloadController.prototype.reload = function(opt_tab)
 {
-  if (this.reloadAllWindows) { // All Windows.
+  if (this.cachedSettings.reloadAllWindows) { // All Windows.
     this.reloadAllWindows()
   }
   else { // Current Window.
@@ -76,7 +78,7 @@ ReloadController.prototype.reload = function(opt_tab)
 ReloadController.prototype.init = function()
 {
   var currVersion = chrome.app.getDetails().version
-  var prevVersion = this.version
+  var prevVersion = this.cachedSettings.version
   if (currVersion != prevVersion) {
 
     // Check if we just installed this extension.
@@ -85,12 +87,12 @@ ReloadController.prototype.init = function()
     } 
 
     // Update the version incase we want to do something in future.
-    this.version = currVersion
-    chrome.storage.sync.set({'version': this.version})
+    this.cachedSettings.version = currVersion
+    chrome.storage.sync.set({'version': this.cachedSettings.version})
   }
 
   // Initialize the context menu.
-  this.setContextMenuVisible(this.contextMenu)
+  this.setContextMenuVisible(this.cachedSettings.contextMenu)
 };
 
 /**
@@ -104,12 +106,13 @@ ReloadController.prototype.setContextMenuVisible = function(visible)
   chrome.contextMenus.removeAll()
   if (visible) {
     var contextMenuProperty = {
+      id: '1',
       type: 'normal',
       title: 'Reload all tabs',
-      contexts: ['all'],
-      onclick: this.reload.bind(this)
+      contexts: ['all']
     }
     chrome.contextMenus.create(contextMenuProperty)
+    chrome.contextMenus.onClicked.addListener(this.reload.bind(this))
   }
 }
 
@@ -142,7 +145,7 @@ ReloadController.prototype.onInstall = function()
 ReloadController.prototype.reloadWindow = function(win)
 {
   chrome.tabs.getAllInWindow(win.id, (tabs) => {
-    var pinnedOnly = this.pinnedOnly;
+    var pinnedOnly = this.cachedSettings.pinnedOnly;
     for (var i in tabs) {
       var tab = tabs[i]
       if (!pinnedOnly || tab.pinned){
