@@ -31,6 +31,7 @@ function onExtension() {
  */
 function onSave() {
   const settingsToSave = {
+    'enableKeyboardShortcut': $('enableKeyboardShortcut').checked,
     'reloadAllWindows': $('reloadAllWindows').checked,
     'shortcutKeyShift': $('shortcutKeyShift').checked,
     'shortcutKeyAlt': $('shortcutKeyAlt').checked,
@@ -40,17 +41,15 @@ function onSave() {
   };
 
   chrome.storage.sync.set(settingsToSave, () => {
-    // Update the status of the context menu.
-    bkg.reloadController.setContextMenuVisible(bkg.settings.contextMenu);
     
     // Update status to let user know options were saved.
-    var info = $('info-message');
-    info.style.display = 'inline';
-    info.style.opacity = 1;
+    var info = $('info-message')
+    info.style.display = 'inline'
+    info.style.opacity = 1
     setTimeout(function() {
       info.style.opacity = 0.0;
-    });
-  });
+    })
+  })
 }
 
 /**
@@ -58,6 +57,7 @@ function onSave() {
 */
 function onRestore() {
   const settingsToFetch = [
+    'enableKeyboardShortcut',
     'reloadAllWindows',
     'shortcutKeyShift',
     'shortcutKeyAlt',
@@ -69,11 +69,12 @@ function onRestore() {
 
   chrome.storage.sync.get(settingsToFetch, settings => {
     $('version').innerText = ' (v' + settings.version + ')'
-    $('reloadAllWindows').checked = settings.reloadAllWindows == true;
+    $('enableKeyboardShortcut').checked = settings.enableKeyboardShortcut == true
+    $('reloadAllWindows').checked = settings.reloadAllWindows == true
     $('pinnedOnly').checked = settings.pinnedOnly == true
     $('shortcutKeyAlt').checked = settings.shortcutKeyAlt == true
     $('shortcutKeyCode').value = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
     $('shortcutKeyShift').checked = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
     $('contextMenu').checked = (typeof settings.contextMenu == 'undefined') ? true : (settings.contextMenu == true)
-  });
+  })
 }

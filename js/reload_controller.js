@@ -11,9 +11,12 @@ ReloadController = function()
   // Listens on browser action callbacks.
   chrome.browserAction.onClicked.addListener(this.reload.bind(this))
 
+  chrome.storage.onChanged.addListener(this.onStorageChanged.bind(this))
+
   this.cachedSettings = {
-    shortcutKeyShift: null,
-    shortcutKeyAlt: null,
+    enableKeyboardShortcut: false,
+    shortcutKeyShift: false,
+    shortcutKeyAlt: false,
     shortcutKeyCode: null,
     version: null,
     reloadAllWindows: false,
@@ -22,6 +25,7 @@ ReloadController = function()
   }
 
   const settingsToFetch = [
+    'enableKeyboardShortcut',
     'shortcutKeyShift',
     'shortcutKeyAlt',
     'shortcutKeyCode',
@@ -33,6 +37,7 @@ ReloadController = function()
 
   chrome.storage.sync.get(settingsToFetch, settings => {
     this.cachedSettings.version = settings.version
+    this.cachedSettings.enableKeyboardShortcut = settings.enableKeyboardShortcut == true
     this.cachedSettings.shortcutKeyAlt = settings.shortcutKeyAlt == true
     this.cachedSettings.reloadAllWindows = settings.reloadAllWindows == true
     this.cachedSettings.pinnedOnly = settings.pinnedOnly == true
@@ -40,6 +45,16 @@ ReloadController = function()
     this.cachedSettings.shortcutKeyShift = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
     this.cachedSettings.contextMenu = (typeof settings.contextMenu == 'undefined') ? true : (settings.contextMenu == true)
   })
+}
+
+ReloadController.prototype.onStorageChanged = function(changes, namespace) {
+  for (key in changes) {
+    this.cachedSettings[key] = changes[key].newValue
+
+    if (key == 'contextMenu') {
+      this.setContextMenuVisible(this.cachedSettings.contextMenu)
+    }
+  }
 }
 
 /**
