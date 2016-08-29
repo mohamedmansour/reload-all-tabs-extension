@@ -50,7 +50,7 @@ ReloadController = function()
 }
 
 ReloadController.prototype.onTabUpdated = function(tabid, changeInfo, tab) {
-  if (changeInfo.status != 'complete' || !this.cachedSettings.enableKeyboardShortcut) {
+  if (changeInfo.status != 'complete') {
     return
   }
 
@@ -137,6 +137,7 @@ ReloadController.prototype.setContextMenuVisible = function(visible)
       title: 'Reload all tabs',
       contexts: ['all']
     }
+    
     chrome.contextMenus.create(contextMenuProperty)
     chrome.contextMenus.onClicked.addListener(this.reload.bind(this))
   }
