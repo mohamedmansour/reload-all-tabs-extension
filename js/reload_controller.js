@@ -87,10 +87,10 @@ ReloadController.prototype.onMessage = function(request, sender, response)
 
 ReloadController.prototype.onMenuClicked = function(info, tab)
 {
-  if (info.menuItemId == 'thiswindow') {
+  if (info.menuItemId == 'thiswindow' || info.menuItemId == 'thiswindow2' ) {
     chrome.windows.getCurrent(this.reloadWindow.bind(this))
   }
-  else if (info.menuItemId == 'allwindows') {
+  else if (info.menuItemId == 'allwindows' || info.menuItemId == 'allwindows2') {
     this.reloadAllWindows()
   }
 }
@@ -146,7 +146,7 @@ ReloadController.prototype.setContextMenuVisible = function(visible)
       id: 'root',
       type: 'normal',
       title: 'Reload all tabs',
-      contexts: ['all']
+      contexts: ['page', 'frame', 'selection', 'link', 'editable', 'image', 'video', 'audio']
     })
     chrome.contextMenus.create({
       id: 'thiswindow',
@@ -161,6 +161,18 @@ ReloadController.prototype.setContextMenuVisible = function(visible)
       type: 'normal',
       title: 'Reload all windows',
       contexts: ['all']
+    })
+    chrome.contextMenus.create({
+      id: 'thiswindow2',
+      type: 'normal',
+      title: 'Reload this window',
+      contexts: ['browser_action']
+    })
+    chrome.contextMenus.create({
+      id: 'allwindows2',
+      type: 'normal',
+      title: 'Reload all windows',
+      contexts: ['browser_action']
     })
 
     chrome.contextMenus.onClicked.addListener(this.onMenuClicked.bind(this))
