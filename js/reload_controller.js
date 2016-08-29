@@ -84,11 +84,22 @@ ReloadController.prototype.onMessage = function(request, sender, response)
   }
 }
 
+
+ReloadController.prototype.onMenuClicked = function(info, tab)
+{
+  if (info.parentMenuItemId == 'thiswindow') {
+    chrome.windows.getCurrent(this.reloadWindow.bind(this))
+  }
+  else if (info.parentMenuItemId == 'allwindows') {
+    this.reloadAllWindows()
+  }
+}
+
 /**
  * Reload Routine. It checks which option the user has allowed (All windows, or
  * or just the current window) then initiates the request.
  */
-ReloadController.prototype.reload = function(opt_tab)
+ReloadController.prototype.reload = function(info, tab)
 {
   if (this.cachedSettings.reloadAllWindows) { // All Windows.
     this.reloadAllWindows()
@@ -131,15 +142,28 @@ ReloadController.prototype.setContextMenuVisible = function(visible)
 {
   chrome.contextMenus.removeAll()
   if (visible) {
-    var contextMenuProperty = {
-      id: '1',
+    chrome.contextMenus.create({
+      id: 'root',
       type: 'normal',
       title: 'Reload all tabs',
       contexts: ['all']
-    }
-    
-    chrome.contextMenus.create(contextMenuProperty)
-    chrome.contextMenus.onClicked.addListener(this.reload.bind(this))
+    })
+    chrome.contextMenus.create({
+      id: 'thiswindow',
+      parentId: 'root',
+      type: 'normal',
+      title: 'Reload this window',
+      contexts: ['all']
+    })
+    chrome.contextMenus.create({
+      id: 'allwindows',
+      parentId: 'root',
+      type: 'normal',
+      title: 'Reload all windows',
+      contexts: ['all']
+    })
+
+    chrome.contextMenus.onClicked.addListener(this.onMenuClicked.bind(this))
   }
 }
 
