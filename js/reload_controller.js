@@ -7,7 +7,7 @@ ReloadController = function()
 {
   // Add a listener to the content script can request to.
   chrome.extension.onMessage.addListener(this.onMessage.bind(this))
-  
+
   // Listens on browser action callbacks.
   chrome.browserAction.onClicked.addListener(this.reload.bind(this))
 
@@ -77,7 +77,7 @@ ReloadController.prototype.onMessage = function(request, sender, response)
                    request.code == this.cachedSettings.shortcutKeyCode &&
                    request.alt == this.cachedSettings.shortcutKeyAlt &&
                    request.shift == this.cachedSettings.shortcutKeyShift)
-  
+
   // Once valid, we can choose which reload method is needed.
   if (validKeys) {
     this.reload()
@@ -87,10 +87,10 @@ ReloadController.prototype.onMessage = function(request, sender, response)
 
 ReloadController.prototype.onMenuClicked = function(info, tab)
 {
-  if (info.parentMenuItemId == 'thiswindow') {
+  if (info.menuItemId == 'thiswindow') {
     chrome.windows.getCurrent(this.reloadWindow.bind(this))
   }
-  else if (info.parentMenuItemId == 'allwindows') {
+  else if (info.menuItemId == 'allwindows') {
     this.reloadAllWindows()
   }
 }
@@ -121,7 +121,7 @@ ReloadController.prototype.init = function()
     // Check if we just installed this extension.
     if (typeof prevVersion == 'undefined') {
       this.onInstall()
-    } 
+    }
 
     // Update the version incase we want to do something in future.
     this.cachedSettings.version = currVersion
@@ -183,7 +183,7 @@ ReloadController.prototype.onInstall = function()
       }
     }
   })
- 
+
   // Show up the options window on first install.
   chrome.tabs.create({url: 'options.html'})
 }
