@@ -18,13 +18,5 @@
     "persistent": false
   },
   "options_page": "options.html",
-  "permissions": ["storage", "tabs", "contextMenus"],
-  "content_scripts": [
-    {
-      "matches": ["http://*/*", "https://*/*", "ftp://*/*"],
-      "js": ["js/keyboard_handler.js"],
-      "run_at": "document_start",
-      "all_frames": true
-    }
-  ]
+  "permissions": ["storage", "tabs", "contextMenus", "http://*/*", "https://*/*", "ftp://*/*"]
 }

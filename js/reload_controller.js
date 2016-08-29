@@ -13,6 +13,8 @@ ReloadController = function()
 
   chrome.storage.onChanged.addListener(this.onStorageChanged.bind(this))
 
+  chrome.tabs.onUpdated.addListener(this.onTabUpdated.bind(this))
+
   this.cachedSettings = {
     enableKeyboardShortcut: false,
     shortcutKeyShift: false,
@@ -47,6 +49,14 @@ ReloadController = function()
   })
 }
 
+ReloadController.prototype.onTabUpdated = function(tabid, changeInfo, tab) {
+  if (changeInfo.status != 'complete' || !this.cachedSettings.enableKeyboardShortcut) {
+    return
+  }
+
+  chrome.tabs.executeScript(tab.id, { file: 'js/keyboard_handler.js', allFrames: false })
+}
+
 ReloadController.prototype.onStorageChanged = function(changes, namespace) {
   for (key in changes) {
     this.cachedSettings[key] = changes[key].newValue
@@ -63,9 +73,10 @@ ReloadController.prototype.onStorageChanged = function(changes, namespace) {
 ReloadController.prototype.onMessage = function(request, sender, response)
 {
   // Checks if the shortcut key is valid to reload all tabs.
-  var validKeys = (request.code == this.cachedSettings.shortcutKeyCode &&
-      request.alt == this.cachedSettings.shortcutKeyAlt &&
-      request.shift == this.cachedSettings.shortcutKeyShift)
+  var validKeys = (this.cachedSettings.enableKeyboardShortcut &&
+                   request.code == this.cachedSettings.shortcutKeyCode &&
+                   request.alt == this.cachedSettings.shortcutKeyAlt &&
+                   request.shift == this.cachedSettings.shortcutKeyShift)
   
   // Once valid, we can choose which reload method is needed.
   if (validKeys) {
@@ -142,7 +153,7 @@ ReloadController.prototype.onInstall = function()
       for (var t = 0; t < tabs.length; t++) {
         var tab = tabs[t]
         if (tab.url.indexOf('http') == 0) { // Only inject in web pages.
-          chrome.tabs.executeScript(tab.id, { file: 'js/keyboard_handler.js', allFrames: true })
+          chrome.tabs.executeScript(tab.id, { file: 'js/keyboard_handler.js', allFrames: false })
         }
       }
     }
