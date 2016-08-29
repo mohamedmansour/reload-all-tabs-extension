@@ -18,7 +18,7 @@ This Google Chrome extension reloads or refreshes all tabs.
 
 ## Screenshot
 
-![Screenshot of the Chrome Extension](https://github.com/mohamedmansour/reload-all-tabs-extension/raw/master/screenshot/screenshot.png)
+![Screenshot of the Chrome Extension](https://github.com/mohamedmansour/reload-all-tabs-extension/raw/master/screenshot/screenshot.jpg)
 
 ## Authors
 
