@@ -14,7 +14,7 @@ This Google Chrome extension reloads or refreshes all tabs.
 
 ## Download
 
-[https://chrome.google.com/webstore/detail/reload-all-tabs/midkcinmplflbiflboepnahkboeonkam](https://chrome.google.com/webstore/detail/reload-all-tabs/midkcinmplflbiflboepnahkboeonkam)
+https://chrome.google.com/webstore/detail/reload-all-tabs/midkcinmplflbiflboepnahkboeonkam
 
 ## Screenshot
 
@@ -22,5 +22,5 @@ This Google Chrome extension reloads or refreshes all tabs.
 
 ## Authors
 
-Developer: Mohamed Mansour http://mohamedmansour.com
-Designer: Eren Song http://erensong.com
+ - *Developer:* Mohamed Mansour http://mohamedmansour.com
+ - *Designer:* Eren Song http://erensong.com
