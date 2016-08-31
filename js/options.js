@@ -32,6 +32,7 @@ function onExtension() {
 function onSave() {
   const settingsToSave = {
     'enableKeyboardShortcut': $('enableKeyboardShortcut').checked,
+    'reloadWindow': $('reloadWindow').checked,
     'reloadAllWindows': $('reloadAllWindows').checked,
     'shortcutKeyShift': $('shortcutKeyShift').checked,
     'shortcutKeyAlt': $('shortcutKeyAlt').checked,
@@ -58,6 +59,7 @@ function onSave() {
 function onRestore() {
   const settingsToFetch = [
     'enableKeyboardShortcut',
+    'reloadWindow',
     'reloadAllWindows',
     'shortcutKeyShift',
     'shortcutKeyAlt',
@@ -70,6 +72,7 @@ function onRestore() {
   chrome.storage.sync.get(settingsToFetch, settings => {
     $('version').innerText = ' (v' + settings.version + ')'
     $('enableKeyboardShortcut').checked = settings.enableKeyboardShortcut == true
+    $('reloadWindow').checked = settings.reloadWindow == (typeof settings.reloadWindow == 'undefined') ? true : (settings.reloadWindow == true)
     $('reloadAllWindows').checked = settings.reloadAllWindows == true
     $('pinnedOnly').checked = settings.pinnedOnly == true
     $('shortcutKeyAlt').checked = settings.shortcutKeyAlt == true

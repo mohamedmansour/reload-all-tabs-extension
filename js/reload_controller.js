@@ -5,14 +5,9 @@
  */
 ReloadController = function()
 {
-  // Add a listener to the content script can request to.
   chrome.extension.onMessage.addListener(this.onMessage.bind(this))
-
-  // Listens on browser action callbacks.
   chrome.browserAction.onClicked.addListener(this.reload.bind(this))
-
   chrome.storage.onChanged.addListener(this.onStorageChanged.bind(this))
-
   chrome.tabs.onUpdated.addListener(this.onTabUpdated.bind(this))
 
   this.cachedSettings = {
@@ -21,6 +16,7 @@ ReloadController = function()
     shortcutKeyAlt: false,
     shortcutKeyCode: null,
     version: null,
+    reloadWindow: true,
     reloadAllWindows: false,
     contextMenu: true,
     pinnedOnly: false
@@ -31,6 +27,7 @@ ReloadController = function()
     'shortcutKeyShift',
     'shortcutKeyAlt',
     'shortcutKeyCode',
+    'reloadWindow',
     'reloadAllWindows',
     'contextMenu',
     'version',
@@ -41,11 +38,15 @@ ReloadController = function()
     this.cachedSettings.version = settings.version
     this.cachedSettings.enableKeyboardShortcut = settings.enableKeyboardShortcut == true
     this.cachedSettings.shortcutKeyAlt = settings.shortcutKeyAlt == true
+    this.cachedSettings.reloadWindow = (typeof settings.reloadWindow == 'undefined') ? true : (settings.reloadWindow == true)
     this.cachedSettings.reloadAllWindows = settings.reloadAllWindows == true
     this.cachedSettings.pinnedOnly = settings.pinnedOnly == true
     this.cachedSettings.shortcutKeyCode = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
     this.cachedSettings.shortcutKeyShift = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
     this.cachedSettings.contextMenu = (typeof settings.contextMenu == 'undefined') ? true : (settings.contextMenu == true)
+  
+    // Update initial context menu.
+    this.setContextMenuVisible(this.cachedSettings.contextMenu)
   })
 }
 
@@ -54,14 +55,16 @@ ReloadController.prototype.onTabUpdated = function(tabid, changeInfo, tab) {
     return
   }
 
-  chrome.tabs.executeScript(tab.id, { file: 'js/keyboard_handler.js', allFrames: false })
+  if (tab.url.indexOf('http') == 0) {
+    chrome.tabs.executeScript(tab.id, { file: 'js/keyboard_handler.js', allFrames: false })
+  }
 }
 
 ReloadController.prototype.onStorageChanged = function(changes, namespace) {
   for (key in changes) {
     this.cachedSettings[key] = changes[key].newValue
 
-    if (key == 'contextMenu') {
+    if (key == 'contextMenu' || key == 'reloadAllWindows' || key == 'reloadWindow') {
       this.setContextMenuVisible(this.cachedSettings.contextMenu)
     }
   }
@@ -84,14 +87,20 @@ ReloadController.prototype.onMessage = function(request, sender, response)
   }
 }
 
-
 ReloadController.prototype.onMenuClicked = function(info, tab)
 {
-  if (info.menuItemId == 'thiswindow' || info.menuItemId == 'thiswindow2' ) {
-    chrome.windows.getCurrent(this.reloadWindow.bind(this))
-  }
-  else if (info.menuItemId == 'allwindows' || info.menuItemId == 'allwindows2') {
-    this.reloadAllWindows()
+  switch (info.menuItemId) {
+    case 'thiswindow':
+    case 'thiswindow2':
+      chrome.windows.getCurrent(this.reloadWindow.bind(this))
+      break
+    case 'allwindows':
+    case 'allwindows2':
+      this.reloadAllWindows()
+      break
+    default:
+      // No default case.
+      break
   }
 }
 
@@ -127,9 +136,6 @@ ReloadController.prototype.init = function()
     this.cachedSettings.version = currVersion
     chrome.storage.sync.set({'version': this.cachedSettings.version})
   }
-
-  // Initialize the context menu.
-  this.setContextMenuVisible(this.cachedSettings.contextMenu)
 };
 
 /**
@@ -141,41 +147,40 @@ ReloadController.prototype.init = function()
 ReloadController.prototype.setContextMenuVisible = function(visible)
 {
   chrome.contextMenus.removeAll()
-  if (visible) {
-    chrome.contextMenus.create({
-      id: 'root',
-      type: 'normal',
-      title: 'Reload all tabs',
-      contexts: ['page', 'frame', 'selection', 'link', 'editable', 'image', 'video', 'audio']
-    })
-    chrome.contextMenus.create({
-      id: 'thiswindow',
-      parentId: 'root',
-      type: 'normal',
-      title: 'Reload this window',
-      contexts: ['all']
-    })
-    chrome.contextMenus.create({
-      id: 'allwindows',
-      parentId: 'root',
-      type: 'normal',
-      title: 'Reload all windows',
-      contexts: ['all']
-    })
-    chrome.contextMenus.create({
-      id: 'thiswindow2',
-      type: 'normal',
-      title: 'Reload this window',
-      contexts: ['browser_action']
-    })
-    chrome.contextMenus.create({
-      id: 'allwindows2',
-      type: 'normal',
-      title: 'Reload all windows',
-      contexts: ['browser_action']
-    })
 
-    chrome.contextMenus.onClicked.addListener(this.onMenuClicked.bind(this))
+  chrome.contextMenus.onClicked.addListener(this.onMenuClicked.bind(this))
+
+  chrome.contextMenus.create({
+    id: 'thiswindow2',
+    type: 'normal',
+    title: 'Reload this window',
+    contexts: ['browser_action']
+  })
+  chrome.contextMenus.create({
+    id: 'allwindows2',
+    type: 'normal',
+    title: 'Reload all windows',
+    contexts: ['browser_action']
+  })
+
+  if (visible) {
+    if (this.cachedSettings.reloadWindow) {
+      chrome.contextMenus.create({
+        id: 'thiswindow',
+        type: 'normal',
+        title: 'Reload this window',
+        contexts: ['page', 'frame', 'selection', 'link', 'editable', 'image', 'video', 'audio']
+      })
+    }
+
+    if (this.cachedSettings.reloadAllWindows) {
+      chrome.contextMenus.create({
+        id: 'allwindows',
+        type: 'normal',
+        title: 'Reload all windows',
+        contexts: ['page', 'frame', 'selection', 'link', 'editable', 'image', 'video', 'audio']
+      })
+    }
   }
 }
 
