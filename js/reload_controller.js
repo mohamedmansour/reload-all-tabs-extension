@@ -18,8 +18,8 @@ ReloadController = function()
     version: null,
     reloadWindow: true,
     reloadAllWindows: false,
-    contextMenu: true,
-    pinnedOnly: false
+    reloadPinnedOnly: false,
+    reloadUnpinnedOnly: false
   }
 
   const settingsToFetch = [
@@ -29,9 +29,9 @@ ReloadController = function()
     'shortcutKeyCode',
     'reloadWindow',
     'reloadAllWindows',
-    'contextMenu',
-    'version',
-    'pinnedOnly'
+    'reloadPinnedOnly',
+    'reloadUnpinnedOnly',
+    'version'
   ]
 
   chrome.storage.sync.get(settingsToFetch, settings => {
@@ -40,13 +40,13 @@ ReloadController = function()
     this.cachedSettings.shortcutKeyAlt = settings.shortcutKeyAlt == true
     this.cachedSettings.reloadWindow = (typeof settings.reloadWindow == 'undefined') ? true : (settings.reloadWindow == true)
     this.cachedSettings.reloadAllWindows = settings.reloadAllWindows == true
-    this.cachedSettings.pinnedOnly = settings.pinnedOnly == true
+    this.cachedSettings.reloadPinnedOnly = settings.reloadPinnedOnly == true
+    this.cachedSettings.reloadUnpinnedOnly = settings.reloadUnpinnedOnly == true
     this.cachedSettings.shortcutKeyCode = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
     this.cachedSettings.shortcutKeyShift = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
-    this.cachedSettings.contextMenu = (typeof settings.contextMenu == 'undefined') ? true : (settings.contextMenu == true)
   
     // Update initial context menu.
-    this.setContextMenuVisible(this.cachedSettings.contextMenu)
+    this.updateContextMenu()
   })
 }
 
@@ -64,8 +64,8 @@ ReloadController.prototype.onStorageChanged = function(changes, namespace) {
   for (key in changes) {
     this.cachedSettings[key] = changes[key].newValue
 
-    if (key == 'contextMenu' || key == 'reloadAllWindows' || key == 'reloadWindow') {
-      this.setContextMenuVisible(this.cachedSettings.contextMenu)
+    if (key.startsWith('reload')) {
+      this.updateContextMenu()
     }
   }
 }
@@ -90,16 +90,19 @@ ReloadController.prototype.onMessage = function(request, sender, response)
 ReloadController.prototype.onMenuClicked = function(info, tab)
 {
   switch (info.menuItemId) {
-    case 'thiswindow':
-    case 'thiswindow2':
+    case 'reloadWindow':
       chrome.windows.getCurrent(this.reloadWindow.bind(this))
       break
-    case 'allwindows':
-    case 'allwindows2':
+    case 'reloadAllWindows':
       this.reloadAllWindows()
       break
+    case 'reloadPinnedOnly':
+      chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadPinnedOnly: true}))
+      break
+    case 'reloadUnpinnedOnly':
+      chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadUnpinnedOnly: true}))
+      break
     default:
-      // No default case.
       break
   }
 }
@@ -140,48 +143,55 @@ ReloadController.prototype.init = function()
 
 /**
  * Handles the request coming back from an external extension.
- *
- * @param request The request that the extension is passing.
- * @param response The response that will be sent back.
  */
-ReloadController.prototype.setContextMenuVisible = function(visible)
+ReloadController.prototype.updateContextMenu = function()
 {
   chrome.contextMenus.removeAll()
 
   chrome.contextMenus.onClicked.addListener(this.onMenuClicked.bind(this))
 
-  chrome.contextMenus.create({
-    id: 'thiswindow2',
-    type: 'normal',
-    title: 'Reload this window',
-    contexts: ['browser_action']
-  })
-  chrome.contextMenus.create({
-    id: 'allwindows2',
-    type: 'normal',
-    title: 'Reload all windows',
-    contexts: ['browser_action']
-  })
-
-  if (visible) {
-    if (this.cachedSettings.reloadWindow) {
-      chrome.contextMenus.create({
-        id: 'thiswindow',
-        type: 'normal',
-        title: 'Reload this window',
-        contexts: ['page', 'frame', 'selection', 'link', 'editable', 'image', 'video', 'audio']
-      })
-    }
-
-    if (this.cachedSettings.reloadAllWindows) {
-      chrome.contextMenus.create({
-        id: 'allwindows',
-        type: 'normal',
-        title: 'Reload all windows',
-        contexts: ['page', 'frame', 'selection', 'link', 'editable', 'image', 'video', 'audio']
-      })
-    }
+  if (this.cachedSettings.reloadWindow) {
+    chrome.contextMenus.create({
+      id: 'reloadWindow',
+      type: 'normal',
+      title: 'Reload this window',
+      contexts: ['all']
+    })
   }
+
+  if (this.cachedSettings.reloadAllWindows) {
+    chrome.contextMenus.create({
+      id: 'reloadAllWindows',
+      type: 'normal',
+      title: 'Reload all windows',
+      contexts: ['all']
+    })
+  }
+
+  if (this.cachedSettings.reloadPinnedOnly) {
+    chrome.contextMenus.create({
+      id: 'reloadPinnedOnly',
+      type: 'normal',
+      title: 'Reload pinned',
+      contexts: ['all']
+    })
+  }
+  
+  if (this.cachedSettings.reloadUnpinnedOnly) {
+    chrome.contextMenus.create({
+      id: 'reloadUnpinnedOnly',
+      type: 'normal',
+      title: 'Reload unpinned',
+      contexts: ['all']
+    })
+  }
+
+  chrome.contextMenus.create({
+    id: 'options',
+    type: 'normal',
+    title: 'Options',
+    contexts: ['page', 'frame', 'selection', 'link', 'editable', 'image', 'video', 'audio']
+  })
 }
 
 /**
@@ -210,18 +220,31 @@ ReloadController.prototype.onInstall = function()
  *
  * @param win Window to reload.
  */
-ReloadController.prototype.reloadWindow = function(win)
+ReloadController.prototype.reloadWindow = function(win, options = {})
 {
   chrome.tabs.getAllInWindow(win.id, (tabs) => {
-    var pinnedOnly = this.cachedSettings.pinnedOnly;
     for (var i in tabs) {
       var tab = tabs[i]
-      if (!pinnedOnly || tab.pinned){
-        chrome.tabs.update(tab.id, {url: tab.url, selected: tab.selected}, null)
-      }
+      this.reloadStrategy(tab, options)
     }
-  });
-};
+  })
+}
+
+ReloadController.prototype.reloadStrategy = function(tab, options = {}) {
+  let issueReload = true
+
+  if (options.reloadPinnedOnly && !tab.pinned){
+    issueReload = false
+  }
+
+  if (options.reloadUnpinnedOnly && tab.pinned){
+    issueReload = false
+  }
+  
+  if (issueReload){
+    chrome.tabs.update(tab.id, {url: tab.url, selected: tab.selected}, null)
+  }
+}
 
 /**
  * Reload all tabs in all windows one by one.
@@ -234,6 +257,5 @@ ReloadController.prototype.reloadAllWindows = function()
   }.bind(this))
 }
 
-
-  var reloadController = new ReloadController()
-  reloadController.init()
+var reloadController = new ReloadController()
+reloadController.init()

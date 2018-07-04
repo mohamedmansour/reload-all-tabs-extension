@@ -34,11 +34,11 @@ function onSave() {
     'enableKeyboardShortcut': $('enableKeyboardShortcut').checked,
     'reloadWindow': $('reloadWindow').checked,
     'reloadAllWindows': $('reloadAllWindows').checked,
+    'reloadPinnedOnly': $('reloadPinnedOnly').checked,
+    'reloadUnpinnedOnly': $('reloadUnpinnedOnly').checked,
     'shortcutKeyShift': $('shortcutKeyShift').checked,
     'shortcutKeyAlt': $('shortcutKeyAlt').checked,
     'shortcutKeyCode': parseInt($('shortcutKeyCode').value),
-    'contextMenu': $('contextMenu').checked,
-    'pinnedOnly': $('pinnedOnly').checked
   };
 
   chrome.storage.sync.set(settingsToSave, () => {
@@ -61,23 +61,23 @@ function onRestore() {
     'enableKeyboardShortcut',
     'reloadWindow',
     'reloadAllWindows',
+    'reloadPinnedOnly',
+    'reloadUnpinnedOnly',
     'shortcutKeyShift',
     'shortcutKeyAlt',
     'shortcutKeyCode',
-    'contextMenu',
-    'pinnedOnly',
     'version'
   ]
 
   chrome.storage.sync.get(settingsToFetch, settings => {
     $('version').innerText = ' (v' + settings.version + ')'
     $('enableKeyboardShortcut').checked = settings.enableKeyboardShortcut == true
-    $('reloadWindow').checked = settings.reloadWindow == (typeof settings.reloadWindow == 'undefined') ? true : (settings.reloadWindow == true)
+    $('reloadWindow').checked = (typeof settings.reloadWindow == 'undefined') ? true : (settings.reloadWindow == true)
     $('reloadAllWindows').checked = settings.reloadAllWindows == true
-    $('pinnedOnly').checked = settings.pinnedOnly == true
+    $('reloadPinnedOnly').checked = settings.reloadPinnedOnly == true
+    $('reloadUnpinnedOnly').checked = settings.reloadUnpinnedOnly == true
     $('shortcutKeyAlt').checked = settings.shortcutKeyAlt == true
     $('shortcutKeyCode').value = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
     $('shortcutKeyShift').checked = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
-    $('contextMenu').checked = (typeof settings.contextMenu == 'undefined') ? true : (settings.contextMenu == true)
   })
 }

@@ -1,6 +1,6 @@
 {
   "name": "Reload All Tabs",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "manifest_version": 2,
   "description": "Reload all tabs using keyboard shortcut(ctrl + shift + r), context menu, or browser action button.",
   "icons": {
