@@ -19,7 +19,9 @@ ReloadController = function()
     reloadWindow: true,
     reloadAllWindows: false,
     reloadPinnedOnly: false,
-    reloadUnpinnedOnly: false
+    reloadUnpinnedOnly: false,
+    reloadAllRight: false,
+    reloadAllLeft: false
   }
 
   const settingsToFetch = [
@@ -31,6 +33,8 @@ ReloadController = function()
     'reloadAllWindows',
     'reloadPinnedOnly',
     'reloadUnpinnedOnly',
+    'reloadAllRight',
+    'reloadAllLeft',
     'version'
   ]
 
@@ -42,6 +46,8 @@ ReloadController = function()
     this.cachedSettings.reloadAllWindows = settings.reloadAllWindows == true
     this.cachedSettings.reloadPinnedOnly = settings.reloadPinnedOnly == true
     this.cachedSettings.reloadUnpinnedOnly = settings.reloadUnpinnedOnly == true
+    this.cachedSettings.reloadAllRight = settings.reloadAllRight == true
+    this.cachedSettings.reloadAllLeft = settings.reloadAllLeft == true
     this.cachedSettings.shortcutKeyCode = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
     this.cachedSettings.shortcutKeyShift = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
   
@@ -101,6 +107,12 @@ ReloadController.prototype.onMenuClicked = function(info, tab)
       break
     case 'reloadUnpinnedOnly':
       chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadUnpinnedOnly: true}))
+      break
+    case 'reloadAllLeft':
+      chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadAllLeft: true}))
+      break
+    case 'reloadAllRight':
+      chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadAllRight: true}))
       break
     default:
       break
@@ -172,7 +184,7 @@ ReloadController.prototype.updateContextMenu = function()
     chrome.contextMenus.create({
       id: 'reloadPinnedOnly',
       type: 'normal',
-      title: 'Reload pinned',
+      title: 'Reload pinned tabs',
       contexts: ['all']
     })
   }
@@ -181,7 +193,25 @@ ReloadController.prototype.updateContextMenu = function()
     chrome.contextMenus.create({
       id: 'reloadUnpinnedOnly',
       type: 'normal',
-      title: 'Reload unpinned',
+      title: 'Reload unpinned tabs',
+      contexts: ['all']
+    })
+  }
+
+  if (this.cachedSettings.reloadAllLeft) {
+    chrome.contextMenus.create({
+      id: 'reloadAllLeft',
+      type: 'normal',
+      title: 'Reload all tabs to the left',
+      contexts: ['all']
+    })
+  }
+
+  if (this.cachedSettings.reloadAllRight) {
+    chrome.contextMenus.create({
+      id: 'reloadAllRight',
+      type: 'normal',
+      title: 'Reload all tabs to the right',
       contexts: ['all']
     })
   }
@@ -223,14 +253,16 @@ ReloadController.prototype.onInstall = function()
 ReloadController.prototype.reloadWindow = function(win, options = {})
 {
   chrome.tabs.getAllInWindow(win.id, (tabs) => {
+    let strategy = {}
     for (var i in tabs) {
       var tab = tabs[i]
-      this.reloadStrategy(tab, options)
+      this.reloadStrategy(tab, strategy, options)
     }
   })
 }
 
-ReloadController.prototype.reloadStrategy = function(tab, options = {}) {
+// When this gets complicated, create a strategy pattern.
+ReloadController.prototype.reloadStrategy = function(tab, strategy, options = {}) {
   let issueReload = true
 
   if (options.reloadPinnedOnly && !tab.pinned){
@@ -240,8 +272,37 @@ ReloadController.prototype.reloadStrategy = function(tab, options = {}) {
   if (options.reloadUnpinnedOnly && tab.pinned){
     issueReload = false
   }
+
+  if (options.reloadAllLeft) {
+    if (tab.active) {
+      strategy.stop = true
+    }
+
+    if (strategy.stop) {
+      issueReload = false
+    }
+  }
   
+  if (options.reloadAllRight) {
+    if (!strategy.reset) {
+      if (!tab.active) {
+        strategy.stop = true
+      }
+      else {
+        strategy.reset = true
+      }
+    }
+    
+    if (strategy.stop) {
+      issueReload = false
+      if (strategy.reset) {
+        strategy.stop = false
+      }
+    }
+  }
+
   if (issueReload){
+    console.log(`reloading ${tab.url}`)
     chrome.tabs.update(tab.id, {url: tab.url, selected: tab.selected}, null)
   }
 }

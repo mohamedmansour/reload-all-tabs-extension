@@ -36,6 +36,8 @@ function onSave() {
     'reloadAllWindows': $('reloadAllWindows').checked,
     'reloadPinnedOnly': $('reloadPinnedOnly').checked,
     'reloadUnpinnedOnly': $('reloadUnpinnedOnly').checked,
+    'reloadAllLeft': $('reloadAllLeft').checked,
+    'reloadAllRight': $('reloadAllRight').checked,
     'shortcutKeyShift': $('shortcutKeyShift').checked,
     'shortcutKeyAlt': $('shortcutKeyAlt').checked,
     'shortcutKeyCode': parseInt($('shortcutKeyCode').value),
@@ -63,6 +65,8 @@ function onRestore() {
     'reloadAllWindows',
     'reloadPinnedOnly',
     'reloadUnpinnedOnly',
+    'reloadAllLeft',
+    'reloadAllRight',
     'shortcutKeyShift',
     'shortcutKeyAlt',
     'shortcutKeyCode',
@@ -76,6 +80,8 @@ function onRestore() {
     $('reloadAllWindows').checked = settings.reloadAllWindows == true
     $('reloadPinnedOnly').checked = settings.reloadPinnedOnly == true
     $('reloadUnpinnedOnly').checked = settings.reloadUnpinnedOnly == true
+    $('reloadAllLeft').checked = settings.reloadAllLeft == true
+    $('reloadAllRight').checked = settings.reloadAllRight == true
     $('shortcutKeyAlt').checked = settings.shortcutKeyAlt == true
     $('shortcutKeyCode').value = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
     $('shortcutKeyShift').checked = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
