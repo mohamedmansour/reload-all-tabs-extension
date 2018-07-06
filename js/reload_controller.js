@@ -215,13 +215,6 @@ ReloadController.prototype.updateContextMenu = function()
       contexts: ['all']
     })
   }
-
-  chrome.contextMenus.create({
-    id: 'options',
-    type: 'normal',
-    title: 'Options',
-    contexts: ['page', 'frame', 'selection', 'link', 'editable', 'image', 'video', 'audio']
-  })
 }
 
 /**
