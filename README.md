@@ -1,4 +1,4 @@
-# Reload all tabs Extension
+# Reload all Tabs Extension
 
 This Google Chrome extension reloads or refreshes all tabs.
 
