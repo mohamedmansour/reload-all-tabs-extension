@@ -4,7 +4,6 @@
   <title>Reload All Tabs Options</title>
   <link rel="stylesheet" type="text/css" href="/css/options.css" />
   <script type="text/javascript" src="/js/functions.js"></script>
-  <script type="text/javascript" src="/js/keyboard_handler.js"></script>
   <script type="text/javascript" src="/js/options.js"></script>
 </head>
 <body>
@@ -38,6 +37,8 @@
     <div class="extension-template">
       <div class="extension-header">Context Menu (Right Click)</div>
       <div class="extension-options">
+        <p>When you have multiple checkboxes checked, it will place all context menus under one parent "Reload All Tabs" menu.</p>
+        <p>When you have just a single context menu selected, there will be no parent.</p>
         <dl>
           <dt>Reload all tabs in current window:</dt>
           <dd><input id="reloadWindow" type="checkbox" /></dd>
@@ -57,43 +58,12 @@
     <div class="extension-template">
       <div class="extension-header">Keyboard Shortcut Options</div>
       <div class="extension-options">
+        <p>To setup the keyboard shortcut or change it, please visit the shortcuts page in Chrome: 
+          <span id="keyboardShortcutUpdate">chrome://extensions/shortcuts</span></p>
+        <img src="/img/keyboard-shortcut.png" alt="Reload All Tabs Keyboard Shortcut" />
         <dl>
-          <dt>Enable Keyboard Shortcut:</dt>
-          <dd><input id="enableKeyboardShortcut" type="checkbox" /></dd>
-          <dt>Keyboard shortcut:</dt>
-          <dd>
-            Ctrl <input type="checkbox" checked="checked" disabled="disabled"/> +
-            Shift <input id="shortcutKeyShift" type="checkbox" /> +
-            Alt <input id="shortcutKeyAlt" type="checkbox" /> +
-            <select id="shortcutKeyCode">
-              <option value="65">a</option>
-              <option value="66">b</option>
-              <option value="67">c</option>
-              <option value="68">d</option>
-              <option value="69">e</option>
-              <option value="70">f</option>
-              <option value="71">g</option>
-              <option value="72">h</option>
-              <option value="73">i</option>
-              <option value="74">j</option>
-              <option value="75">k</option>
-              <option value="76">l</option>
-              <option value="77">m</option>
-              <option value="78">n</option>
-              <option value="79">o</option>
-              <option value="80">p</option>
-              <option value="81">q</option>
-              <option value="82">r</option>
-              <option value="83">s</option>
-              <option value="84">t</option>
-              <option value="85">u</option>
-              <option value="86">v</option>
-              <option value="87">w</option>
-              <option value="88">x</option>
-              <option value="89">y</option>
-              <option value="90">z</option>
-            </select>
-          </dd>
+          <dt>Current keyboard shortcut:</dt>
+          <dd id="keyboardShortcut"></dd>
         </dl>
       </div>
     </div>

@@ -1,8 +1,8 @@
 {
   "name": "Reload All Tabs",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "manifest_version": 2,
-  "description": "Reload all tabs using keyboard shortcut(ctrl + shift + r), context menu, or browser action button.",
+  "description": "Reload All tabs using keyboard shortcut(alt + shift + r), context menu, or browser action button.",
   "icons": {
     "16": "img/icon16.png",
     "48": "img/icon48.png",
@@ -21,5 +21,13 @@
     "storage",
     "tabs",
     "contextMenus"
-  ]
+  ],
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Alt + Shift + R",
+        "mac": "Alt + Shift + R"
+      }
+    }
+  }
 }
