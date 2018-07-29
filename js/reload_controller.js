@@ -8,7 +8,6 @@ ReloadController = function()
   chrome.extension.onMessage.addListener(this.onMessage.bind(this))
   chrome.browserAction.onClicked.addListener(this.reload.bind(this))
   chrome.storage.onChanged.addListener(this.onStorageChanged.bind(this))
-  chrome.tabs.onUpdated.addListener(this.onTabUpdated.bind(this))
 
   this.cachedSettings = {
     enableKeyboardShortcut: false,
@@ -54,16 +53,6 @@ ReloadController = function()
     // Update initial context menu.
     this.updateContextMenu()
   })
-}
-
-ReloadController.prototype.onTabUpdated = function(tabid, changeInfo, tab) {
-  if (changeInfo.status != 'complete') {
-    return
-  }
-
-  if (tab.url.indexOf('http') == 0) {
-    chrome.tabs.executeScript(tab.id, { file: 'js/keyboard_handler.js', allFrames: false })
-  }
 }
 
 ReloadController.prototype.onStorageChanged = function(changes, namespace) {
@@ -222,20 +211,7 @@ ReloadController.prototype.updateContextMenu = function()
  */
 ReloadController.prototype.onInstall = function()
 {
-  chrome.windows.getAll({ populate: true }, function(windows) {
-    for (var w = 0; w < windows.length; w++) {
-      var tabs = windows[w].tabs
-      for (var t = 0; t < tabs.length; t++) {
-        var tab = tabs[t]
-        if (tab.url.indexOf('http') == 0) { // Only inject in web pages.
-          chrome.tabs.executeScript(tab.id, { file: 'js/keyboard_handler.js', allFrames: false })
-        }
-      }
-    }
-  })
-
-  // Show up the options window on first install.
-  chrome.tabs.create({url: 'options.html'})
+  chrome.runtime.openOptionsPage()
 }
 
 /**

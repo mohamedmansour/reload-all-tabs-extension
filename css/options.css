@@ -4,27 +4,24 @@ body {
   margin: 10px;
   min-width: 47em;
 }
- 
+
 a {
   color: blue;
   font-size: 100%;
 }
 
-dl {
-}
-
 dt {
-width: 25em;
-padding: .5em;
-float: left;
-margin: 0;
+  width: 25em;
+  padding: .5em;
+  float: left;
+  margin: 0;
+  font-weight: bold;
 }
 
 dd {
-margin-left: 16em;
-padding: .4em;
+  margin-left: 16em;
+  padding: .4em;
 }
-
 
 h1 {
   background: url("/img/icon48.png") 0px 30px no-repeat;
@@ -36,7 +33,7 @@ h1 {
   font-size: 150%;
   font-weight: bold;
 }
- 
+
 button {
   font-size: 100%;
 }
@@ -73,7 +70,7 @@ em {
   font-size: 85%;
   padding: 0.8em 10px;
 }
- 
+
 #extension-footer {
   text-align: right;
   padding: 10px 0px;
@@ -86,18 +83,25 @@ em {
 }
 
 #info-message {
-  -webkit-transition-duration: 1s;
+  transition-duration: 1s;
   display: none;
-  background:#FDFFBD none repeat scroll 0 0;
-  -webkit-border-radius: 5px;
+  background: #FDFFBD none repeat scroll 0 0;
+  border-radius: 5px;
   border-radius: 5px;
   padding: 7px 10px;
   margin-right: 30px;
 }
 
 .note {
-  -webkit-border-radius: 10px;
+  border-radius: 10px;
   background: #c80000;
   padding: 10px;
   width: 500px;
+}
+
+#keyboardShortcutUpdate {
+  color: blue;
+  font-size: 100%;
+  cursor: pointer;
+  display: inline;
 }

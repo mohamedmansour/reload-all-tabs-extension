@@ -1,20 +1,21 @@
-window.addEventListener('load', onLoad, false);
+window.addEventListener('load', onLoad, false)
 
 /**
  * When the options window has been loaded.
  */
 function onLoad() {
   onRestore();
-  $('button-save').addEventListener('click', onSave, false);
-  $('button-close').addEventListener('click', onClose, false);
-  $('button-extension').addEventListener('click', onExtension, false);
+  $('button-save').addEventListener('click', onSave, false)
+  $('button-close').addEventListener('click', onClose, false)
+  $('button-extension').addEventListener('click', onExtension, false)
+  $('keyboardShortcutUpdate').addEventListener('click', onKeyboardShortcut, false)
 }
 
 /**
  *  When the options window is closed;
  */
 function onClose() {
-  window.close();
+  window.close()
 }
 
 /**
@@ -22,8 +23,8 @@ function onClose() {
  * is because you are not allowed to load that local resource via renderer.
  */
 function onExtension() {
-  chrome.tabs.create({url: 'chrome://extensions/'});
-  return false;
+  chrome.tabs.create({url: 'chrome://extensions/'})
+  return false
 }
 
 /**
@@ -31,16 +32,12 @@ function onExtension() {
  */
 function onSave() {
   const settingsToSave = {
-    'enableKeyboardShortcut': $('enableKeyboardShortcut').checked,
     'reloadWindow': $('reloadWindow').checked,
     'reloadAllWindows': $('reloadAllWindows').checked,
     'reloadPinnedOnly': $('reloadPinnedOnly').checked,
     'reloadUnpinnedOnly': $('reloadUnpinnedOnly').checked,
     'reloadAllLeft': $('reloadAllLeft').checked,
     'reloadAllRight': $('reloadAllRight').checked,
-    'shortcutKeyShift': $('shortcutKeyShift').checked,
-    'shortcutKeyAlt': $('shortcutKeyAlt').checked,
-    'shortcutKeyCode': parseInt($('shortcutKeyCode').value),
   };
 
   chrome.storage.sync.set(settingsToSave, () => {
@@ -60,30 +57,39 @@ function onSave() {
 */
 function onRestore() {
   const settingsToFetch = [
-    'enableKeyboardShortcut',
     'reloadWindow',
     'reloadAllWindows',
     'reloadPinnedOnly',
     'reloadUnpinnedOnly',
     'reloadAllLeft',
     'reloadAllRight',
-    'shortcutKeyShift',
-    'shortcutKeyAlt',
-    'shortcutKeyCode',
     'version'
   ]
 
   chrome.storage.sync.get(settingsToFetch, settings => {
     $('version').innerText = ' (v' + settings.version + ')'
-    $('enableKeyboardShortcut').checked = settings.enableKeyboardShortcut == true
     $('reloadWindow').checked = (typeof settings.reloadWindow == 'undefined') ? true : (settings.reloadWindow == true)
     $('reloadAllWindows').checked = settings.reloadAllWindows == true
     $('reloadPinnedOnly').checked = settings.reloadPinnedOnly == true
     $('reloadUnpinnedOnly').checked = settings.reloadUnpinnedOnly == true
     $('reloadAllLeft').checked = settings.reloadAllLeft == true
     $('reloadAllRight').checked = settings.reloadAllRight == true
-    $('shortcutKeyAlt').checked = settings.shortcutKeyAlt == true
-    $('shortcutKeyCode').value = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
-    $('shortcutKeyShift').checked = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
   })
+
+  chrome.commands.getAll(callback => {
+    $('keyboardShortcut').innerText = callback[0].shortcut || 'Not Set'
+  }) 
+}
+
+function onKeyboardShortcut(e) {
+  var selection = window.getSelection()
+  var range = document.createRange()
+  range.selectNodeContents(e.target)
+  selection.removeAllRanges()
+  selection.addRange(range)
+
+  document.execCommand('copy')
+  selection.removeAllRanges()
+
+  alert(`Copied the following link '${e.target.innerText}' to clipboard. You can change its defaults there. Due to Chrome security, you need to visit it manually.`)
 }
