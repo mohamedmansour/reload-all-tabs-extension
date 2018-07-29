@@ -17,5 +17,9 @@
     "persistent": false
   },
   "options_page": "options.html",
-  "permissions": ["storage", "tabs", "contextMenus", "http://*/*", "https://*/*", "ftp://*/*"]
+  "permissions": [
+    "storage",
+    "tabs",
+    "contextMenus"
+  ]
 }
