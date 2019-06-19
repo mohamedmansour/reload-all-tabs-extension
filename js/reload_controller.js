@@ -8,6 +8,7 @@ ReloadController = function()
   chrome.extension.onMessage.addListener(this.onMessage.bind(this))
   chrome.browserAction.onClicked.addListener(this.reload.bind(this))
   chrome.storage.onChanged.addListener(this.onStorageChanged.bind(this))
+  chrome.windows.onCreated.addListener(this.onStartup.bind(this))
 
   this.cachedSettings = {
     enableKeyboardShortcut: false,
@@ -20,7 +21,8 @@ ReloadController = function()
     reloadPinnedOnly: false,
     reloadUnpinnedOnly: false,
     reloadAllRight: false,
-    reloadAllLeft: false
+    reloadAllLeft: false,
+    reloadStartup: 'none'
   }
 
   const settingsToFetch = [
@@ -34,6 +36,7 @@ ReloadController = function()
     'reloadUnpinnedOnly',
     'reloadAllRight',
     'reloadAllLeft',
+    'reloadStartup',
     'version'
   ]
 
@@ -47,9 +50,10 @@ ReloadController = function()
     this.cachedSettings.reloadUnpinnedOnly = settings.reloadUnpinnedOnly == true
     this.cachedSettings.reloadAllRight = settings.reloadAllRight == true
     this.cachedSettings.reloadAllLeft = settings.reloadAllLeft == true
+    this.cachedSettings.reloadStartup = (typeof settings.reloadStartup == 'undefined') ? "none" : settings.reloadStartup
     this.cachedSettings.shortcutKeyCode = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
     this.cachedSettings.shortcutKeyShift = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
-  
+
     // Update initial context menu.
     this.updateContextMenu()
   })
@@ -139,8 +143,31 @@ ReloadController.prototype.init = function()
     // Update the version incase we want to do something in future.
     this.cachedSettings.version = currVersion
     chrome.storage.sync.set({'version': this.cachedSettings.version})
+
   }
 };
+
+/**
+ * Do onStartup actions
+ */
+ReloadController.prototype.onStartup = function(win)
+{
+  var con = chrome.extension.getBackgroundPage().console;
+  con.log(`onStartup: ${this.cachedSettings.reloadStartup}`)
+  switch (this.cachedSettings.reloadStartup) {
+    case 'all':
+      this.reloadWindow(win)
+      break
+    case 'pinned':
+      this.reloadWindow(win, {reloadPinnedOnly: true})
+      break
+    case 'unpinned':
+        this.reloadWindow(win, {reloadUnpinnedOnly: true})
+      break
+    default:
+      break
+  }
+}
 
 /**
  * Handles the request coming back from an external extension.
@@ -177,7 +204,7 @@ ReloadController.prototype.updateContextMenu = function()
       contexts: ['all']
     })
   }
-  
+
   if (this.cachedSettings.reloadUnpinnedOnly) {
     chrome.contextMenus.create({
       id: 'reloadUnpinnedOnly',
@@ -251,7 +278,7 @@ ReloadController.prototype.reloadStrategy = function(tab, strategy, options = {}
       issueReload = false
     }
   }
-  
+
   if (options.reloadAllRight) {
     if (!strategy.reset) {
       if (!tab.active) {
@@ -261,7 +288,7 @@ ReloadController.prototype.reloadStrategy = function(tab, strategy, options = {}
         strategy.reset = true
       }
     }
-    
+
     if (strategy.stop) {
       issueReload = false
       if (strategy.reset) {
@@ -271,7 +298,8 @@ ReloadController.prototype.reloadStrategy = function(tab, strategy, options = {}
   }
 
   if (issueReload){
-    console.log(`reloading ${tab.url}`)
+    var con = chrome.extension.getBackgroundPage().console;
+    con.log(`reloading ${tab.url}`)
     chrome.tabs.update(tab.id, {url: tab.url, selected: tab.selected}, null)
   }
 }
@@ -285,7 +313,7 @@ ReloadController.prototype.reloadAllWindows = function()
     for (var i in windows)
       this.reloadWindow(windows[i])
   }.bind(this))
-}
+};
 
 var reloadController = new ReloadController()
 reloadController.init()

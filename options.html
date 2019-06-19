@@ -56,9 +56,21 @@
       </div>
     </div>
     <div class="extension-template">
+      <div class="extension-header">Startup</div>
+      <div class="extension-options">
+        <p>Reload the following tabs on startup:</p>
+        <select id="reloadStartup">
+          <option value="all">All tabs</option>
+          <option value="pinned">Pinned tabs</option>
+          <option value="unpinned">Unpinned tabs</option>
+          <option value="none">None</option>
+        </select>
+      </div>
+    </div>
+    <div class="extension-template">
       <div class="extension-header">Keyboard Shortcut Options</div>
       <div class="extension-options">
-        <p>To setup the keyboard shortcut or change it, please visit the shortcuts page in Chrome: 
+        <p>To setup the keyboard shortcut or change it, please visit the shortcuts page in Chrome:
           <span id="keyboardShortcutUpdate">chrome://extensions/shortcuts</span></p>
         <img src="/img/keyboard-shortcut.png" alt="Reload All Tabs Keyboard Shortcut" />
         <dl>
