@@ -38,10 +38,11 @@ function onSave() {
     'reloadUnpinnedOnly': $('reloadUnpinnedOnly').checked,
     'reloadAllLeft': $('reloadAllLeft').checked,
     'reloadAllRight': $('reloadAllRight').checked,
+    'reloadStartup': $('reloadStartup').value
   };
 
   chrome.storage.sync.set(settingsToSave, () => {
-    
+
     // Update status to let user know options were saved.
     var info = $('info-message')
     info.style.display = 'inline'
@@ -63,6 +64,7 @@ function onRestore() {
     'reloadUnpinnedOnly',
     'reloadAllLeft',
     'reloadAllRight',
+    'reloadStartup',
     'version'
   ]
 
@@ -74,11 +76,12 @@ function onRestore() {
     $('reloadUnpinnedOnly').checked = settings.reloadUnpinnedOnly == true
     $('reloadAllLeft').checked = settings.reloadAllLeft == true
     $('reloadAllRight').checked = settings.reloadAllRight == true
+    $('reloadStartup').value = (typeof settings.reloadStartup == 'undefined') ? 'none' : settings.reloadStartup
   })
 
   chrome.commands.getAll(callback => {
     $('keyboardShortcut').innerText = callback[0].shortcut || 'Not Set'
-  }) 
+  })
 }
 
 function onKeyboardShortcut(e) {
