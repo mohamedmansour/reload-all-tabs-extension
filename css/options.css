@@ -72,14 +72,14 @@ em {
 }
 
 #extension-footer {
-  text-align: right;
+  text-align: left;
   padding: 10px 0px;
 }
 
 #credits {
   font-size: 85%;
   margin-top: 1em;
-  text-align: right;
+  text-align: left;
 }
 
 #info-message {
