@@ -38,18 +38,18 @@ function onSave() {
     'reloadUnpinnedOnly': $('reloadUnpinnedOnly').checked,
     'reloadAllLeft': $('reloadAllLeft').checked,
     'reloadAllRight': $('reloadAllRight').checked,
-    'reloadStartup': $('reloadStartup').value
+    'reloadStartup': $('reloadStartup').value,
+    'bypassCache': $('bypassCache').checked
   };
 
   chrome.storage.sync.set(settingsToSave, () => {
 
     // Update status to let user know options were saved.
-    var info = $('info-message')
-    info.style.display = 'inline'
+    const info = $('info-message')
     info.style.opacity = 1
     setTimeout(function() {
       info.style.opacity = 0.0;
-    })
+    }, 1000)
   })
 }
 
@@ -65,6 +65,7 @@ function onRestore() {
     'reloadAllLeft',
     'reloadAllRight',
     'reloadStartup',
+    'bypassCache',
     'version'
   ]
 
@@ -77,6 +78,7 @@ function onRestore() {
     $('reloadAllLeft').checked = settings.reloadAllLeft == true
     $('reloadAllRight').checked = settings.reloadAllRight == true
     $('reloadStartup').value = (typeof settings.reloadStartup == 'undefined') ? 'none' : settings.reloadStartup
+    $('bypassCache').checked = settings.bypassCache == true
   })
 
   chrome.commands.getAll(callback => {
@@ -85,8 +87,8 @@ function onRestore() {
 }
 
 function onKeyboardShortcut(e) {
-  var selection = window.getSelection()
-  var range = document.createRange()
+  const selection = window.getSelection()
+  const range = document.createRange()
   range.selectNodeContents(e.target)
   selection.removeAllRanges()
   selection.addRange(range)

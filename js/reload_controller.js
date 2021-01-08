@@ -22,7 +22,8 @@ ReloadController = function()
     reloadUnpinnedOnly: false,
     reloadAllRight: false,
     reloadAllLeft: false,
-    reloadStartup: 'none'
+    reloadStartup: 'none',
+    bypassCache: false
   }
 
   const settingsToFetch = [
@@ -37,6 +38,7 @@ ReloadController = function()
     'reloadAllRight',
     'reloadAllLeft',
     'reloadStartup',
+    'bypassCache',
     'version'
   ]
 
@@ -51,6 +53,7 @@ ReloadController = function()
     this.cachedSettings.reloadAllRight = settings.reloadAllRight == true
     this.cachedSettings.reloadAllLeft = settings.reloadAllLeft == true
     this.cachedSettings.reloadStartup = (typeof settings.reloadStartup == 'undefined') ? "none" : settings.reloadStartup
+    this.cachedSettings.bypassCache = settings.bypassCache == true
     this.cachedSettings.shortcutKeyCode = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
     this.cachedSettings.shortcutKeyShift = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
 
@@ -63,7 +66,7 @@ ReloadController.prototype.onStorageChanged = function(changes, namespace) {
   for (key in changes) {
     this.cachedSettings[key] = changes[key].newValue
 
-    if (key.startsWith('reload')) {
+    if (key.startsWith('reload') || key == 'bypassCache') {
       this.updateContextMenu()
     }
   }
@@ -75,7 +78,7 @@ ReloadController.prototype.onStorageChanged = function(changes, namespace) {
 ReloadController.prototype.onMessage = function(request, sender, response)
 {
   // Checks if the shortcut key is valid to reload all tabs.
-  var validKeys = (this.cachedSettings.enableKeyboardShortcut &&
+  const validKeys = (this.cachedSettings.enableKeyboardShortcut &&
                    request.code == this.cachedSettings.shortcutKeyCode &&
                    request.alt == this.cachedSettings.shortcutKeyAlt &&
                    request.shift == this.cachedSettings.shortcutKeyShift)
@@ -131,8 +134,8 @@ ReloadController.prototype.reload = function(info, tab)
  */
 ReloadController.prototype.init = function()
 {
-  var currVersion = chrome.app.getDetails().version
-  var prevVersion = this.cachedSettings.version
+  const currVersion = chrome.app.getDetails().version
+  const prevVersion = this.cachedSettings.version
   if (currVersion != prevVersion) {
 
     // Check if we just installed this extension.
@@ -152,7 +155,7 @@ ReloadController.prototype.init = function()
  */
 ReloadController.prototype.onStartup = function(win)
 {
-  var con = chrome.extension.getBackgroundPage().console;
+  const con = chrome.extension.getBackgroundPage().console;
   con.log(`onStartup: ${this.cachedSettings.reloadStartup}`)
   switch (this.cachedSettings.reloadStartup) {
     case 'all':
@@ -178,11 +181,16 @@ ReloadController.prototype.updateContextMenu = function()
 
   chrome.contextMenus.onClicked.addListener(this.onMenuClicked.bind(this))
 
+  let attributions = '';
+  if (this.cachedSettings.bypassCache) {
+    attributions = ' (cache bypassed)'
+  }
+
   if (this.cachedSettings.reloadWindow) {
     chrome.contextMenus.create({
       id: 'reloadWindow',
       type: 'normal',
-      title: 'Reload this window',
+      title: `Reload this window${attributions}`,
       contexts: ['all']
     })
   }
@@ -191,7 +199,7 @@ ReloadController.prototype.updateContextMenu = function()
     chrome.contextMenus.create({
       id: 'reloadAllWindows',
       type: 'normal',
-      title: 'Reload all windows',
+      title: `Reload all windows${attributions}`,
       contexts: ['all']
     })
   }
@@ -200,7 +208,7 @@ ReloadController.prototype.updateContextMenu = function()
     chrome.contextMenus.create({
       id: 'reloadPinnedOnly',
       type: 'normal',
-      title: 'Reload pinned tabs',
+      title: `Reload pinned tabs${attributions}`,
       contexts: ['all']
     })
   }
@@ -209,7 +217,7 @@ ReloadController.prototype.updateContextMenu = function()
     chrome.contextMenus.create({
       id: 'reloadUnpinnedOnly',
       type: 'normal',
-      title: 'Reload unpinned tabs',
+      title: `Reload unpinned tabs${attributions}`,
       contexts: ['all']
     })
   }
@@ -218,7 +226,7 @@ ReloadController.prototype.updateContextMenu = function()
     chrome.contextMenus.create({
       id: 'reloadAllLeft',
       type: 'normal',
-      title: 'Reload all tabs to the left',
+      title: `Reload all tabs to the left${attributions}`,
       contexts: ['all']
     })
   }
@@ -227,7 +235,7 @@ ReloadController.prototype.updateContextMenu = function()
     chrome.contextMenus.create({
       id: 'reloadAllRight',
       type: 'normal',
-      title: 'Reload all tabs to the right',
+      title: `Reload all tabs to the right${attributions}`,
       contexts: ['all']
     })
   }
@@ -249,7 +257,7 @@ ReloadController.prototype.onInstall = function()
 ReloadController.prototype.reloadWindow = function(win, options = {})
 {
   chrome.tabs.getAllInWindow(win.id, (tabs) => {
-    let strategy = {}
+    const strategy = {}
     for (var i in tabs) {
       var tab = tabs[i]
       this.reloadStrategy(tab, strategy, options)
@@ -298,9 +306,9 @@ ReloadController.prototype.reloadStrategy = function(tab, strategy, options = {}
   }
 
   if (issueReload){
-    var con = chrome.extension.getBackgroundPage().console;
-    con.log(`reloading ${tab.url}`)
-    chrome.tabs.update(tab.id, {url: tab.url, selected: tab.selected}, null)
+    const con = chrome.extension.getBackgroundPage().console;
+    con.log(`reloading ${tab.url}, cache bypassed: ${this.cachedSettings.bypassCache}`)
+    chrome.tabs.reload(tab.id, { bypassCache: this.cachedSettings.bypassCache }, null)
   }
 }
 
@@ -315,5 +323,5 @@ ReloadController.prototype.reloadAllWindows = function()
   }.bind(this))
 };
 
-var reloadController = new ReloadController()
+const reloadController = new ReloadController()
 reloadController.init()

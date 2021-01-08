@@ -56,15 +56,21 @@
       </div>
     </div>
     <div class="extension-template">
-      <div class="extension-header">Startup</div>
+      <div class="extension-header">Advanced Options</div>
       <div class="extension-options">
-        <p>Reload the following tabs on startup:</p>
-        <select id="reloadStartup">
-          <option value="all">All tabs</option>
-          <option value="pinned">Pinned tabs</option>
-          <option value="unpinned">Unpinned tabs</option>
-          <option value="none">None</option>
-        </select>
+        <dl>
+          <dt>Reload the following tabs on startup:</dt>
+          <dd>
+            <select id="reloadStartup">
+              <option value="all">All tabs</option>
+              <option value="pinned">Pinned tabs</option>
+              <option value="unpinned">Unpinned tabs</option>
+              <option value="none">None</option>
+            </select>
+          </dd>
+          <dt>Bypass Cache when reloading:</dt>
+          <dd><input id="bypassCache" type="checkbox" /></dd>
+        </dl>
       </div>
     </div>
     <div class="extension-template">
@@ -80,9 +86,9 @@
       </div>
     </div>
     <div id="extension-footer">
-      <span id="info-message">Options saved!</span>
       <button id="button-save">Save</button>
       <button id="button-close">Close</button>
+      <span id="info-message">Options saved!</span>
     </div>
     <div id="credits">
       Extension developed by <a href="http://mohamedmansour.com">Mohamed Mansour</a>,

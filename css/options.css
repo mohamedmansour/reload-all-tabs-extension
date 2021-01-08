@@ -84,12 +84,13 @@ em {
 
 #info-message {
   transition-duration: 1s;
-  display: none;
+  display: inline;
+  opacity: 0;
   background: #FDFFBD none repeat scroll 0 0;
   border-radius: 5px;
   border-radius: 5px;
   padding: 7px 10px;
-  margin-right: 30px;
+  margin-left: 30px;
 }
 
 .note {
