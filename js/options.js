@@ -39,7 +39,8 @@ function onSave() {
     'reloadAllLeft': $('reloadAllLeft').checked,
     'reloadAllRight': $('reloadAllRight').checked,
     'reloadStartup': $('reloadStartup').value,
-    'bypassCache': $('bypassCache').checked
+    'bypassCache': $('bypassCache').checked,
+	'buttonDefaultAction': $('buttonDefaultAction').value
   };
 
   chrome.storage.sync.set(settingsToSave, () => {
@@ -66,6 +67,7 @@ function onRestore() {
     'reloadAllRight',
     'reloadStartup',
     'bypassCache',
+	'buttonDefaultAction',
     'version'
   ]
 
@@ -78,7 +80,9 @@ function onRestore() {
     $('reloadAllLeft').checked = settings.reloadAllLeft == true
     $('reloadAllRight').checked = settings.reloadAllRight == true
     $('reloadStartup').value = (typeof settings.reloadStartup == 'undefined') ? 'none' : settings.reloadStartup
-    $('bypassCache').checked = settings.bypassCache == true
+    $('bypassCache').checked = settings.bypassCache == true,
+	$('buttonDefaultAction').value = (typeof settings.buttonDefaultAction == 'undefined') ? 'window' : settings.buttonDefaultAction
+	
   })
 
   chrome.commands.getAll(callback => {
