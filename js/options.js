@@ -38,6 +38,8 @@ function onSave() {
     'reloadUnpinnedOnly': $('reloadUnpinnedOnly').checked,
     'reloadAllLeft': $('reloadAllLeft').checked,
     'reloadAllRight': $('reloadAllRight').checked,
+    'closeAllLeft': $('closeAllLeft').checked,
+    'closeAllRight': $('closeAllRight').checked,
     'reloadStartup': $('reloadStartup').value,
     'bypassCache': $('bypassCache').checked,
 	'buttonDefaultAction': $('buttonDefaultAction').value
@@ -65,6 +67,8 @@ function onRestore() {
     'reloadUnpinnedOnly',
     'reloadAllLeft',
     'reloadAllRight',
+    'closeAllLeft',
+    'closeAllRight',
     'reloadStartup',
     'bypassCache',
 	'buttonDefaultAction',
@@ -79,6 +83,8 @@ function onRestore() {
     $('reloadUnpinnedOnly').checked = settings.reloadUnpinnedOnly == true
     $('reloadAllLeft').checked = settings.reloadAllLeft == true
     $('reloadAllRight').checked = settings.reloadAllRight == true
+    $('closeAllLeft').checked = settings.closeAllLeft == true
+    $('closeAllRight').checked = settings.closeAllRight == true
     $('reloadStartup').value = (typeof settings.reloadStartup == 'undefined') ? 'none' : settings.reloadStartup
     $('bypassCache').checked = settings.bypassCache == true,
 	$('buttonDefaultAction').value = (typeof settings.buttonDefaultAction == 'undefined') ? 'window' : settings.buttonDefaultAction
