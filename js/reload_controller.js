@@ -23,7 +23,8 @@ ReloadController = function()
     reloadAllRight: false,
     reloadAllLeft: false,
     reloadStartup: 'none',
-    bypassCache: false
+    bypassCache: false,
+    autoreloadInInterval: false
   }
 
   const settingsToFetch = [
@@ -39,6 +40,7 @@ ReloadController = function()
     'reloadAllLeft',
     'reloadStartup',
     'bypassCache',
+    'autoreloadInInterval',
     'version'
   ]
 
@@ -54,6 +56,7 @@ ReloadController = function()
     this.cachedSettings.reloadAllLeft = settings.reloadAllLeft == true
     this.cachedSettings.reloadStartup = (typeof settings.reloadStartup == 'undefined') ? "none" : settings.reloadStartup
     this.cachedSettings.bypassCache = settings.bypassCache == true
+    this.cachedSettings.autoreloadInInterval = settings.autoreloadInInterval == true
     this.cachedSettings.shortcutKeyCode = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
     this.cachedSettings.shortcutKeyShift = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
 
@@ -109,6 +112,9 @@ ReloadController.prototype.onMenuClicked = function(info, tab)
       break
     case 'reloadAllRight':
       chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadAllRight: true}))
+      break
+    case 'autoreloadInInterval':
+      chrome.windows.getCurrent((win) => this.reloadWindow(win, {autoreloadInInterval: true}))
       break
     default:
       break
@@ -236,6 +242,16 @@ ReloadController.prototype.updateContextMenu = function()
       id: 'reloadAllRight',
       type: 'normal',
       title: `Reload all tabs to the right${attributions}`,
+      contexts: ['all']
+    })
+  }
+}
+
+  if (this.cachedSettings.autoreloadInInterval) {
+    chrome.contextMenus.create({
+      id: 'autoreloadInInterval',
+      type: 'normal',
+      title: `Auto-reload tab in set interval${attributions}`,
       contexts: ['all']
     })
   }
