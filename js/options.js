@@ -39,7 +39,8 @@ function onSave() {
     'reloadAllLeft': $('reloadAllLeft').checked,
     'reloadAllRight': $('reloadAllRight').checked,
     'reloadStartup': $('reloadStartup').value,
-    'bypassCache': $('bypassCache').checked
+    'bypassCache': $('bypassCache').checked,
+    'autoreloadInInterval': $('autoreloadInInterval').checked
   };
 
   chrome.storage.sync.set(settingsToSave, () => {
@@ -66,6 +67,7 @@ function onRestore() {
     'reloadAllRight',
     'reloadStartup',
     'bypassCache',
+    'autoreloadInInterval',
     'version'
   ]
 
@@ -79,6 +81,7 @@ function onRestore() {
     $('reloadAllRight').checked = settings.reloadAllRight == true
     $('reloadStartup').value = (typeof settings.reloadStartup == 'undefined') ? 'none' : settings.reloadStartup
     $('bypassCache').checked = settings.bypassCache == true
+    $('autoreloadInInterval').checked = settings.autoreloadInInterval == true
   })
 
   chrome.commands.getAll(callback => {
