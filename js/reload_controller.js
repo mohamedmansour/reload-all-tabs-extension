@@ -24,7 +24,7 @@ ReloadController = function()
     reloadAllLeft: false,
     reloadStartup: 'none',
     bypassCache: false,
-    buttonDefaultAction: "window"
+    buttonDefaultAction: 'window'
   }
 
   const settingsToFetch = [
