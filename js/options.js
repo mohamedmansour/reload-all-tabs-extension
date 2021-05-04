@@ -42,7 +42,7 @@ function onSave() {
     'closeAllRight': $('closeAllRight').checked,
     'reloadStartup': $('reloadStartup').value,
     'bypassCache': $('bypassCache').checked,
-	'buttonDefaultAction': $('buttonDefaultAction').value
+    'buttonDefaultAction': $('buttonDefaultAction').value
   };
 
   chrome.storage.sync.set(settingsToSave, () => {
@@ -51,7 +51,7 @@ function onSave() {
     const info = $('info-message')
     info.style.opacity = 1
     setTimeout(function() {
-      info.style.opacity = 0.0;
+		info.style.opacity = 0.0;
     }, 1000)
   })
 }
@@ -71,7 +71,7 @@ function onRestore() {
     'closeAllRight',
     'reloadStartup',
     'bypassCache',
-	'buttonDefaultAction',
+    'buttonDefaultAction',
     'version'
   ]
 
@@ -86,9 +86,9 @@ function onRestore() {
     $('closeAllLeft').checked = settings.closeAllLeft == true
     $('closeAllRight').checked = settings.closeAllRight == true
     $('reloadStartup').value = (typeof settings.reloadStartup == 'undefined') ? 'none' : settings.reloadStartup
-    $('bypassCache').checked = settings.bypassCache == true,
-	$('buttonDefaultAction').value = (typeof settings.buttonDefaultAction == 'undefined') ? 'window' : settings.buttonDefaultAction
-	
+    $('bypassCache').checked = settings.bypassCache == true
+    $('buttonDefaultAction').value = (typeof settings.buttonDefaultAction == 'undefined') ? 'window' : settings.buttonDefaultAction
+   
   })
 
   chrome.commands.getAll(callback => {
