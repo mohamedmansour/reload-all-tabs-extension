@@ -26,7 +26,7 @@ ReloadController = function()
     closeAllLeft: false,
     reloadStartup: 'none',
     bypassCache: false,
-	buttonDefaultAction: "window"
+    buttonDefaultAction: "window"
   }
 
   const settingsToFetch = [
@@ -59,7 +59,7 @@ ReloadController = function()
     this.cachedSettings.reloadUnpinnedOnly = settings.reloadUnpinnedOnly == true
     this.cachedSettings.reloadAllRight = settings.reloadAllRight == true
     this.cachedSettings.reloadAllLeft = settings.reloadAllLeft == true
-	this.cachedSettings.closeAllRight = settings.closeAllRight == true
+    this.cachedSettings.closeAllRight = settings.closeAllRight == true
     this.cachedSettings.closeAllLeft = settings.closeAllLeft == true
     this.cachedSettings.reloadStartup = (typeof settings.reloadStartup == 'undefined') ? "none" : settings.reloadStartup
     this.cachedSettings.bypassCache = settings.bypassCache == true
@@ -125,7 +125,7 @@ ReloadController.prototype.onMenuClicked = function(info, tab)
     case 'closeAllRight':
       chrome.windows.getCurrent((win) => this.closeWindow(win, {closeAllRight: true}))
       break
-	  default:
+     default:
       break
   }
 }
@@ -139,9 +139,9 @@ ReloadController.prototype.reload = function(info, tab)
   if (this.cachedSettings.buttonDefaultAction == "allWindows") { // All Windows.
     this.reloadAllWindows()
   } else if (this.cachedSettings.buttonDefaultAction == "pinned") { // Pinned.
-	chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadPinnedOnly: true}))
+   chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadPinnedOnly: true}))
   } else if (this.cachedSettings.buttonDefaultAction == "unpinned") { // Unpinned.
-	chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadUnpinnedOnly: true}))
+   chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadUnpinnedOnly: true}))
   } else { // Current Window.
     chrome.windows.getCurrent(this.reloadWindow.bind(this))
   }
@@ -296,22 +296,22 @@ ReloadController.prototype.closeWindow = function(win, options = {})
 
     var passedCurrent = false;
 
-	for (var i in tabs) {
+   for (var i in tabs) {
       var tab = tabs[i];
-	  var closeThisTab = false;
+     var closeThisTab = false;
 
-	  if ( tab.active ) {
-		passedCurrent = true;
-		continue;
-	  }
+     if ( tab.active ) {
+      passedCurrent = true;
+      continue;
+     }
 
-	  if (passedCurrent) { // right of current
-		if (options.closeAllLeft) return;
-		if (options.closeAllRight) closeThisTab = true;
-	  } else { // left of current
-		if (options.closeAllLeft) closeThisTab = true;
-	  }
-	  if (closeThisTab) chrome.tabs.remove(tab.id); 
+     if (passedCurrent) { // right of current
+      if (options.closeAllLeft) return;
+      if (options.closeAllRight) closeThisTab = true;
+     } else { // left of current
+      if (options.closeAllLeft) closeThisTab = true;
+     }
+     if (closeThisTab) chrome.tabs.remove(tab.id); 
     }
   })
 }
