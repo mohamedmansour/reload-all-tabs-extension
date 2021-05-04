@@ -5,11 +5,10 @@
  */
 ReloadController = function()
 {
-  chrome.extension.onMessage.addListener(this.onMessage.bind(this))
-  chrome.browserAction.onClicked.addListener(this.reload.bind(this))
-  chrome.storage.onChanged.addListener(this.onStorageChanged.bind(this))
-  chrome.windows.onCreated.addListener(this.onStartup.bind(this))
-
+  //move event listeners to init
+  
+  console.log("start instantiate" + new Date().toISOString())
+  
   this.cachedSettings = {
     enableKeyboardShortcut: false,
     shortcutKeyShift: false,
@@ -47,28 +46,24 @@ ReloadController = function()
     'bypassCache',
     'version'
   ]
+   // move storage retrieval to init
+	
+	
+  // add settings to change badge depending on timedReload state
+  this.badgeSettings = {
+        badge : {color: "#0066cc"},
+        badgeW : {text: "W"},
+        badgeT : {text: "T"},
+        badgeOff : {text: ""},
 
-  chrome.storage.sync.get(settingsToFetch, settings => {
-    this.cachedSettings.version = settings.version
-    this.cachedSettings.buttonDefaultAction = (typeof settings.buttonDefaultAction == 'undefined') ? "window" : settings.buttonDefaultAction
-    this.cachedSettings.enableKeyboardShortcut = settings.enableKeyboardShortcut == true
-    this.cachedSettings.shortcutKeyAlt = settings.shortcutKeyAlt == true
-    this.cachedSettings.reloadWindow = (typeof settings.reloadWindow == 'undefined') ? true : (settings.reloadWindow == true)
-    this.cachedSettings.reloadAllWindows = settings.reloadAllWindows == true
-    this.cachedSettings.reloadPinnedOnly = settings.reloadPinnedOnly == true
-    this.cachedSettings.reloadUnpinnedOnly = settings.reloadUnpinnedOnly == true
-    this.cachedSettings.reloadAllRight = settings.reloadAllRight == true
-    this.cachedSettings.reloadAllLeft = settings.reloadAllLeft == true
-    this.cachedSettings.closeAllRight = settings.closeAllRight == true
-    this.cachedSettings.closeAllLeft = settings.closeAllLeft == true
-    this.cachedSettings.reloadStartup = (typeof settings.reloadStartup == 'undefined') ? "none" : settings.reloadStartup
-    this.cachedSettings.bypassCache = settings.bypassCache == true
-    this.cachedSettings.shortcutKeyCode = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
-    this.cachedSettings.shortcutKeyShift = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true)
+        iconReady : {path: {'16': "img/icon16r.png", '48': "img/icon48r.png", '128': "img/icon128r.png"}},
+        iconOn : {path: {'16': "img/icon16t.png", '48': "img/icon48t.png", '128': "img/icon128t.png"}},
+        iconOff : {path: {'16': "img/icon16.png", '48': "img/icon48.png", '128': "img/icon128.png"}},
 
-    // Update initial context menu.
-    this.updateContextMenu()
-  })
+        iconDefault : this.iconOff
+    };
+
+    this.init(); //sven init needs to fire ONLY after settings have been retrieved
 }
 
 ReloadController.prototype.onStorageChanged = function(changes, namespace) {
@@ -147,11 +142,10 @@ ReloadController.prototype.reload = function(info, tab)
   }
 }
 
-/**
- * Initializes the reload extension.
- */
 ReloadController.prototype.init = function()
 {
+//  console.log("INIT-----------------------")
+    
   const currVersion = chrome.app.getDetails().version
   const prevVersion = this.cachedSettings.version
   if (currVersion != prevVersion) {
@@ -164,8 +158,54 @@ ReloadController.prototype.init = function()
     // Update the version incase we want to do something in future.
     this.cachedSettings.version = currVersion
     chrome.storage.sync.set({'version': this.cachedSettings.version})
-
   }
+  
+    // MOVED from class def. 
+	// set listeners
+    chrome.extension.onMessage.addListener(this.onMessage.bind(this))
+    chrome.browserAction.onClicked.addListener(this.reload.bind(this))
+    chrome.storage.onChanged.addListener(this.onStorageChanged.bind(this))
+    chrome.windows.onCreated.addListener(this.onWindowCreate.bind(this))
+    chrome.windows.onFocusChanged.addListener(this.onWindowFocused.bind(this))
+    chrome.windows.onRemoved.addListener(this.onWindowClosed.bind(this))
+
+    chrome.contextMenus.onClicked.addListener(this.onMenuClicked.bind(this))
+    chrome.tabs.onActivated.addListener(this.onTabActivate.bind(this))
+    chrome.tabs.onRemoved.addListener(this.onTabRemoved.bind(this))
+    chrome.tabs.onUpdated.addListener(this.onTabUpdated.bind(this))
+
+    chrome.tabs.onDetached.addListener(this.onTabMoved.bind(this))
+    chrome.tabs.onAttached.addListener(this.onTabMoved.bind(this))    
+
+    // MOVED from class def. 
+	// get stored values fro settings
+    chrome.storage.sync.get(this.settingsToFetch, (settings) => {
+        this.cachedSettings.version = settings.version;
+        this.cachedSettings.buttonDefaultAction = (typeof settings.buttonDefaultAction == 'undefined') ? 'window' : settings.buttonDefaultAction;
+        this.cachedSettings.enableKeyboardShortcut = settings.enableKeyboardShortcut == true;
+        this.cachedSettings.shortcutKeyAlt = settings.shortcutKeyAlt == true;
+        this.cachedSettings.reloadWindow = (typeof settings.reloadWindow == 'undefined') ? true : (settings.reloadWindow == true);
+        this.cachedSettings.reloadAllWindows = settings.reloadAllWindows == true;
+        this.cachedSettings.reloadPinnedOnly = settings.reloadPinnedOnly == true;
+        this.cachedSettings.reloadUnpinnedOnly = settings.reloadUnpinnedOnly == true;
+        this.cachedSettings.reloadAllRight = settings.reloadAllRight == true;
+        this.cachedSettings.reloadAllLeft = settings.reloadAllLeft == true;
+        this.cachedSettings.closeAllRight = settings.closeAllRight == true;
+        this.cachedSettings.closeAllLeft = settings.closeAllLeft == true;
+        this.cachedSettings.enableTimedReloads = (typeof settings.enableTimedReloads == 'undefined') ? false : settings.enableTimedReloads;
+        this.cachedSettings.reloadStartup = (typeof settings.reloadStartup == 'undefined') ? 'none' : settings.reloadStartup;
+        this.cachedSettings.bypassCache = settings.bypassCache == true;
+        this.cachedSettings.shortcutKeyCode = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode;
+        this.cachedSettings.shortcutKeyShift = (typeof settings.shortcutKeyShift == 'undefined') ? true : (settings.shortcutKeyShift == true);
+
+
+        //    console.log("---------------------------");
+        //    console.log("end instantiate " + new Date().toISOString())
+        this.buildTimerObject();
+        this.createContextMenu('init');
+    });
+
+    chrome.browserAction.setBadgeBackgroundColor(this.badgeSettings.badge);
 };
 
 /**
@@ -392,4 +432,4 @@ ReloadController.prototype.reloadAllWindows = function()
 };
 
 const reloadController = new ReloadController()
-reloadController.init()
+// remove call to init - make it part of instantiation
