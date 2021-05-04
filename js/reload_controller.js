@@ -26,7 +26,7 @@ ReloadController = function()
     closeAllLeft: false,
     reloadStartup: 'none',
     bypassCache: false,
-    buttonDefaultAction: "window"
+    buttonDefaultAction: 'window'
   }
 
   const settingsToFetch = [
@@ -136,12 +136,12 @@ ReloadController.prototype.onMenuClicked = function(info, tab)
  */
 ReloadController.prototype.reload = function(info, tab)
 {
-  if (this.cachedSettings.buttonDefaultAction == "allWindows") { // All Windows.
+  if (this.cachedSettings.buttonDefaultAction === 'allWindows') { // All Windows.
     this.reloadAllWindows()
-  } else if (this.cachedSettings.buttonDefaultAction == "pinned") { // Pinned.
-   chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadPinnedOnly: true}))
-  } else if (this.cachedSettings.buttonDefaultAction == "unpinned") { // Unpinned.
-   chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadUnpinnedOnly: true}))
+  } else if (this.cachedSettings.buttonDefaultAction === 'pinned') { // Pinned.
+   chrome.windows.getCurrent((win) => this.reloadWindow(win, { reloadPinnedOnly: true }))
+  } else if (this.cachedSettings.buttonDefaultAction === 'unpinned') { // Unpinned.
+   chrome.windows.getCurrent((win) => this.reloadWindow(win, { reloadUnpinnedOnly: true }))
   } else { // Current Window.
     chrome.windows.getCurrent(this.reloadWindow.bind(this))
   }
