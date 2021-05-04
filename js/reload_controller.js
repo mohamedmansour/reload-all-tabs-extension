@@ -23,10 +23,12 @@ ReloadController = function()
     reloadAllRight: false,
     reloadAllLeft: false,
     reloadStartup: 'none',
-    bypassCache: false
+    bypassCache: false,
+    buttonDefaultAction: "window"
   }
 
   const settingsToFetch = [
+    'buttonDefaultAction',
     'enableKeyboardShortcut',
     'shortcutKeyShift',
     'shortcutKeyAlt',
@@ -44,6 +46,7 @@ ReloadController = function()
 
   chrome.storage.sync.get(settingsToFetch, settings => {
     this.cachedSettings.version = settings.version
+    this.cachedSettings.buttonDefaultAction = (typeof settings.buttonDefaultAction == 'undefined') ? "window" : settings.buttonDefaultAction
     this.cachedSettings.enableKeyboardShortcut = settings.enableKeyboardShortcut == true
     this.cachedSettings.shortcutKeyAlt = settings.shortcutKeyAlt == true
     this.cachedSettings.reloadWindow = (typeof settings.reloadWindow == 'undefined') ? true : (settings.reloadWindow == true)
@@ -121,10 +124,13 @@ ReloadController.prototype.onMenuClicked = function(info, tab)
  */
 ReloadController.prototype.reload = function(info, tab)
 {
-  if (this.cachedSettings.reloadAllWindows) { // All Windows.
+  if (this.cachedSettings.buttonDefaultAction == "allWindows") { // All Windows.
     this.reloadAllWindows()
-  }
-  else { // Current Window.
+  } else if (this.cachedSettings.buttonDefaultAction == "pinned") { // Pinned.
+   chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadPinnedOnly: true}))
+  } else if (this.cachedSettings.buttonDefaultAction == "unpinned") { // Unpinned.
+   chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadUnpinnedOnly: true}))
+  } else { // Current Window.
     chrome.windows.getCurrent(this.reloadWindow.bind(this))
   }
 }
