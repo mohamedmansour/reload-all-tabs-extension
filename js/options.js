@@ -39,7 +39,8 @@ function onSave() {
     'reloadAllLeft': $('reloadAllLeft').checked,
     'reloadAllRight': $('reloadAllRight').checked,
     'reloadStartup': $('reloadStartup').value,
-    'bypassCache': $('bypassCache').checked
+    'bypassCache': $('bypassCache').checked,
+    'buttonDefaultAction': $('buttonDefaultAction').value
   };
 
   chrome.storage.sync.set(settingsToSave, () => {
@@ -48,7 +49,7 @@ function onSave() {
     const info = $('info-message')
     info.style.opacity = 1
     setTimeout(function() {
-      info.style.opacity = 0.0;
+        info.style.opacity = 0.0;
     }, 1000)
   })
 }
@@ -66,6 +67,7 @@ function onRestore() {
     'reloadAllRight',
     'reloadStartup',
     'bypassCache',
+    'buttonDefaultAction',
     'version'
   ]
 
@@ -79,6 +81,8 @@ function onRestore() {
     $('reloadAllRight').checked = settings.reloadAllRight == true
     $('reloadStartup').value = (typeof settings.reloadStartup == 'undefined') ? 'none' : settings.reloadStartup
     $('bypassCache').checked = settings.bypassCache == true
+    $('buttonDefaultAction').value = (typeof settings.buttonDefaultAction == 'undefined') ? 'window' : settings.buttonDefaultAction
+   
   })
 
   chrome.commands.getAll(callback => {
