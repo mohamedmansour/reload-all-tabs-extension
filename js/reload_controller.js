@@ -293,30 +293,26 @@ ReloadController.prototype.onInstall = function()
 ReloadController.prototype.closeWindow = function(win, options = {})
 {
   chrome.tabs.getAllInWindow(win.id, (tabs) => {
+    let passedCurrent = false;
+    for (const i in tabs) {
+      const tab = tabs[i]
+      let closeThisTab = false
 
-    var passedCurrent = false;
+      if (tab.active) {
+        passedCurrent = true
+        continue
+      }
 
-   for (var i in tabs) {
-      var tab = tabs[i];
-     var closeThisTab = false;
-
-     if ( tab.active ) {
-      passedCurrent = true;
-      continue;
-     }
-
-     if (passedCurrent) { // right of current
-      if (options.closeAllLeft) return;
-      if (options.closeAllRight) closeThisTab = true;
-     } else { // left of current
-      if (options.closeAllLeft) closeThisTab = true;
-     }
-     if (closeThisTab) chrome.tabs.remove(tab.id); 
+      if (passedCurrent) { // right of current
+        if (options.closeAllLeft) return
+        if (options.closeAllRight) closeThisTab = true
+      } else { // left of current
+        if (options.closeAllLeft) closeThisTab = true
+      }
+      if (closeThisTab) chrome.tabs.remove(tab.id)
     }
   })
 }
-
-
 /**
  * Reload all |tabs| one by one.
  *
