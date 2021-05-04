@@ -22,6 +22,8 @@ ReloadController = function()
     reloadUnpinnedOnly: false,
     reloadAllRight: false,
     reloadAllLeft: false,
+    closeAllRight: false,
+    closeAllLeft: false,
     reloadStartup: 'none',
     bypassCache: false,
     buttonDefaultAction: 'window'
@@ -39,6 +41,8 @@ ReloadController = function()
     'reloadUnpinnedOnly',
     'reloadAllRight',
     'reloadAllLeft',
+    'closeAllRight',
+    'closeAllLeft',
     'reloadStartup',
     'bypassCache',
     'version'
@@ -55,6 +59,8 @@ ReloadController = function()
     this.cachedSettings.reloadUnpinnedOnly = settings.reloadUnpinnedOnly == true
     this.cachedSettings.reloadAllRight = settings.reloadAllRight == true
     this.cachedSettings.reloadAllLeft = settings.reloadAllLeft == true
+    this.cachedSettings.closeAllRight = settings.closeAllRight == true
+    this.cachedSettings.closeAllLeft = settings.closeAllLeft == true
     this.cachedSettings.reloadStartup = (typeof settings.reloadStartup == 'undefined') ? "none" : settings.reloadStartup
     this.cachedSettings.bypassCache = settings.bypassCache == true
     this.cachedSettings.shortcutKeyCode = (typeof settings.shortcutKeyCode == 'undefined') ? 82 : settings.shortcutKeyCode
@@ -112,6 +118,12 @@ ReloadController.prototype.onMenuClicked = function(info, tab)
       break
     case 'reloadAllRight':
       chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadAllRight: true}))
+      break
+    case 'closeAllLeft':
+      chrome.windows.getCurrent((win) => this.closeWindow(win, {closeAllLeft: true}))
+      break
+    case 'closeAllRight':
+      chrome.windows.getCurrent((win) => this.closeWindow(win, {closeAllRight: true}))
       break
     default:
       break
@@ -245,6 +257,24 @@ ReloadController.prototype.updateContextMenu = function()
       contexts: ['all']
     })
   }
+  
+  if (this.cachedSettings.closeAllLeft) {
+    chrome.contextMenus.create({
+      id: 'closeAllLeft',
+      type: 'normal',
+      title: `Close all tabs to the left${attributions}`,
+      contexts: ['all']
+    })
+  }
+
+  if (this.cachedSettings.closeAllRight) {
+    chrome.contextMenus.create({
+      id: 'closeAllRight',
+      type: 'normal',
+      title: `Close all tabs to the right${attributions}`,
+      contexts: ['all']
+    })
+  }
 }
 
 /**
@@ -255,6 +285,34 @@ ReloadController.prototype.onInstall = function()
   chrome.runtime.openOptionsPage()
 }
 
+/**
+ * Close tabs to left or right one by one.
+ *
+ * @param win Window to close.
+ */
+ReloadController.prototype.closeWindow = function(win, options = {})
+{
+  chrome.tabs.getAllInWindow(win.id, (tabs) => {
+    let passedCurrent = false;
+    for (const i in tabs) {
+      const tab = tabs[i]
+      let closeThisTab = false
+
+      if (tab.active) {
+        passedCurrent = true
+        continue
+      }
+
+      if (passedCurrent) { // right of current
+        if (options.closeAllLeft) return
+        if (options.closeAllRight) closeThisTab = true
+      } else { // left of current
+        if (options.closeAllLeft) closeThisTab = true
+      }
+      if (closeThisTab) chrome.tabs.remove(tab.id)
+    }
+  })
+}
 /**
  * Reload all |tabs| one by one.
  *
