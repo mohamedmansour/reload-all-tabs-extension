@@ -42,7 +42,8 @@ function onSave() {
     'closeAllRight': $('closeAllRight').checked,
     'reloadStartup': $('reloadStartup').value,
     'bypassCache': $('bypassCache').checked,
-    'buttonDefaultAction': $('buttonDefaultAction').value
+    'buttonDefaultAction': $('buttonDefaultAction').value,
+    'enableTimedReloads': $('enableTimedReloads').checked
   };
 
   chrome.storage.sync.set(settingsToSave, () => {
@@ -71,6 +72,7 @@ function onRestore() {
     'closeAllRight',
     'reloadStartup',
     'bypassCache',
+    'enableTimedReloads',
     'buttonDefaultAction',
     'version'
   ]
@@ -88,6 +90,7 @@ function onRestore() {
     $('reloadStartup').value = (typeof settings.reloadStartup == 'undefined') ? 'none' : settings.reloadStartup
     $('bypassCache').checked = settings.bypassCache == true
     $('buttonDefaultAction').value = (typeof settings.buttonDefaultAction == 'undefined') ? 'window' : settings.buttonDefaultAction
+    $('enableTimedReloads').checked = settings.enableTimedReloads == true
   })
 
   chrome.commands.getAll(callback => {
