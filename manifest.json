@@ -1,20 +1,19 @@
 {
   "name": "Reload All Tabs",
-  "version": "4.3.1",
-  "manifest_version": 2,
+  "version": "4.4.0",
+  "manifest_version": 3,
   "description": "Reload All tabs using keyboard shortcut (alt + shift + r), context menu, browser action button, or startup.",
   "icons": {
     "16": "img/icon16.png",
     "48": "img/icon48.png",
     "128": "img/icon128.png"
   },
-  "browser_action": {
+  "action": {
     "default_icon": "img/icon128.png",
     "default_title": "Reload All Tabs"
   },
   "background": {
-    "scripts": ["js/functions.js", "js/reload_controller.js"],
-    "persistent": false
+    "service_worker": "reload_controller.js"
   },
   "options_page": "options.html",
   "permissions": [
@@ -23,11 +22,12 @@
     "contextMenus"
   ],
   "commands": {
-    "_execute_browser_action": {
+    "reload": {
       "suggested_key": {
-        "default": "Alt + Shift + R",
-        "mac": "Alt + Shift + R"
-      }
+        "default": "Ctrl+Shift+R",
+        "mac": "Command+Shift+R"
+      },
+      "description": "Toggle reload"
     }
   }
 }
