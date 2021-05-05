@@ -13,7 +13,6 @@ function $(id) {
  */
 function onLoad() {
   onRestore();
-  $('button-save').addEventListener('click', onSave, false)
   $('button-close').addEventListener('click', onClose, false)
   $('button-extension').addEventListener('click', onExtension, false)
   $('keyboardShortcutUpdate').addEventListener('click', onKeyboardShortcut, false)
@@ -35,33 +34,31 @@ function onExtension() {
   return false
 }
 
-/**
- * Saves options to localStorage.
- */
-function onSave() {
-  const settingsToSave = {
-    'reloadWindow': $('reloadWindow').checked,
-    'reloadAllWindows': $('reloadAllWindows').checked,
-    'reloadPinnedOnly': $('reloadPinnedOnly').checked,
-    'reloadUnpinnedOnly': $('reloadUnpinnedOnly').checked,
-    'reloadAllLeft': $('reloadAllLeft').checked,
-    'reloadAllRight': $('reloadAllRight').checked,
-    'closeAllLeft': $('closeAllLeft').checked,
-    'closeAllRight': $('closeAllRight').checked,
-    'reloadStartup': $('reloadStartup').value,
-    'bypassCache': $('bypassCache').checked,
-    'buttonDefaultAction': $('buttonDefaultAction').value
-  };
-
-  chrome.storage.sync.set(settingsToSave, () => {
-
-    // Update status to let user know options were saved.
-    const info = $('info-message')
-    info.style.opacity = 1
-    setTimeout(function () {
-      info.style.opacity = 0.0;
-    }, 1000)
+function setupCheckbox(id, storedValue, defaultValue = false) {
+  const element = $(id)
+  element.checked = (typeof storedValue == 'undefined') ? defaultValue : (storedValue == true)
+  element.addEventListener('change', (e) => {
+    const stopFlashing = flashMessage(e.target)
+    chrome.storage.sync.set({ [id]: e.target.checked }, () => stopFlashing())
   })
+}
+
+function setupDropdown(id, storedValue, defaultValue = false) {
+  const element = $(id)
+  element.value = (typeof storedValue == 'undefined') ? defaultValue : storedValue
+  element.addEventListener('change', (e) => {
+    const stopFlashing = flashMessage(e.target)
+    chrome.storage.sync.set({ [id]: e.target.value }, () => stopFlashing())
+  })
+}
+
+function flashMessage(element) {
+  const rect = element.getBoundingClientRect()
+  const info = $('info-message')
+  info.style.top = rect.top + (rect.height / 2) - (info.clientHeight / 2) + 'px'
+  info.style.left = rect.x + rect.width + 'px'
+  info.style.opacity = 1
+  return () => setTimeout(() => info.style.opacity = 0.0, 1000)
 }
 
 /**
@@ -85,17 +82,19 @@ function onRestore() {
 
   chrome.storage.sync.get(settingsToFetch, settings => {
     $('version').innerText = ' (v' + settings.version + ')'
-    $('reloadWindow').checked = (typeof settings.reloadWindow == 'undefined') ? true : (settings.reloadWindow == true)
-    $('reloadAllWindows').checked = settings.reloadAllWindows == true
-    $('reloadPinnedOnly').checked = settings.reloadPinnedOnly == true
-    $('reloadUnpinnedOnly').checked = settings.reloadUnpinnedOnly == true
-    $('reloadAllLeft').checked = settings.reloadAllLeft == true
-    $('reloadAllRight').checked = settings.reloadAllRight == true
-    $('closeAllLeft').checked = settings.closeAllLeft == true
-    $('closeAllRight').checked = settings.closeAllRight == true
-    $('reloadStartup').value = (typeof settings.reloadStartup == 'undefined') ? 'none' : settings.reloadStartup
-    $('bypassCache').checked = settings.bypassCache == true
-    $('buttonDefaultAction').value = (typeof settings.buttonDefaultAction == 'undefined') ? 'window' : settings.buttonDefaultAction
+
+    setupCheckbox('reloadWindow', settings.reloadWindow, true /* default if not exists */)
+    setupCheckbox('reloadAllWindows', settings.reloadAllWindows)
+    setupCheckbox('reloadPinnedOnly', settings.reloadPinnedOnly)
+    setupCheckbox('reloadUnpinnedOnly', settings.reloadUnpinnedOnly)
+    setupCheckbox('reloadAllLeft', settings.reloadAllLeft)
+    setupCheckbox('reloadAllRight', settings.reloadAllRight)
+    setupCheckbox('closeAllLeft', settings.closeAllLeft)
+    setupCheckbox('closeAllRight', settings.closeAllRight)
+    setupCheckbox('bypassCache', settings.bypassCache)
+
+    setupDropdown('reloadStartup', settings.reloadStartup, 'none')
+    setupDropdown('buttonDefaultAction', settings.buttonDefaultAction, 'window')
   })
 
   chrome.commands.getAll(callback => {
