@@ -51,9 +51,7 @@
 
     
     this.badgeSettings = {
-        badge : {color: "#0066cc"},
-        badgeW : {text: "W"},
-        badgeT : {text: "T"},
+        badge : {color: "#006633"},
         badgeOff : {text: ""},
 
         iconReady : {path: {'16': "img/icon16r.png", '48': "img/icon48r.png", '128': "img/icon128r.png"}},
@@ -62,6 +60,8 @@
 
         iconDefault : this.iconOff
     };
+	
+	this.badgeUpdateTimer = null;
 
     this.init(); //sven init needs to fire ONLY after settings have been retrieved
 }
@@ -193,7 +193,8 @@ ReloadController.prototype.reload = function(info, tab)
 ReloadController.prototype.init = function()
 {
 //  console.log("INIT-----------------------")
-    
+  //move event listeners to init
+  
   const currVersion = chrome.app.getDetails().version
   const prevVersion = this.cachedSettings.version
   if (currVersion != prevVersion) {
@@ -267,14 +268,62 @@ ReloadController.prototype.onWindowCreate = function(win)
 
 }
 
+ReloadController.prototype.updateBadgeText = function(windowId,tabId,force)
+{
+// switch tab = prev timer shows up in badge
+// when zero stops - should be blank
+// new timer doesn't restart countdown
+ 	
+	if ( force ) { // called from active tab; reset any timer
+		clearTimeout(this.badgeUpdateTimer);
+		this.badgeUpdateTimer = null;
+		chrome.browserAction.setBadgeText(this.badgeSettings.badgeOff);
+	}	
+    var winSettings = this.timers.windows[windowId];
+    var tabSettings = winSettings.tabs[tabId];
+	var ts = null,intvl = null;
+	if ( null != winSettings.timer ) {
+		intvl = winSettings.intvl;
+		ts = winSettings.ts;
+	} else if ( null != tabSettings.timer ) {
+		intvl = tabSettings.intvl;
+		ts = tabSettings.ts;
+	} else { // no timer
+		chrome.browserAction.setBadgeText(this.badgeSettings.badgeOff);
+		return;
+	}
+		
+	var badgeIntvl = 1000;
+	var rem = parseInt(( ts + intvl*1000-new Date().getTime() )/1000);
+	if ( rem > 60 ) {
+		badgeIntvl *= 60;
+		rem = parseInt(rem/60);
+	}
+
+	if ( rem > 60 ) {
+		rem = "-"+rem+"m";
+	} else if ( rem == 0 ) {	
+		rem = "...";
+	} else {
+		rem = "-"+rem+"s";
+	}
+	var rlc = this;
+	this.badgeUpdateTimer = setTimeout(function(){
+		rlc.badgeUpdateTimer = null;
+		rlc.updateBadgeText(0+windowId,0+tabId);
+	}, parseInt(badgeIntvl));	
+//	console.log(rem)
+	chrome.browserAction.setBadgeText({text:rem});
+}
+
 ReloadController.prototype.updateContextMenu = function(tab,s)
 {    
 /**
  * updat menu w/ tab and window-specific settings
  */
- if (!this.cachedSettings.enableTimedReloads) {
-    return;
- };
+	if (!this.cachedSettings.enableTimedReloads) {
+		return;
+	};
 
     if ( tab == null ) return;
     
@@ -287,83 +336,85 @@ ReloadController.prototype.updateContextMenu = function(tab,s)
                     ?winSettings.intvl
                     :tabSettings.intvl;
 
- if (!winSettings.enabled) {
-    this.badgeSettings.iconDefault = this.badgeSettings.iconOff;
- }else {
-    this.badgeSettings.iconDefault = this.badgeSettings.iconReady;     
- };            
+	if (!winSettings.enabled) {
+		this.badgeSettings.iconDefault = this.badgeSettings.iconOff;
+	}else {
+		this.badgeSettings.iconDefault = this.badgeSettings.iconReady;
+	};            
                     
 //    console.log('update context menu - '+s+" - intvl="+currIntvl+", enabled="+winSettings.enabled);
 
-        if ( null != winSettings.timer || null != tabSettings.timer ) {
-            chrome.browserAction.setIcon(this.badgeSettings.iconOn);
-        } else { 
-            chrome.browserAction.setIcon(this.badgeSettings.iconDefault);
-        }
+	if ( null != winSettings.timer || null != tabSettings.timer ) {
+		chrome.browserAction.setIcon(this.badgeSettings.iconOn);
+	} else { 
+		chrome.browserAction.setIcon(this.badgeSettings.iconDefault);
+	}
 
-        if ( null != winSettings.timer ) {
-            chrome.browserAction.setBadgeText(this.badgeSettings.badgeW);
-        } else if ( null != tabSettings.timer ) {
-            chrome.browserAction.setBadgeText(this.badgeSettings.badgeT);
-        } else {
-            chrome.browserAction.setBadgeText(this.badgeSettings.badgeOff);
-        }
+	if ( null != winSettings.timer ) {
+		console.log("call updateBadge for win "+winSettings.id)
+	} else if ( null != tabSettings.timer ) {
+		console.log("call updateBadge for win "+winSettings.id+", tab "+tabSettings.id)
+	} else {
+		console.log("no timer on win "+winSettings.id+", tab "+tabSettings.id+"- call updateBadge to reset badge")
+	}
 
-        chrome.contextMenus.update('enableTimedReloads',{
-            title:(winSettings.enabled?"Clear for this window":"Enable for this window"),
-            checked: (winSettings.enabled)
-        });
-        chrome.contextMenus.update('timedReloadScope',{
-            visible: (winSettings.enabled)
-        });
-        chrome.contextMenus.update('timedReloadScope-tab',{
-            visible: (winSettings.enabled),
-            checked:(winSettings.scope=="tab")
-        });
-        chrome.contextMenus.update('timedReloadScope-window',{
-            visible: (winSettings.enabled),
-            checked: (winSettings.scope=="window")
-        });
-        chrome.contextMenus.update('timedReloadIntvl',{
-            visible: (winSettings.enabled)
-        });
+	this.updateBadgeText(windowId,tabId,true);
 
-        chrome.contextMenus.update('timedReloadInterval-none',{
-            visible: (winSettings.enabled),
-            checked: (currIntvl=="none"||currIntvl==null)
-        })
-        chrome.contextMenus.update('timedReloadInterval-10',{ 
-            visible: (winSettings.enabled),
-            checked: (currIntvl==10)
-        })
-        chrome.contextMenus.update('timedReloadInterval-30',{
-            visible: (winSettings.enabled),
-            checked: (currIntvl==30)
-        })
-        chrome.contextMenus.update('timedReloadInterval-60',{
-            checked: (currIntvl==60),
-            visible: (winSettings.enabled)
-        })    
-        chrome.contextMenus.update('timedReloadInterval-120',{
-            checked: (currIntvl==120),
-            visible: (winSettings.enabled)
-        })    
-        chrome.contextMenus.update('timedReloadInterval-300',{
-            checked: (currIntvl==300),
-            visible: (winSettings.enabled)
-        })
-        chrome.contextMenus.update('timedReloadInterval-900',{
-            checked: (currIntvl==900),
-            visible: (winSettings.enabled)
-        })
-        chrome.contextMenus.update('timedReloadInterval-1800',{
-            checked: (currIntvl==1800),
-            visible: (winSettings.enabled)
-        })
-        chrome.contextMenus.update('timedReloadInterval-3600',{
-            checked: (currIntvl==3600),
-            visible: (winSettings.enabled)
-        })
+	chrome.contextMenus.update('enableTimedReloads',{
+		title:(winSettings.enabled?"Clear for this window":"Enable for this window"),
+		checked: (winSettings.enabled)
+	});
+	chrome.contextMenus.update('timedReloadScope',{
+		visible: (winSettings.enabled)
+	});
+	chrome.contextMenus.update('timedReloadScope-tab',{
+		visible: (winSettings.enabled),
+		checked:(winSettings.scope=="tab")
+	});
+	chrome.contextMenus.update('timedReloadScope-window',{
+		visible: (winSettings.enabled),
+		checked: (winSettings.scope=="window")
+	});
+	chrome.contextMenus.update('timedReloadIntvl',{
+		visible: (winSettings.enabled)
+	});
+
+	chrome.contextMenus.update('timedReloadInterval-none',{
+		visible: (winSettings.enabled),
+		checked: (currIntvl=="none"||currIntvl==null)
+	})
+	chrome.contextMenus.update('timedReloadInterval-10',{ 
+		visible: (winSettings.enabled),
+		checked: (currIntvl==10)
+	})
+	chrome.contextMenus.update('timedReloadInterval-30',{
+		visible: (winSettings.enabled),
+		checked: (currIntvl==30)
+	})
+	chrome.contextMenus.update('timedReloadInterval-60',{
+		checked: (currIntvl==60),
+		visible: (winSettings.enabled)
+	})    
+	chrome.contextMenus.update('timedReloadInterval-120',{
+		checked: (currIntvl==120),
+		visible: (winSettings.enabled)
+	})    
+	chrome.contextMenus.update('timedReloadInterval-300',{
+		checked: (currIntvl==300),
+		visible: (winSettings.enabled)
+	})
+	chrome.contextMenus.update('timedReloadInterval-900',{
+		checked: (currIntvl==900),
+		visible: (winSettings.enabled)
+	})
+	chrome.contextMenus.update('timedReloadInterval-1800',{
+		checked: (currIntvl==1800),
+		visible: (winSettings.enabled)
+	})
+	chrome.contextMenus.update('timedReloadInterval-3600',{
+		checked: (currIntvl==3600),
+		visible: (winSettings.enabled)
+	})
 }
 
 ReloadController.prototype.onInstall = function()
@@ -490,8 +541,6 @@ ReloadController.prototype.reloadAllWindows = function()
     }
   }.bind(this))
 };
-
-const reloadController = new ReloadController()
 
 ///sven : new methods below to support timed reloads
 ReloadController.prototype.createContextMenu = function(s)
@@ -903,37 +952,40 @@ ReloadController.prototype.createNewTimer = function (winId, tabId, intvl, msg) 
 
     return setInterval( 
         function (){
-            rlc.timedReload(winId, tabId, msg)
+            rlc.doTimedReload(winId, tabId, msg);
         }, intvl*1000 );
 }
 
 
-ReloadController.prototype.timedReload = function(winId, tabId, msg) {
+ReloadController.prototype.doTimedReload = function(winId, tabId, msg) {
 /**
  * called by the set interval.
  * reload that specific tab
  */
  
 //    console.log('timed reload: win/tab/msg : '+winId+', '+tabId+', '+msg)
-
-    var bpc = this.cachedSettings.bypassCache;
+	var bpc = this.cachedSettings.bypassCache;
     function doit(title,tabid,bpc,reloadCounter){    
         setTimeout(function(){
             chrome.tabs.reload(tabid, { bypassCache: bpc }, function(){
-//                console.log('Reloaded '+title+' ('+tabid+'), '+(bpc?'cache bypassed':'')+' at '+new Date().toLocaleString());
+                console.log('Reloading '+title+' ('+tabid+'), '+(bpc?'cache bypassed':'')+' at '+new Date().toLocaleString());
             })
         }, reloadCounter*500);        
     }
-
+	var n = new Date().getTime();
     if ( null!=tabId ) { // single tab
-        var tabsettings = this.getTabSettings(winId, tabId);
-        doit(tabsettings.title, tabId, bpc, 1)
+        var tabSettings = this.getTabSettings(winId, tabId);
+		tabSettings.ts = n+1000;
+        doit(tabSettings.title, tabId, bpc, 0)
     } else { // all window tabs
+		var winSettings = this.getWindowSettings(winId);
+		winSettings.ts = n+1000;
         chrome.tabs.getAllInWindow(winId, function (tabs) {
             var reloadCounter = 0; // counter to stagger reloads
             for (var i=0; i<tabs.length; i++) {
                 var tab = tabs[i];
-                doit(tab.title, tab.id, bpc,reloadCounter++);
+                doit(tab.title, tab.id, bpc,reloadCounter);
+				reloadCounter++;
             }
         });
     }
@@ -1023,8 +1075,6 @@ ReloadController.prototype.onWindowFocused = function(winId)
                 rlc.onTabActivate({windowId: winId,tabId:tabs[0].id})
             }
     );
-
-
 }
 
 ReloadController.prototype.onTabMoved = function(tabid)
@@ -1033,7 +1083,7 @@ ReloadController.prototype.onTabMoved = function(tabid)
  * called then a tab is attached/detached
  * 
 */
-    if ( tabid == -1 ) return
+    if ( tabid == -1 ||  tabid == undefined ) return
     var rlc = this;
     chrome.tabs.get(tabId, function (tab){
         var tabSettings = rlc.getTabSettings(tab.windowId, tab.id);
@@ -1089,3 +1139,6 @@ ReloadController.prototype.onTabRemoved = function(tabId, info)
         this.removeWinTimers(info.windowId, tabId);
     }
 }
+
+
+const reloadController = new ReloadController()
