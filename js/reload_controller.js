@@ -3,8 +3,7 @@
  *
  * @constructor
  */
-ReloadController = function()
-{
+ReloadController = function () {
   chrome.extension.onMessage.addListener(this.onMessage.bind(this))
   chrome.browserAction.onClicked.addListener(this.reload.bind(this))
   chrome.storage.onChanged.addListener(this.onStorageChanged.bind(this))
@@ -71,7 +70,7 @@ ReloadController = function()
   })
 }
 
-ReloadController.prototype.onStorageChanged = function(changes, namespace) {
+ReloadController.prototype.onStorageChanged = function (changes, namespace) {
   for (key in changes) {
     this.cachedSettings[key] = changes[key].newValue
 
@@ -84,13 +83,12 @@ ReloadController.prototype.onStorageChanged = function(changes, namespace) {
 /**
  * Context Menu Message listener when a keyboard event happened.
  */
-ReloadController.prototype.onMessage = function(request, sender, response)
-{
+ReloadController.prototype.onMessage = function (request, sender, response) {
   // Checks if the shortcut key is valid to reload all tabs.
   const validKeys = (this.cachedSettings.enableKeyboardShortcut &&
-                   request.code == this.cachedSettings.shortcutKeyCode &&
-                   request.alt == this.cachedSettings.shortcutKeyAlt &&
-                   request.shift == this.cachedSettings.shortcutKeyShift)
+    request.code == this.cachedSettings.shortcutKeyCode &&
+    request.alt == this.cachedSettings.shortcutKeyAlt &&
+    request.shift == this.cachedSettings.shortcutKeyShift)
 
   // Once valid, we can choose which reload method is needed.
   if (validKeys) {
@@ -98,8 +96,7 @@ ReloadController.prototype.onMessage = function(request, sender, response)
   }
 }
 
-ReloadController.prototype.onMenuClicked = function(info, tab)
-{
+ReloadController.prototype.onMenuClicked = function (info, tab) {
   switch (info.menuItemId) {
     case 'reloadWindow':
       chrome.windows.getCurrent(this.reloadWindow.bind(this))
@@ -108,22 +105,22 @@ ReloadController.prototype.onMenuClicked = function(info, tab)
       this.reloadAllWindows()
       break
     case 'reloadPinnedOnly':
-      chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadPinnedOnly: true}))
+      chrome.windows.getCurrent((win) => this.reloadWindow(win, { reloadPinnedOnly: true }))
       break
     case 'reloadUnpinnedOnly':
-      chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadUnpinnedOnly: true}))
+      chrome.windows.getCurrent((win) => this.reloadWindow(win, { reloadUnpinnedOnly: true }))
       break
     case 'reloadAllLeft':
-      chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadAllLeft: true}))
+      chrome.windows.getCurrent((win) => this.reloadWindow(win, { reloadAllLeft: true }))
       break
     case 'reloadAllRight':
-      chrome.windows.getCurrent((win) => this.reloadWindow(win, {reloadAllRight: true}))
+      chrome.windows.getCurrent((win) => this.reloadWindow(win, { reloadAllRight: true }))
       break
     case 'closeAllLeft':
-      chrome.windows.getCurrent((win) => this.closeWindow(win, {closeAllLeft: true}))
+      chrome.windows.getCurrent((win) => this.closeWindow(win, { closeAllLeft: true }))
       break
     case 'closeAllRight':
-      chrome.windows.getCurrent((win) => this.closeWindow(win, {closeAllRight: true}))
+      chrome.windows.getCurrent((win) => this.closeWindow(win, { closeAllRight: true }))
       break
     default:
       break
@@ -134,14 +131,13 @@ ReloadController.prototype.onMenuClicked = function(info, tab)
  * Reload Routine. It checks which option the user has allowed (All windows, or
  * or just the current window) then initiates the request.
  */
-ReloadController.prototype.reload = function(info, tab)
-{
+ReloadController.prototype.reload = function (info, tab) {
   if (this.cachedSettings.buttonDefaultAction === 'allWindows') { // All Windows.
     this.reloadAllWindows()
   } else if (this.cachedSettings.buttonDefaultAction === 'pinned') { // Pinned.
-   chrome.windows.getCurrent((win) => this.reloadWindow(win, { reloadPinnedOnly: true }))
+    chrome.windows.getCurrent((win) => this.reloadWindow(win, { reloadPinnedOnly: true }))
   } else if (this.cachedSettings.buttonDefaultAction === 'unpinned') { // Unpinned.
-   chrome.windows.getCurrent((win) => this.reloadWindow(win, { reloadUnpinnedOnly: true }))
+    chrome.windows.getCurrent((win) => this.reloadWindow(win, { reloadUnpinnedOnly: true }))
   } else { // Current Window.
     chrome.windows.getCurrent(this.reloadWindow.bind(this))
   }
@@ -150,8 +146,7 @@ ReloadController.prototype.reload = function(info, tab)
 /**
  * Initializes the reload extension.
  */
-ReloadController.prototype.init = function()
-{
+ReloadController.prototype.init = function () {
   const currVersion = chrome.app.getDetails().version
   const prevVersion = this.cachedSettings.version
   if (currVersion != prevVersion) {
@@ -163,27 +158,26 @@ ReloadController.prototype.init = function()
 
     // Update the version incase we want to do something in future.
     this.cachedSettings.version = currVersion
-    chrome.storage.sync.set({'version': this.cachedSettings.version})
+    chrome.storage.sync.set({ 'version': this.cachedSettings.version })
 
   }
-};
+}
 
 /**
  * Do onStartup actions
  */
-ReloadController.prototype.onStartup = function(win)
-{
-  const con = chrome.extension.getBackgroundPage().console;
+ReloadController.prototype.onStartup = function (win) {
+  const con = chrome.extension.getBackgroundPage().console
   con.log(`onStartup: ${this.cachedSettings.reloadStartup}`)
   switch (this.cachedSettings.reloadStartup) {
     case 'all':
       this.reloadWindow(win)
       break
     case 'pinned':
-      this.reloadWindow(win, {reloadPinnedOnly: true})
+      this.reloadWindow(win, { reloadPinnedOnly: true })
       break
     case 'unpinned':
-        this.reloadWindow(win, {reloadUnpinnedOnly: true})
+      this.reloadWindow(win, { reloadUnpinnedOnly: true })
       break
     default:
       break
@@ -193,13 +187,12 @@ ReloadController.prototype.onStartup = function(win)
 /**
  * Handles the request coming back from an external extension.
  */
-ReloadController.prototype.updateContextMenu = function()
-{
+ReloadController.prototype.updateContextMenu = function () {
   chrome.contextMenus.removeAll()
 
   chrome.contextMenus.onClicked.addListener(this.onMenuClicked.bind(this))
 
-  let attributions = '';
+  let attributions = ''
   if (this.cachedSettings.bypassCache) {
     attributions = ' (cache bypassed)'
   }
@@ -257,7 +250,7 @@ ReloadController.prototype.updateContextMenu = function()
       contexts: ['all']
     })
   }
-  
+
   if (this.cachedSettings.closeAllLeft) {
     chrome.contextMenus.create({
       id: 'closeAllLeft',
@@ -280,8 +273,7 @@ ReloadController.prototype.updateContextMenu = function()
 /**
  * When the extension first installed.
  */
-ReloadController.prototype.onInstall = function()
-{
+ReloadController.prototype.onInstall = function () {
   chrome.runtime.openOptionsPage()
 }
 
@@ -290,13 +282,13 @@ ReloadController.prototype.onInstall = function()
  *
  * @param win Window to close.
  */
-ReloadController.prototype.closeWindow = function(win, options = {})
-{
+ReloadController.prototype.closeWindow = function (win, options = {}) {
   chrome.tabs.getAllInWindow(win.id, (tabs) => {
-    let passedCurrent = false;
+    const tabsToClose = []
+    let passedCurrent = false
+
     for (const i in tabs) {
       const tab = tabs[i]
-      let closeThisTab = false
 
       if (tab.active) {
         passedCurrent = true
@@ -304,22 +296,30 @@ ReloadController.prototype.closeWindow = function(win, options = {})
       }
 
       if (passedCurrent) { // right of current
-        if (options.closeAllLeft) return
-        if (options.closeAllRight) closeThisTab = true
-      } else { // left of current
-        if (options.closeAllLeft) closeThisTab = true
+        if (options.closeAllLeft) {
+          break
+        }
+
+        if (options.closeAllRight) {
+          tabsToClose.push(tab.id)
+        }
+      } else if (options.closeAllLeft) {
+        tabsToClose.push(tab.id)
       }
-      if (closeThisTab) chrome.tabs.remove(tab.id)
+    }
+
+    if (tabsToClose.length) {
+      chrome.tabs.remove(tabsToClose).then(() => { })
     }
   })
 }
+
 /**
  * Reload all |tabs| one by one.
  *
  * @param win Window to reload.
  */
-ReloadController.prototype.reloadWindow = function(win, options = {})
-{
+ReloadController.prototype.reloadWindow = function (win, options = {}) {
   chrome.tabs.getAllInWindow(win.id, (tabs) => {
     const strategy = {}
     for (var i in tabs) {
@@ -330,14 +330,14 @@ ReloadController.prototype.reloadWindow = function(win, options = {})
 }
 
 // When this gets complicated, create a strategy pattern.
-ReloadController.prototype.reloadStrategy = function(tab, strategy, options = {}) {
+ReloadController.prototype.reloadStrategy = function (tab, strategy, options = {}) {
   let issueReload = true
 
-  if (options.reloadPinnedOnly && !tab.pinned){
+  if (options.reloadPinnedOnly && !tab.pinned) {
     issueReload = false
   }
 
-  if (options.reloadUnpinnedOnly && tab.pinned){
+  if (options.reloadUnpinnedOnly && tab.pinned) {
     issueReload = false
   }
 
@@ -369,8 +369,8 @@ ReloadController.prototype.reloadStrategy = function(tab, strategy, options = {}
     }
   }
 
-  if (issueReload){
-    const con = chrome.extension.getBackgroundPage().console;
+  if (issueReload) {
+    const con = chrome.extension.getBackgroundPage().console
     con.log(`reloading ${tab.url}, cache bypassed: ${this.cachedSettings.bypassCache}`)
     chrome.tabs.reload(tab.id, { bypassCache: this.cachedSettings.bypassCache }, null)
   }
@@ -379,13 +379,12 @@ ReloadController.prototype.reloadStrategy = function(tab, strategy, options = {}
 /**
  * Reload all tabs in all windows one by one.
  */
-ReloadController.prototype.reloadAllWindows = function()
-{
-  chrome.windows.getAll({}, function(windows) {
+ReloadController.prototype.reloadAllWindows = function () {
+  chrome.windows.getAll({}, function (windows) {
     for (var i in windows)
       this.reloadWindow(windows[i])
   }.bind(this))
-};
+}
 
 const reloadController = new ReloadController()
 reloadController.init()
