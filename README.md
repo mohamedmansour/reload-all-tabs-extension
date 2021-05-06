@@ -25,6 +25,8 @@ https://chrome.google.com/webstore/detail/reload-all-tabs/midkcinmplflbiflboepna
 
 ## Screenshot
 
-![Screenshot of the Chrome Extension](https://github.com/mohamedmansour/reload-all-tabs-extension/raw/master/screenshot/screenshot.jpg)
-![Screenshot of the Chrome Extension](https://github.com/mohamedmansour/reload-all-tabs-extension/raw/master/screenshot/screenshot2.jpg)
-![Screenshot of the Chrome Extension](https://github.com/mohamedmansour/reload-all-tabs-extension/raw/master/screenshot/screenshot3.jpg)
+![Screenshot of the Chrome Extension](https://github.com/mohamedmansour/reload-all-tabs-extension/raw/master/screenshot/feature_a.jpg)
+![Screenshot of the Chrome Extension](https://github.com/mohamedmansour/reload-all-tabs-extension/raw/master/screenshot/feature_b.jpg)
+![Screenshot of the Chrome Extension](https://github.com/mohamedmansour/reload-all-tabs-extension/raw/master/screenshot/options_a.jpg)
+![Screenshot of the Chrome Extension](https://github.com/mohamedmansour/reload-all-tabs-extension/raw/master/screenshot/options_b.jpg)
+![Screenshot of the Chrome Extension](https://github.com/mohamedmansour/reload-all-tabs-extension/raw/master/screenshot/options_c.jpg)
