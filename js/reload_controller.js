@@ -222,8 +222,8 @@ ReloadController.prototype.init = function()
     chrome.tabs.onRemoved.addListener(this.onTabRemoved.bind(this))
     chrome.tabs.onUpdated.addListener(this.onTabUpdated.bind(this))
 
-    chrome.tabs.onDetached.addListener(this.onTabMoved.bind(this))
-    chrome.tabs.onAttached.addListener(this.onTabMoved.bind(this))    
+    chrome.tabs.onDetached.addListener(this.onTabDetached.bind(this))
+    chrome.tabs.onAttached.addListener(this.onTabAttached.bind(this))    
 
     chrome.storage.sync.get(this.settingsToFetch, (settings) => {
         this.cachedSettings.version = settings.version;
@@ -247,13 +247,15 @@ ReloadController.prototype.init = function()
 
         //    console.log("---------------------------");
         //    console.log("end instantiate " + new Date().toISOString())
-        this.buildTimerObject();
-        this.createContextMenu('init');
+		var rlc = this;
+        this.buildTimerObject(function(timers) {
+			setInterval(function(){console.log(timers);}, 1000*60);
+			rlc.createContextMenu('init');
+		});
+
     });
 
     chrome.browserAction.setBadgeBackgroundColor(this.badgeSettings.badge);
-
-
 };
 
 ReloadController.prototype.onWindowCreate = function(win)
@@ -261,11 +263,8 @@ ReloadController.prototype.onWindowCreate = function(win)
 /** this is a onWindowCreate event - 
 * removed startup reloads 
 **/ 
-
-    var winSettings = this.getWindowSettings(win.id);
-    winSettings.id = win.id;
-    this.buildTimerObject();
-
+	// add window to the object
+	this.getWindowSettings(win.id);
 }
 
 ReloadController.prototype.updateBadgeText = function(windowId,tabId,force)
@@ -279,8 +278,8 @@ ReloadController.prototype.updateBadgeText = function(windowId,tabId,force)
 		this.badgeUpdateTimer = null;
 		chrome.browserAction.setBadgeText(this.badgeSettings.badgeOff);
 	}	
-    var winSettings = this.timers.windows[windowId];
-    var tabSettings = winSettings.tabs[tabId];
+    var winSettings = this.getWindowSettings(windowId);
+    var tabSettings = this.getTabSettings(windowId,tabId);
 	var ts = null,intvl = null;
 	if ( null != winSettings.timer ) {
 		intvl = winSettings.intvl;
@@ -295,12 +294,10 @@ ReloadController.prototype.updateBadgeText = function(windowId,tabId,force)
 		
 	var badgeIntvl = 1000;
 	var rem = parseInt(( ts + intvl*1000-new Date().getTime() )/1000);
+
 	if ( rem > 60 ) {
 		badgeIntvl *= 60;
 		rem = parseInt(rem/60);
-	}
-
-	if ( rem > 60 ) {
 		rem = "-"+rem+"m";
 	} else if ( rem == 0 ) {	
 		rem = "...";
@@ -329,9 +326,9 @@ ReloadController.prototype.updateContextMenu = function(tab,s)
     
     var tabId = tab.id;
     var windowId = tab.windowId;
-    var winSettings = this.timers.windows[windowId];
+    var winSettings = this.getWindowSettings(windowId);
 
-    var tabSettings = winSettings.tabs[tabId];
+    var tabSettings = this.getTabSettings(windowId,tabId);
     var currIntvl = (winSettings.scope=="window")
                     ?winSettings.intvl
                     :tabSettings.intvl;
@@ -820,7 +817,6 @@ ReloadController.prototype.setTimedReloadEnabled = function (tab, enabled) {
     
 }
 
-
 ReloadController.prototype.setTimedReloadIntvl = function (tab, intvl) {
 /**
 *    scope : win, gobal, tab
@@ -829,7 +825,7 @@ ReloadController.prototype.setTimedReloadIntvl = function (tab, intvl) {
 *    this.timers.tabs, .windows
 **/
     var winSettings = this.getWindowSettings(tab.windowId);
-    var tabSettings = winSettings.tabs[tab.id];
+    var tabSettings = this.getTabSettings(tab.windowId,tab.id);
     
     // interval changed
 //    console.log('intvl changed to '+intvl);
@@ -859,7 +855,6 @@ ReloadController.prototype.setTimedReloadIntvl = function (tab, intvl) {
     }
 }
 
-
 ReloadController.prototype.setTimedReloadScope = function (tab,scope) {
 /**
 *    scope : win, gobal, tab
@@ -885,47 +880,52 @@ ReloadController.prototype.setTimedReloadScope = function (tab,scope) {
                 // remove all timers
                 this.removeWinTimers(tab.windowId);
                 // set new tab timers wt the win intvl
-                for ( var i in winSettings.tabs ) {
-                    winSettings.tabs[i].intvl = tabIntvl;
-                    winSettings.tabs[i].ts = new Date().getTime();
-                    winSettings.tabs[i].timer = this.createNewTimer(tab.windowId, tab.id, tabIntvl, 'tab '+tab.title);
+                for ( var i in this.timers.tabs ) {
+                    this.timers.tabs[i].intvl = tabIntvl;
+                    this.timers.tabs[i].ts = new Date().getTime();
+                    this.timers.tabs[i].timer = this.createNewTimer(tab.windowId, tab.id, tabIntvl, 'tab '+tab.title);
                 }
             }
         }
     }
 }
 
-
-ReloadController.prototype.removeWinTimers = function (winId,tabId) {
+ReloadController.prototype.removeWinTimers = function (winId,tabId, del) {
 /**
 *    remove all timers for a window
 **/
-//    console.log('removeWinTimers '+winId+','+tabId)
-    var intvlCleared = {tab:0, win:0};
+    console.log('removeWinTimers '+winId+','+tabId)
+
+	var winSettings = this.getWindowSettings(winId);
+
+    
+	var intvlCleared = {tab:0, win:0};
     if ( tabId ) {
-        this.timers.windows[winId].tabs[tabId].intvl = null;
-        this.timers.windows[winId].tabs[tabId].ts = null;
-        if (null!=this.timers.windows[winId].tabs[tabId].timer){
-            clearInterval(this.timers.windows[winId].tabs[tabId].timer);
-            this.timers.windows[winId].tabs[tabId].timer = null;
+		var tabSettings = this.getTabSettings(winId,tabId);
+		tabSettings.intvl = null;
+        tabSettings.ts = null;
+        if (null!=tabSettings.timer){
+            clearInterval(tabSettings.timer);
+            tabSettings.timer = null;
             intvlCleared.tab++;
             console.log('Cleared timer for tab '+tabId+' in win '+winId);
         }
     } else {
-        this.timers.windows[winId].intvl = null;
-        this.timers.windows[winId].ts = null;
-        if (null!=this.timers.windows[winId].timer){
-            clearInterval(this.timers.windows[winId].timer);
-            this.timers.windows[winId].timer = null;
+        winSettings.intvl = null;
+        winSettings.ts = null;
+        if (null!=winSettings.timer){
+            clearInterval(winSettings.timer);
+            winSettings.timer = null;
             intvlCleared.win++;
             console.log('cleared timer for Window '+winId);
         }
-        for ( var i in this.timers.windows[winId].tabs ) {
-            this.timers.windows[winId].tabs[i].intvl = null;
-            this.timers.windows[winId].tabs[i].ts = null;
-            if (null!=this.timers.windows[winId].tabs[i].timer){
-                clearInterval(this.timers.windows[winId].tabs[i].timer);
-                this.timers.windows[winId].tabs[i].timer = null;
+        for ( var i in this.timers.tabs ) {
+			if (this.timers.tabs[i].windowId != winId) continue; 
+            this.timers.tabs[i].intvl = null;
+            this.timers.tabs[i].ts = null;
+            if (null!=this.timers.tabs[i].timer){
+                clearInterval(this.timers.tabs[i].timer);
+                this.timers.tabs[i].timer = null;
                 intvlCleared.tab++;
                 console.log('cleared timer for tab '+i+' in win '+winId);
             }
@@ -933,7 +933,6 @@ ReloadController.prototype.removeWinTimers = function (winId,tabId) {
     }
     return intvlCleared;
 }
-
 
 ReloadController.prototype.removeAllTimers = function () {
 /**
@@ -945,7 +944,6 @@ ReloadController.prototype.removeAllTimers = function () {
 
 }
 
-
 ReloadController.prototype.createNewTimer = function (winId, tabId, intvl, msg) {    
     var rlc = this;
     console.log('setting timer for win/tab '+winId+"/"+tabId+" - "+msg+', '+this.formatIntvl(intvl))
@@ -955,7 +953,6 @@ ReloadController.prototype.createNewTimer = function (winId, tabId, intvl, msg) 
             rlc.doTimedReload(winId, tabId, msg);
         }, intvl*1000 );
 }
-
 
 ReloadController.prototype.doTimedReload = function(winId, tabId, msg) {
 /**
@@ -984,7 +981,7 @@ ReloadController.prototype.doTimedReload = function(winId, tabId, msg) {
             var reloadCounter = 0; // counter to stagger reloads
             for (var i=0; i<tabs.length; i++) {
                 var tab = tabs[i];
-                doit(tab.title, tab.id, bpc,reloadCounter);
+                doit(tab.title, tab.id, bpc, reloadCounter);
 				reloadCounter++;
             }
         });
@@ -993,7 +990,6 @@ ReloadController.prototype.doTimedReload = function(winId, tabId, msg) {
 
 ReloadController.prototype.getWindowSettings = function (winId) {
 /**
-*    Settings are by window
 *     get settings from BGpage by winId
 **/
     this.timers.windows[winId] = this.timers.windows[winId] || {
@@ -1001,39 +997,42 @@ ReloadController.prototype.getWindowSettings = function (winId) {
         scope: 'window',
         ts: null,
         title : null,
-        tabs: {},
         timer: null,
-        enabled    : false,
-        id: null
+        enabled : false,
+		id: winId
     };
     return this.timers.windows[winId];
 }
 
 ReloadController.prototype.getTabSettings = function (winId,tabId) {
 /**
-*    Settings are by window
-*     get settings from BGpage by winId & tab id
+*     get settings from BGpage by tabId
 **/
-    this.timers.windows[winId] = this.getWindowSettings(winId);
-    this.timers.windows[winId].tabs[tabId] = this.timers.windows[winId].tabs[tabId] || {
+
+    this.timers.tabs[tabId] = this.timers.tabs[tabId] || {
         intvl: 'none',
         title : null,
         url : null,
         timer: null,
-        id: null
+        id: tabId,
+		windowId: winId
     };
-    return this.timers.windows[winId].tabs[tabId];
+	if ( this.timers.tabs[tabId].windowId != winId )
+		this.timers.tabs[tabId].windowId = winId;
+    return this.timers.tabs[tabId];
 }
 
-ReloadController.prototype.buildTimerObject = function(){
-    this.timers = {windows: {}};
+ReloadController.prototype.buildTimerObject = function(cb){
+	// called only at init
+	console.log("init timers obj")
+    this.timers = {windows: {}, tabs:{}};
     var rlc = this;
 
     chrome.windows.getAll({populate:true, windowTypes:['normal']}, function(windows) {
 //        console.log("build timers object");
         for ( var w=0; w<windows.length; w++ ){
             var winSettings = rlc.getWindowSettings(windows[w].id);
-            winSettings.id = windows[w].id;
+
             for ( var t=0; t<windows[w].tabs.length; t++ ){
                 var tabSettings = rlc.getTabSettings(windows[w].id, windows[w].tabs[t].id);
                 tabSettings.title=windows[w].tabs[t].title; 
@@ -1041,7 +1040,9 @@ ReloadController.prototype.buildTimerObject = function(){
                 tabSettings.id=windows[w].tabs[t].id;
             }
         }
-//        console.log(rlc.timers);
+		if ( cb && typeof(cb)=="function" ){
+			cb(rlc.timers);
+		}
     })
 }
 
@@ -1051,16 +1052,18 @@ ReloadController.prototype.formatIntvl = function (i) {
     
 }
 
-
 ReloadController.prototype.onWindowClosed = function(winId)
 {
 /**
  * called then a window is closed
- * goes through all timers and if there was one
- * for the closed tab - remove it
+ * if theres a window timer - kill it, then remove win object
 */
-    this.removeWinTimers(winId);
-    
+	console.log("win closed")
+	var winSettings = this.getWindowSettings(winId);
+	if ( winSettings.timer != null ) {
+		clearInterval(winSettings.timer);
+	}
+	delete winSettings;
 }
 
 ReloadController.prototype.onWindowFocused = function(winId)
@@ -1077,21 +1080,28 @@ ReloadController.prototype.onWindowFocused = function(winId)
     );
 }
 
-ReloadController.prototype.onTabMoved = function(tabid)
+ReloadController.prototype.onTabAttached = function(tabid, info)
 {
 /**
- * called then a tab is attached/detached
+ * called then a tab is attached
  * 
 */
     if ( tabid == -1 ||  tabid == undefined ) return
-    var rlc = this;
-    chrome.tabs.get(tabId, function (tab){
-        var tabSettings = rlc.getTabSettings(tab.windowId, tab.id);
-            tabSettings.title=tab.title; 
-            tabSettings.url=tab.url;
-            tabSettings.id=tab.id;
-        rlc.updateContextMenu(tab, "tab moved");        
-    });
+	this.getTabSettings(info.windowId, tabid);
+//console.log("attached")
+//console.log(info) // if detached winId = -1
+//console.log(this.timers)
+}
+
+ReloadController.prototype.onTabDetached = function(tabid, info)
+{
+/**
+ * called then a tab is detached
+ * set the old winID on tab setting
+*/
+//console.log("detached")
+//console.log(info) // if detached winId = -1
+//console.log(this.timers)
 }
 
 ReloadController.prototype.onTabActivate = function(info)
@@ -1100,14 +1110,24 @@ ReloadController.prototype.onTabActivate = function(info)
  * called then a tab is activated
  * 
 */
-    if ( info.tabId == -1 ) return
+// info.tabId
+// info.windowId
+
+    if ( info.windowId == -1 ) return
     var rlc = this;
+	// get the curr tab and window
     chrome.tabs.get(info.tabId, function (tab){
+		if ( rlc.timers.windows[tab.windowId] ) 
+		
+		
         var tabSettings = rlc.getTabSettings(tab.windowId, tab.id);
             tabSettings.title=tab.title; 
             tabSettings.url=tab.url;
             tabSettings.id=tab.id;
         rlc.updateContextMenu(tab, "tab activated");        
+//console.log("activated")
+//console.log(info) // if detached winId = -1
+//console.log(rlc.timers)
     });
 }
 
@@ -1117,6 +1137,11 @@ ReloadController.prototype.onTabUpdated = function(tabId, changeInfo, tab)
  * called then a tab is opened
  * 
 */
+//console.log("updated")
+//console.log("tab "+tabId)
+//console.log(changeInfo)
+//console.log(this.timers)
+
     if ( tabId == -1 ) return;
 
     if ( changeInfo.url || changeInfo.title ) {
@@ -1130,14 +1155,17 @@ ReloadController.prototype.onTabRemoved = function(tabId, info)
 {
 /**
  * called then a tab is closed
- * goes through all timers and if there was one
- * for the closed tab - remove it
+ * if theres a tab timer - kill it; remove the tab object
 */
+console.log("tab removed")
     if ( tabId == -1 ) return
 
-    if ( !info.isWindowClosing ) { // don't if full win is closing
-        this.removeWinTimers(info.windowId, tabId);
-    }
+	// single tab closed
+	var tabSettings = this.getTabSettings(info.windowId,tabId);
+	if ( tabSettings.timer != null ) {
+		clearInterval(tabSettings.timer);
+	}
+	delete tabSettings;
 }
 
 
