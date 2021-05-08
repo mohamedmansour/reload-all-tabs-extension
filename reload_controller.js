@@ -27,6 +27,7 @@ async function getSetting(keys) {
           case 'closeAllRight':
           case 'closeAllLeft':
           case 'bypassCache':
+          case 'enableTimedReloads':
             result = value == true
             break
           default:
@@ -50,8 +51,10 @@ async function init() {
   chrome.storage.onChanged.addListener(async (changes) => await onStorageChanged(changes))
   chrome.windows.onCreated.addListener(async (win) => onStartup(win))
   chrome.commands.onCommand.addListener(async () => await reload());
+  
+  chrome.contextMenus.onClicked.addListener((info) => onMenuClicked(info))  
 
-  await updateContextMenu()
+  await createContextMenu()
 
   // Version Check.
   const currVersion = chrome.runtime.getManifest().version
@@ -67,12 +70,33 @@ async function init() {
     // Update the version incase we want to do something in future.
     chrome.storage.sync.set({ 'version': currVersion })
   }
+
+  const badgeSettings = {
+      badge : {color: "#006633"},
+      badgeOff : {text: ""},
+
+      iconReady : {path: {'16': "img/icon16r.png", '48': "img/icon48r.png", '128': "img/icon128r.png"}},
+      iconOn : {path: {'16': "img/icon16t.png", '48': "img/icon48t.png", '128': "img/icon128t.png"}},
+      iconOff : {path: {'16': "img/icon16.png", '48': "img/icon48.png", '128': "img/icon128.png"}},
+
+      iconDefault : badgeSettings.iconOff
+  };
+	
+	let badgeUpdateTimer = null; // FIX badge update timer
+//  this.init(); // FIX init call
+
 }
 
+
 async function onStorageChanged(changes) {
+	
   for (key in changes) {
-    if (key.startsWith('reload') || key == 'bypassCache' || key.startsWith('close')) {
-      await updateContextMenu()
+    if (key.startsWith('enable') || key.startsWith('reload') || key == 'bypassCache' || key.startsWith('close')) {
+    // if we're disabling timed reloads in options - remove all timers
+      if ( key == 'enableTimedReloads') {
+        if ( changes[key].newValue == false ) this.removeAllTimers(); // FIX remove all timers
+      }
+      await createContextMenu()
     }
   }
 }
@@ -103,9 +127,34 @@ function onMenuClicked(info) {
     case 'closeAllRight':
       chrome.windows.getCurrent((win) => closeWindow(win, { closeAllRight: true }))
       break
+    case 'enableTimedReloads':
+    case 'timedReloadScope-tab': 
+    case 'timedReloadScope-window': 
+    case 'timedReloadInterval-none':
+    case 'timedReloadInterval-10':
+    case 'timedReloadInterval-30':
+    case 'timedReloadInterval-60':
+    case 'timedReloadInterval-120':
+    case 'timedReloadInterval-300':
+    case 'timedReloadInterval-900':
+    case 'timedReloadInterval-1800':
+    case 'timedReloadInterval-3600':
+        // get current window and tab IDs
+        var rlc = this;
+        if ( info.menuItemId == 'enableTimedReloads' ){
+            rlc.setTimedReloadEnabled(tab, info.checked);
+        } else if ( null !== info.menuItemId.match(/^timedReloadScope/) ) {
+            var scope = info.menuItemId.replace(/^timedReloadScope\-/,'').toLowerCase();
+            rlc.setTimedReloadScope(tab, scope);    
+        } else if ( null !== info.menuItemId.match(/^timedReloadInterval/) ) {
+            var intvl = info.menuItemId.replace(/^timedReloadInterval\-/,'');
+            rlc.setTimedReloadIntvl(tab, intvl);
+        }
+      break;
     default:
       break
   }
+  this.createContextMenu(tab,'onMenuClicked - '+info.menuItemId);
 }
 
 /**
@@ -154,10 +203,9 @@ async function onStartup(win) {
 /**
  * Handles the request coming back from an external extension.
  */
-async function updateContextMenu() {
+async function createContextMenu() {
   chrome.contextMenus.removeAll()
 
-  chrome.contextMenus.onClicked.addListener((info) => onMenuClicked(info))
 
   const setting = await getSetting([
     'bypassCache',
@@ -301,15 +349,16 @@ function closeWindow(win, options = {}) {
 function reloadWindow(win, options = {}) {
   chrome.tabs.query({ windowId: win.id }, async (tabs) => {
     const strategy = {}
+    var reloadCounter = 0; // counter to stagger reloads
     for (const i in tabs) {
       const tab = tabs[i]
-      await reloadStrategy(tab, strategy, options)
+      await reloadStrategy(tab, strategy, options, reloadCounter)
     }
   })
 }
 
 // When this gets complicated, create a strategy pattern.
-async function reloadStrategy(tab, strategy, options = {}) {
+async function reloadStrategy(tab, strategy, options = {}, reloadCounter) {
   let issueReload = true
 
   if (options.reloadPinnedOnly && !tab.pinned) {
@@ -351,7 +400,12 @@ async function reloadStrategy(tab, strategy, options = {}) {
   if (issueReload) {
     const { bypassCache } = await getSetting(['bypassCache'])
     console.log(`reloading ${tab.url}, cache bypassed: ${bypassCache}`)
-    chrome.tabs.reload(tab.id, { bypassCache }, null)
+
+    var id = tab.id;
+    setTimeout(function(){
+        chrome.tabs.reload(id, { bypassCache }, null)
+        }, reloadCounter*500);
+    return reloadCounter++;
   }
 }
 
@@ -361,7 +415,10 @@ async function reloadStrategy(tab, strategy, options = {}) {
 function reloadAllWindows() {
   chrome.windows.getAll({}, (windows) => {
     for (const i in windows) {
-      reloadWindow(windows[i])
+      let winId = windows[i];
+      setTimeout(function(){
+        reloadWindow(winId)
+        , 500});
     }
   })
 }
