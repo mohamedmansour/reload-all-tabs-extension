@@ -16,7 +16,6 @@ async function getSetting(keys) {
           case 'reloadWindow':
             result = (value == 'undefined') ? true : (value == true)
             break
-		// remove startup
           case 'reloadAllWindows':
           case 'reloadPinnedOnly':
           case 'reloadUnpinnedOnly':
