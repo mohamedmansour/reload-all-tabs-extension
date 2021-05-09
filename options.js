@@ -74,7 +74,6 @@ function onRestore() {
     'reloadAllRight',
     'closeAllLeft',
     'closeAllRight',
-    'reloadStartup',
     'bypassCache',
     'buttonDefaultAction',
     'version'
@@ -93,7 +92,6 @@ function onRestore() {
     setupCheckbox('closeAllRight', settings.closeAllRight)
     setupCheckbox('bypassCache', settings.bypassCache)
 
-    setupDropdown('reloadStartup', settings.reloadStartup, 'none')
     setupDropdown('buttonDefaultAction', settings.buttonDefaultAction, 'window')
   })
 

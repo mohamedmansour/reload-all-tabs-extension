@@ -16,9 +16,6 @@ async function getSetting(keys) {
           case 'reloadWindow':
             result = (value == 'undefined') ? true : (value == true)
             break
-          case 'reloadStartup':
-            result = (typeof value == 'undefined') ? 'none' : value
-            break
           case 'reloadAllWindows':
           case 'reloadPinnedOnly':
           case 'reloadUnpinnedOnly':
@@ -48,7 +45,6 @@ async function getSetting(keys) {
 async function init() {
   chrome.action.onClicked.addListener(async () => await reload())
   chrome.storage.onChanged.addListener(async (changes) => await onStorageChanged(changes))
-  chrome.windows.onCreated.addListener(async (win) => onStartup(win))
   chrome.commands.onCommand.addListener(async () => await reload());
 
   await updateContextMenu()
@@ -130,26 +126,6 @@ async function reload() {
   }
 }
 
-/**
- * Do onStartup actions
- */
-async function onStartup(win) {
-  const { reloadStartup } = await getSetting(['reloadStartup'])
-  console.log(`onStartup: ${reloadStartup}`)
-  switch (reloadStartup) {
-    case 'all':
-      reloadWindow(win)
-      break
-    case 'pinned':
-      reloadWindow(win, { reloadPinnedOnly: true })
-      break
-    case 'unpinned':
-      reloadWindow(win, { reloadUnpinnedOnly: true })
-      break
-    default:
-      break
-  }
-}
 
 /**
  * Handles the request coming back from an external extension.
