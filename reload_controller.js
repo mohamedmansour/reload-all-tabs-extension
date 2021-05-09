@@ -16,7 +16,6 @@ async function getSetting(keys) {
           case 'reloadWindow':
             result = (value == 'undefined') ? true : (value == true)
             break
-          // removed onStartup
           case 'reloadAllWindows':
           case 'reloadPinnedOnly':
           case 'reloadUnpinnedOnly':
@@ -127,7 +126,6 @@ async function reload() {
   }
 }
 
-  // remove onStartup
 
 /**
  * Handles the request coming back from an external extension.
