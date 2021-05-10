@@ -657,104 +657,112 @@ async function updateContextMenu(tab,s)
 /**
  * update menu w/ tab and window-specific settings
  */
-  const { enableTimedReloads } = await getSetting(['enableTimedReloads']);
-	if ( !enableTimedReloads) {
-		return;
-	};
+ // tab s the current tab
+ // when a tab is reloaded 
+ 
+  chrome.windows.getLastFocused({windowTypes:['normal']}, async (win) => {
+    if ( win.id != tab.windowId ) return true;
+    
+    const { enableTimedReloads } = await getSetting(['enableTimedReloads']);
+    if ( !enableTimedReloads) return;
+    chrome.tabs.query({ windowId: win.id }, async (tabs) => {
 
-console.log("upd menu - "+s)
-console.log(timers)
+      console.log("upd menu - "+s)
+      console.log(tab.title)
+      console.log(timers)
 
-  if ( tab == null ) return;
-  
-  var tabId = tab.id;
-  var windowId = tab.windowId;
-  var winSettings = timers.windows[windowId];
+      if ( tab == null ) return;
+      
+      var tabId = tab.id;
+      var windowId = tab.windowId;
+      var winSettings = timers.windows[windowId];
 
-  var tabSettings = timers.tabs[tabId];
-  var currIntvl = (winSettings.scope=="window")
-                  ?winSettings.intvl
-                  :tabSettings.intvl;
+      var tabSettings = timers.tabs[tabId];
+      var currIntvl = (winSettings.scope=="window")
+                      ?winSettings.intvl
+                      :tabSettings.intvl;
 
-	if (!winSettings.enabled) {
-		badgeSettings.iconDefault = badgeSettings.iconOff;
-	}else {
-		badgeSettings.iconDefault = badgeSettings.iconReady;
-	};            
-                    
-//    console.log('update context menu - '+s+" - intvl="+currIntvl+", enabled="+winsetting.enabled);
+      if (!winSettings.enabled) {
+        badgeSettings.iconDefault = badgeSettings.iconOff;
+      }else {
+        badgeSettings.iconDefault = badgeSettings.iconReady;
+      };            
+                        
+    //    console.log('update context menu - '+s+" - intvl="+currIntvl+", enabled="+winsetting.enabled);
 
-	if ( null != winSettings.timer || null != tabSettings.timer ) {
-		chrome.action.setIcon(badgeSettings.iconOn);
-	} else { 
-		chrome.action.setIcon(badgeSettings.iconDefault);
-	}
+      if ( null != winSettings.timer || null != tabSettings.timer ) {
+        chrome.action.setIcon(badgeSettings.iconOn);
+      } else { 
+        chrome.action.setIcon(badgeSettings.iconDefault);
+      }
 
-	if ( null != winSettings.timer ) {
-		console.log("call updateBadge for win "+winSettings.id)
-	} else if ( null != tabSettings.timer ) {
-		console.log("call updateBadge for win "+winSettings.id+", tab "+tabSettings.id)
-	} else {
-		console.log("no timer on win "+winSettings.id+", tab "+tabSettings.id+"- call updateBadge to reset badge")
-	}
+      if ( null != winSettings.timer ) {
+        console.log("call updateBadge for win "+winSettings.id)
+      } else if ( null != tabSettings.timer ) {
+        console.log("call updateBadge for win "+winSettings.id+", tab "+tabSettings.id)
+      } else {
+        console.log("no timer on win "+winSettings.id+", tab "+tabSettings.id+"- call updateBadge to reset badge")
+      }
 
-	updateBadgeText(windowId,tabId,true);
+      updateBadgeText(windowId,tabId,true);
 
-	chrome.contextMenus.update('enableTimedReloads',{
-		title:(winSettings.enabled?"Clear for this window":"Enable for this window"),
-		checked: (winSettings.enabled)
-	});
-	chrome.contextMenus.update('timedReloadScope',{
-		visible: (winSettings.enabled)
-	});
-	chrome.contextMenus.update('timedReloadScope-tab',{
-		visible: (winSettings.enabled),
-		checked:(winSettings.scope=="tab")
-	});
-	chrome.contextMenus.update('timedReloadScope-window',{
-		visible: (winSettings.enabled),
-		checked: (winSettings.scope=="window")
-	});
-	chrome.contextMenus.update('timedReloadIntvl',{
-		visible: (winSettings.enabled)
-	});
+      chrome.contextMenus.update('enableTimedReloads',{
+        title:(winSettings.enabled?"Clear for this window":"Enable for this window"),
+        checked: (winSettings.enabled)
+      });
+      chrome.contextMenus.update('timedReloadScope',{
+        visible: (winSettings.enabled)
+      });
+      chrome.contextMenus.update('timedReloadScope-tab',{
+        visible: (winSettings.enabled),
+        checked:(winSettings.scope=="tab")
+      });
+      chrome.contextMenus.update('timedReloadScope-window',{
+        visible: (winSettings.enabled),
+        checked: (winSettings.scope=="window")
+      });
+      chrome.contextMenus.update('timedReloadIntvl',{
+        visible: (winSettings.enabled)
+      });
 
-	chrome.contextMenus.update('timedReloadInterval-none',{
-		visible: (winSettings.enabled),
-		checked: (currIntvl=="none"||currIntvl==null)
-	})
-	chrome.contextMenus.update('timedReloadInterval-10',{ 
-		visible: (winSettings.enabled),
-		checked: (currIntvl==10)
-	})
-	chrome.contextMenus.update('timedReloadInterval-30',{
-		visible: (winSettings.enabled),
-		checked: (currIntvl==30)
-	})
-	chrome.contextMenus.update('timedReloadInterval-60',{
-		checked: (currIntvl==60),
-		visible: (winSettings.enabled)
-	})    
-	chrome.contextMenus.update('timedReloadInterval-120',{
-		checked: (currIntvl==120),
-		visible: (winSettings.enabled)
-	})    
-	chrome.contextMenus.update('timedReloadInterval-300',{
-		checked: (currIntvl==300),
-		visible: (winSettings.enabled)
-	})
-	chrome.contextMenus.update('timedReloadInterval-900',{
-		checked: (currIntvl==900),
-		visible: (winSettings.enabled)
-	})
-	chrome.contextMenus.update('timedReloadInterval-1800',{
-		checked: (currIntvl==1800),
-		visible: (winSettings.enabled)
-	})
-	chrome.contextMenus.update('timedReloadInterval-3600',{
-		checked: (currIntvl==3600),
-		visible: (winSettings.enabled)
-	})
+      chrome.contextMenus.update('timedReloadInterval-none',{
+        visible: (winSettings.enabled),
+        checked: (currIntvl=="none"||currIntvl==null)
+      })
+      chrome.contextMenus.update('timedReloadInterval-10',{ 
+        visible: (winSettings.enabled),
+        checked: (currIntvl==10)
+      })
+      chrome.contextMenus.update('timedReloadInterval-30',{
+        visible: (winSettings.enabled),
+        checked: (currIntvl==30)
+      })
+      chrome.contextMenus.update('timedReloadInterval-60',{
+        checked: (currIntvl==60),
+        visible: (winSettings.enabled)
+      })    
+      chrome.contextMenus.update('timedReloadInterval-120',{
+        checked: (currIntvl==120),
+        visible: (winSettings.enabled)
+      })    
+      chrome.contextMenus.update('timedReloadInterval-300',{
+        checked: (currIntvl==300),
+        visible: (winSettings.enabled)
+      })
+      chrome.contextMenus.update('timedReloadInterval-900',{
+        checked: (currIntvl==900),
+        visible: (winSettings.enabled)
+      })
+      chrome.contextMenus.update('timedReloadInterval-1800',{
+        checked: (currIntvl==1800),
+        visible: (winSettings.enabled)
+      })
+      chrome.contextMenus.update('timedReloadInterval-3600',{
+        checked: (currIntvl==3600),
+        visible: (winSettings.enabled)
+      })
+    })
+  }) 
 }
 
 function setTimedReloadEnabled(tab, enabled) {
@@ -925,7 +933,7 @@ async function removeAllTimers() {
 }
 function createNewTimer(winId, tabId, intvl, msg) {    
     console.log('setting timer for win/tab '+winId+"/"+tabId+" - "+msg+', '+formatIntvl(intvl))
-
+    if (isNaN(intvl)) return null;
     return setInterval( 
         function (){
             doTimedReload(winId, tabId, msg);
