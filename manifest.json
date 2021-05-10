@@ -19,7 +19,8 @@
   "permissions": [
     "storage",
     "tabs",
-    "contextMenus"
+    "contextMenus",
+    "notifications"
   ],
   "commands": {
     "reload": {
