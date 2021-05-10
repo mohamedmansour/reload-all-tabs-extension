@@ -1,3 +1,20 @@
+/*
+ * We only need persistence when timed reloads are set (win or tabs)
+ */
+
+let timers = {windows: {}, tabs:{}};
+let badgeSettings = {
+      badge : {color: "#006633"},
+      badgeOff : {text: ""},
+
+      iconReady : {path: {'16': "img/icon16r.png", '48': "img/icon48r.png", '128': "img/icon128r.png"}},
+      iconOn : {path: {'16': "img/icon16t.png", '48': "img/icon48t.png", '128': "img/icon128t.png"}},
+      iconOff : {path: {'16': "img/icon16.png", '48': "img/icon48.png", '128': "img/icon128.png"}},
+      badgeUpdateTimer : null
+  };
+
+
+
 async function getSetting(keys) {
   return new Promise((resolve) => {
     chrome.storage.sync.get(keys, (values) => {
@@ -16,7 +33,7 @@ async function getSetting(keys) {
           case 'reloadWindow':
             result = (value == 'undefined') ? true : (value == true)
             break
-          case 'reloadAllWindows':
+          case 'reloadAllwind ows':
           case 'reloadPinnedOnly':
           case 'reloadUnpinnedOnly':
           case 'reloadAllRight':
@@ -25,7 +42,7 @@ async function getSetting(keys) {
           case 'closeAllLeft':
           case 'bypassCache':
           case 'enableTimedReloads':
-            result = value == true
+            result = value || false;
             break
           default:
             result = undefined
@@ -46,28 +63,26 @@ async function getSetting(keys) {
 async function init() {
   chrome.action.onClicked.addListener(async () => await reload())
   chrome.storage.onChanged.addListener(async (changes) => await onStorageChanged(changes))
-  chrome.windows.onCreated.addListener(async (win) => onStartup(win))
   chrome.commands.onCommand.addListener(async () => await reload());
   
-  chrome.contextMenus.onClicked.addListener((info) => onMenuClicked(info))  
+  chrome.contextMenus.onClicked.addListener((info,tab) => onMenuClicked(info,tab))  
 //sven
-	chrome.windows.onCreated.addListener(this.onWindowCreate.bind(this))
-	chrome.windows.onFocusChanged.addListener(this.onWindowFocused.bind(this))
-	chrome.windows.onRemoved.addListener(this.onWindowClosed.bind(this))
+	chrome.windows.onCreated.addListener((win) => onWindowCreate(win))
+	chrome.windows.onFocusChanged.addListener((winId) => onWindowFocused(winId))
+	chrome.windows.onRemoved.addListener((winId) => onWindowClosed(winId))
 
-  chrome.tabs.onActivated.addListener(this.onTabActivate.bind(this))
-  chrome.tabs.onRemoved.addListener(this.onTabRemoved.bind(this))
-  chrome.tabs.onUpdated.addListener(this.onTabUpdated.bind(this))
+  chrome.tabs.onActivated.addListener((info) => onTabActivate(info))
+  chrome.tabs.onRemoved.addListener((tabId, info) => onTabRemoved(tabId, info))
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => onTabUpdated(tabId, changeInfo, tab))
 
-  chrome.tabs.onDetached.addListener(this.onTabDetached.bind(this))
-  chrome.tabs.onAttached.addListener(this.onTabAttached.bind(this))    
+  chrome.tabs.onDetached.addListener((tabid, info) => onTabDetached(tabid, info))
+  chrome.tabs.onAttached.addListener((tabid, info) => onTabAttached(tabid, info))    
   
+  console.log("init timers obj")
   
-  var rlc = this;
-    this.buildTimerObject(function(timers) {
-      rlc.createContextMenu('init');
+  buildTimerObject(function() {
+    createContextMenu('init');
   });
-  await createContextMenu()
 
   // Version Check.
   const currVersion = chrome.runtime.getManifest().version
@@ -83,22 +98,9 @@ async function init() {
     // Update the version incase we want to do something in future.
     chrome.storage.sync.set({ 'version': currVersion })
   }
-
-  const badgeSettings = {
-      badge : {color: "#006633"},
-      badgeOff : {text: ""},
-
-      iconReady : {path: {'16': "img/icon16r.png", '48': "img/icon48r.png", '128': "img/icon128r.png"}},
-      iconOn : {path: {'16': "img/icon16t.png", '48': "img/icon48t.png", '128': "img/icon128t.png"}},
-      iconOff : {path: {'16': "img/icon16.png", '48': "img/icon48.png", '128': "img/icon128.png"}},
-
-      iconDefault : badgeSettings.iconOff
-  };
-	
-	let badgeUpdateTimer = null; // FIX badge update timer
-//  this.init(); // FIX init call
-
-    chrome.browserAction.setBadgeBackgroundColor(this.badgeSettings.badge);
+  const { enableTimedReloads } = await getSetting(['enableTimedReloads'])
+  badgeSettings.iconDefault = (enableTimedReloads)?badgeSettings.iconReady:badgeSettings.iconOff;
+  chrome.action.setBadgeBackgroundColor(badgeSettings.badge);
 }
 
 
@@ -108,14 +110,14 @@ async function onStorageChanged(changes) {
     if (key.startsWith('enable') || key.startsWith('reload') || key == 'bypassCache' || key.startsWith('close')) {
     // if we're disabling timed reloads in options - remove all timers
       if ( key == 'enableTimedReloads') {
-        if ( changes[key].newValue == false ) this.removeAllTimers(); // FIX remove all timers
+        if ( changes[key].newValue == false ) await removeAllTimers(); 
       }
       await createContextMenu()
     }
   }
 }
 
-function onMenuClicked(info) {
+function onMenuClicked(info, tab) {
   switch (info.menuItemId) {
     case 'reloadWindow':
       chrome.windows.getCurrent((win) => reloadWindow(win))
@@ -153,22 +155,21 @@ function onMenuClicked(info) {
     case 'timedReloadInterval-900':
     case 'timedReloadInterval-1800':
     case 'timedReloadInterval-3600':
-        // get current window and tab IDs
-        var rlc = this;
         if ( info.menuItemId == 'enableTimedReloads' ){
-            rlc.setTimedReloadEnabled(tab, info.checked);
+          setTimedReloadEnabled(tab, info.checked);
         } else if ( null !== info.menuItemId.match(/^timedReloadScope/) ) {
-            var scope = info.menuItemId.replace(/^timedReloadScope\-/,'').toLowerCase();
-            rlc.setTimedReloadScope(tab, scope);    
+          var scope = info.menuItemId.replace(/^timedReloadScope\-/,'').toLowerCase();
+          setTimedReloadScope(tab, scope);    
         } else if ( null !== info.menuItemId.match(/^timedReloadInterval/) ) {
-            var intvl = info.menuItemId.replace(/^timedReloadInterval\-/,'');
-            rlc.setTimedReloadIntvl(tab, intvl);
+          var intvl = info.menuItemId.replace(/^timedReloadInterval\-/,'');
+          setTimedReloadIntvl(tab, intvl);
         }
+        // selecting any timedReload-related option requires a menu update
+        updateContextMenu(tab,'onMenuClicked - '+info.menuItemId);
       break;
     default:
       break
   }
-  this.createContextMenu(tab,'onMenuClicked - '+info.menuItemId);
 }
 
 /**
@@ -188,24 +189,19 @@ async function reload() {
       chrome.windows.getCurrent((win) => reloadWindow(win, { reloadUnpinnedOnly: true }))
       break
     default:
-      chrome.windows.getCurrent((win) => this.reloadWindow(win))
+      chrome.windows.getCurrent((win) => reloadWindow(win))
       break
   }
 }
 
 /**
- * Do onStartup actions
- */
-async function onStartup(win) {
-
-}
-
-/**
  * Handles the request coming back from an external extension.
  */
-async function createContextMenu() {
+async function createContextMenu(s) {
+  
+  console.log(s)
+  
   chrome.contextMenus.removeAll()
-
 
   const setting = await getSetting([
     'bypassCache',
@@ -216,20 +212,19 @@ async function createContextMenu() {
     'reloadAllLeft',
     'reloadAllRight',
     'closeAllLeft',
-    'closeAllRight'
+    'closeAllRight',
+    'enableTimedReloads'
   ])
 
-  let attributions = ''
-  if (setting.bypassCache) {
-    attributions = ' (cache bypassed)'
-  }
+  let bypassCache = ''
+  bypassCache = setting.bypassCache?' (cache bypassed)':''
 
-  if (settings.reloadWindow || 
-      settings.reloadAllWindows ||
-      settings.reloadPinnedOnly ||
-      settings.reloadUnpinnedOnly ||
-      settings.reloadAllLeft ||
-      settings.reloadAllRight
+  if (setting.reloadWindow || 
+      setting.reloadAllWindows ||
+      setting.reloadPinnedOnly ||
+      setting.reloadUnpinnedOnly ||
+      setting.reloadAllLeft ||
+      setting.reloadAllRight
       ) {
       chrome.contextMenus.create({
           id: 'reload',
@@ -238,62 +233,62 @@ async function createContextMenu() {
           contexts: ['all']
       })
   }
-  if (settings.reloadWindow) {
+  if (setting.reloadWindow) {
       chrome.contextMenus.create({
           parentId: 'reload',
           id: 'reloadWindow',
           type: 'normal',
-          title: 'Reload this window'+attributions,
+          title: 'Reload this window'+bypassCache,
           contexts: ['all']
       })
   }
-  if (settings.reloadAllWindows) {
+  if (setting.reloadAllWindows) {
       chrome.contextMenus.create({
           parentId: 'reload',
           id: 'reloadAllWindows',
           type: 'normal',
-          title: 'Reload all windows'+attributions,
+          title: 'Reload all windows'+bypassCache,
           contexts: ['all']
       })
   }
-  if (settings.reloadPinnedOnly) {
+  if (setting.reloadPinnedOnly) {
       chrome.contextMenus.create({
           parentId: 'reload',
           id: 'reloadPinnedOnly',
           type: 'normal',
-          title: 'Reload pinned tabs'+attributions,
+          title: 'Reload pinned tabs'+bypassCache,
           contexts: ['all']
       })
   }
-  if (settings.reloadUnpinnedOnly) {
+  if (setting.reloadUnpinnedOnly) {
       chrome.contextMenus.create({
           parentId: 'reload',
           id: 'reloadUnpinnedOnly',
           type: 'normal',
-          title: 'Reload unpinned tabs'+attributions,
+          title: 'Reload unpinned tabs'+bypassCache,
           contexts: ['all']
       })
   }
-  if (settings.reloadAllLeft) {
+  if (setting.reloadAllLeft) {
       chrome.contextMenus.create({
           parentId: 'reload',
           id: 'reloadAllLeft',
           type: 'normal',
-          title: 'Reload all tabs to the left'+attributions,
+          title: 'Reload all tabs to the left'+bypassCache,
           contexts: ['all']
       })
   }
-  if (settings.reloadAllRight) {
+  if (setting.reloadAllRight) {
       chrome.contextMenus.create({
           parentId: 'reload',
           id: 'reloadAllRight',
           type: 'normal',
-          title: 'Reload all tabs to the right'+attributions,
+          title: 'Reload all tabs to the right'+bypassCache,
           contexts: ['all']
       })
   }
-  if (settings.closeAllLeft ||
-      settings.closeAllRight) {
+  if (setting.closeAllLeft ||
+      setting.closeAllRight) {
       chrome.contextMenus.create({
           id: 'close',
           type: 'normal',
@@ -301,26 +296,26 @@ async function createContextMenu() {
           contexts: ['all']
       })
   }
-  if (settings.closeAllLeft) {
+  if (setting.closeAllLeft) {
       chrome.contextMenus.create({
           parentId: 'close',
           id: 'closeAllLeft',
           type: 'normal',
-          title: 'To the left'+attributions,
+          title: 'To the left',
           contexts: ['all']
       })
   }
 
-  if (settings.closeAllRight) {
+  if (setting.closeAllRight) {
       chrome.contextMenus.create({
           parentId: 'close',
           id: 'closeAllRight',
           type: 'normal',
-          title: 'To the right'+attributions,
+          title: 'To the right',
           contexts: ['all']
       })
   }
-  if (settings.enableTimedReloads) {
+  if (setting.enableTimedReloads) {
       
   // timed reload menus
   // use defaults
@@ -456,14 +451,14 @@ async function createContextMenu() {
       })
 
   }
-  var rlc = this;
+
   chrome.tabs.query({
           "active":true,
           "windowType":"normal",
           "currentWindow":true
       }, 
       function (tabs) {
-          rlc.updateContextMenu(tabs[0], "createContextMenu");
+          updateContextMenu(tabs[0], "createContextMenu");
       }
   );
 }
@@ -471,7 +466,7 @@ async function createContextMenu() {
 /**
  * When the extension first installed.
  */
-function onInstall() {
+function onInstall() {  
   chrome.runtime.openOptionsPage()
 }
 
@@ -517,7 +512,7 @@ function closeWindow(win, options = {}) {
  *
  * @param win Window to reload.
  */
-function reloadWindow(win, options = {}) {
+async function reloadWindow(win, options = {}) {
   chrome.tabs.query({ windowId: win.id }, async (tabs) => {
     const strategy = {}
     var reloadCounter = 0; // counter to stagger reloads
@@ -602,37 +597,38 @@ catch (e) {
 }
 
 /// sven add'l methods
-ReloadController.prototype.onWindowCreate = function(win)
+function onWindowCreate(win)
 {
 /** this is a onWindowCreate event - 
 * removed startup reloads 
 **/ 
 	// add window to the object
-	this.getWindowSettings(win.id);
+  timers.windows[win.id] = 
+      timers.windows[win.id] || createWindowSettings(win.id);
+      
 }
 
-ReloadController.prototype.updateBadgeText = function(windowId,tabId,force)
+async function updateBadgeText(windowId,tabId,force)
 {
 // switch tab = prev timer shows up in badge
 // when zero stops - should be blank
 // new timer doesn't restart countdown
- 	
+ 
 	if ( force ) { // called from active tab; reset any timer
-		clearTimeout(this.badgeUpdateTimer);
-		this.badgeUpdateTimer = null;
-		chrome.browserAction.setBadgeText(this.badgeSettings.badgeOff);
+		clearTimeout(badgeSettings.badgeUpdateTimer);
+		badgeSettings.badgeUpdateTimer = null;
+		chrome.action.setBadgeText(badgeSettings.badgeOff);
 	}	
-    var winSettings = this.getWindowSettings(windowId);
-    var tabSettings = this.getTabSettings(windowId,tabId);
+ 
 	var ts = null,intvl = null;
-	if ( null != winSettings.timer ) {
-		intvl = winSettings.intvl;
-		ts = winSettings.ts;
-	} else if ( null != tabSettings.timer ) {
-		intvl = tabSettings.intvl;
-		ts = tabSettings.ts;
+	if ( null != timers.windows[windowId].timer ) {
+		intvl = timers.windows[windowId].intvl;
+		ts = timers.windows[windowId].ts;
+	} else if ( null != timers.tabs[tabId].timer ) {
+		intvl = timers.tabs[tabId].intvl;
+		ts = timers.tabs[tabId].ts;
 	} else { // no timer
-		chrome.browserAction.setBadgeText(this.badgeSettings.badgeOff);
+		chrome.action.setBadgeText(badgeSettings.badgeOff);
 		return;
 	}
 		
@@ -649,46 +645,49 @@ ReloadController.prototype.updateBadgeText = function(windowId,tabId,force)
 		rem = "-"+rem+"s";
 	}
 	var rlc = this;
-	this.badgeUpdateTimer = setTimeout(function(){
-		rlc.badgeUpdateTimer = null;
-		rlc.updateBadgeText(0+windowId,0+tabId);
+	badgeSettings.badgeUpdateTimer = setTimeout(function(){
+		updateBadgeText(0+windowId,0+tabId);
 	}, parseInt(badgeIntvl));	
 //	console.log(rem)
-	chrome.browserAction.setBadgeText({text:rem});
+	chrome.action.setBadgeText({text:rem});
 }
 
-ReloadController.prototype.updateContextMenu = function(tab,s)
+async function updateContextMenu(tab,s)
 {    
 /**
- * updat menu w/ tab and window-specific settings
+ * update menu w/ tab and window-specific settings
  */
-	if (!this.cachedSettings.enableTimedReloads) {
+  const { enableTimedReloads } = await getSetting(['enableTimedReloads']);
+	if ( !enableTimedReloads) {
 		return;
 	};
 
-    if ( tab == null ) return;
-    
-    var tabId = tab.id;
-    var windowId = tab.windowId;
-    var winSettings = this.getWindowSettings(windowId);
+console.log("upd menu - "+s)
+console.log(timers)
 
-    var tabSettings = this.getTabSettings(windowId,tabId);
-    var currIntvl = (winSettings.scope=="window")
-                    ?winSettings.intvl
-                    :tabSettings.intvl;
+  if ( tab == null ) return;
+  
+  var tabId = tab.id;
+  var windowId = tab.windowId;
+  var winSettings = timers.windows[windowId];
+
+  var tabSettings = timers.tabs[tabId];
+  var currIntvl = (winSettings.scope=="window")
+                  ?winSettings.intvl
+                  :tabSettings.intvl;
 
 	if (!winSettings.enabled) {
-		this.badgeSettings.iconDefault = this.badgeSettings.iconOff;
+		badgeSettings.iconDefault = badgeSettings.iconOff;
 	}else {
-		this.badgeSettings.iconDefault = this.badgeSettings.iconReady;
+		badgeSettings.iconDefault = badgeSettings.iconReady;
 	};            
                     
-//    console.log('update context menu - '+s+" - intvl="+currIntvl+", enabled="+winSettings.enabled);
+//    console.log('update context menu - '+s+" - intvl="+currIntvl+", enabled="+winsetting.enabled);
 
 	if ( null != winSettings.timer || null != tabSettings.timer ) {
-		chrome.browserAction.setIcon(this.badgeSettings.iconOn);
+		chrome.action.setIcon(badgeSettings.iconOn);
 	} else { 
-		chrome.browserAction.setIcon(this.badgeSettings.iconDefault);
+		chrome.action.setIcon(badgeSettings.iconDefault);
 	}
 
 	if ( null != winSettings.timer ) {
@@ -699,7 +698,7 @@ ReloadController.prototype.updateContextMenu = function(tab,s)
 		console.log("no timer on win "+winSettings.id+", tab "+tabSettings.id+"- call updateBadge to reset badge")
 	}
 
-	this.updateBadgeText(windowId,tabId,true);
+	updateBadgeText(windowId,tabId,true);
 
 	chrome.contextMenus.update('enableTimedReloads',{
 		title:(winSettings.enabled?"Clear for this window":"Enable for this window"),
@@ -758,301 +757,333 @@ ReloadController.prototype.updateContextMenu = function(tab,s)
 	})
 }
 
-ReloadController.prototype.setTimedReloadEnabled = function (tab, enabled) {
+function setTimedReloadEnabled(tab, enabled) {
 /**
 *    Settings are by window
 *     save setting; this will control whether timers run
-**/    
-    
-    var winSettings = this.getWindowSettings(tab.windowId);
-
-    if ( !enabled) {
+**/
+    if ( !enabled ) {
 //        console.log('removing timers from win - setTimedReloadEnabled')
-        this.removeWinTimers(tab.windowId);
-        winSettings.enabled = false;
+        removeWinTimers(tab.windowId);
+        timers.windows[tab.windowId].enabled = false;
     } else {
-        winSettings.enabled = true;
+        timers.windows[tab.windowId].enabled = true;
     }
-    
 }
 
-ReloadController.prototype.setTimedReloadIntvl = function (tab, intvl) {
+async function setTimedReloadIntvl(tab, intvl) {
 /**
 *    scope : win, gobal, tab
 *    interval
 *     when change in intvl, remove & replace prior intervals
-*    this.timers.tabs, .windows
-**/
-    var winSettings = this.getWindowSettings(tab.windowId);
-    var tabSettings = this.getTabSettings(tab.windowId,tab.id);
-    
-    // interval changed
-//    console.log('intvl changed to '+intvl);
-    
-    if ( winSettings.scope == 'window' ) {
-        // change the window timer
-        winSettings.intvl = intvl;
-        if ( null != winSettings.timer ) {
-            clearInterval(winSettings.timer);
-            winSettings.timer = null;
-        }
-        if ( intvl != "none" ) {
-            winSettings.ts = new Date().getTime();
-            winSettings.timer = this.createNewTimer(tab.windowId, null, intvl, 'win '+tab.windowId);
-        }
-    } else if (winSettings.scope == 'tab') {
-        // change the tab timers
-        tabSettings.intvl = intvl;
-        if ( null != tabSettings.timer ) {
-            clearInterval(tabSettings.timer);
-            tabSettings.timer = null;
-        }
-        if ( intvl != "none" ) {
-            tabSettings.ts = new Date().getTime();
-            tabSettings.timer = this.createNewTimer(tab.windowId, tab.id, intvl, 'tab '+tab.title);
-        }
+*    timers.tabs, .windows
+**/   
+
+    const winId = tab.windowId;
+    const n = new Date().getTime();
+
+    if ( timers.windows[winId].scope == 'window' ) {
+      if ( timers.windows[winId].intvl == intvl) return;
+
+      // change the window timer
+      timers.windows[winId].intvl = intvl;
+      if ( null != timers.windows[winId].timer ) {
+          clearInterval(timers.windows[winId].timer);
+          timers.windows[winId].timer = null;
+      }
+      if ( intvl != "none" ) {
+          timers.windows[winId].ts = n;
+          timers.windows[winId].timer = createNewTimer(tab.windowId, null, intvl, 'win '+tab.windowId);
+      }
+    } else if (timers.windows[winId].scope == 'tab') {
+      if ( timers.tabs[tab.id].intvl == intvl) return;
+      // change the timer for current tab
+      timers.tabs[tab.id].intvl = intvl;
+      if ( null != timers.tabs[tab.id].timer ) {
+          clearInterval(timers.tabs[tab.id].timer);
+          timers.tabs[tab.id].timer = null;
+      }
+      if ( intvl != "none" ) {
+          timers.tabs[tab.id].ts = n;
+          timers.tabs[tab.id].timer = createNewTimer(tab.windowId, tab.id, intvl, 'tab '+tab.title);
+      }
     }
 }
 
-ReloadController.prototype.setTimedReloadScope = function (tab,scope) {
+async function setTimedReloadScope(tab,scope) {
 /**
 *    scope : win, gobal, tab
 *    interval
 *     when change in scope, remove prior intervals
-*    this.timers.tabs, .windows
+*    timers.tabs, .windows
 **/
-    var winSettings = this.getWindowSettings(tab.windowId);
 
-    if ( scope != winSettings.scope ) {
+    const winId = tab.windowId;
+    if ( scope != timers.windows[winId].scope ) {
 //        console.log('scope changed to '+scope);
-        winSettings.scope = scope;
+        timers.windows[winId].scope = scope;
         if ( scope == 'window' ){ // changed to window
             // remove tab timers on the window
-            this.removeWinTimers(tab.windowId);
+            const intvlCleared = await removeWinTimers(winId);
+            const tTimersRm = intvlCleared.tabs.length;
             // can't redo timers - tabs have all diff ones
-            setTimeout( function () {
-                alert("Changing the scope to window removed individual tab timers. Please set them as you need.");
-            }, 100);
+            if (tTimersRm > 0 ) 
+              registration.showNotification('Reload scope changed to "window"', {
+                body: 'The scope change removed '+tTimersRm+' tab timer'+(tTimersRm>1?"s":"")+' on the current window.',
+                data: null,
+                requireInteraction: true,
+                icon: badgeSettings.iconReady.path[128],
+                renotify : true,
+                tag: "ReloadAllTabsExtension",
+                actions: [
+                  { action: 'Close', title: 'Close' }
+                ]
+              })
         } else { // changed to tabs - tabs will get win.intvl based timers
-            var tabIntvl = winSettings.intvl;
+            const n = new Date().getTime();
+            const tabIntvl = parseInt(timers.windows[winId].intvl);
+            removeWinTimers(winId);
             if ( tabIntvl != null && tabIntvl != 'none' ) {
-                // remove all timers
-                this.removeWinTimers(tab.windowId);
                 // set new tab timers wt the win intvl
-                for ( var i in this.timers.tabs ) {
-                    this.timers.tabs[i].intvl = tabIntvl;
-                    this.timers.tabs[i].ts = new Date().getTime();
-                    this.timers.tabs[i].timer = this.createNewTimer(tab.windowId, tab.id, tabIntvl, 'tab '+tab.title);
+                for ( var i in timers.tabs ) {
+                    if ( timers.tabs[i].windowId != winId ) continue;
+                    timers.tabs[i].intvl = tabIntvl;
+                    timers.tabs[i].ts = n;
+//console.log("create new timer for "+timers.tabs[i].id+" in win "+tab.windowId)
+                    timers.tabs[i].timer = createNewTimer(winId, timers.tabs[i].id, tabIntvl, 'tab '+timers.tabs[i].title);
                 }
             }
         }
     }
 }
 
-ReloadController.prototype.removeWinTimers = function (winId,tabId, del) {
+async function removeWinTimers(winId,tabId) {
 /**
 *    remove all timers for a window
 **/
-    console.log('removeWinTimers '+winId+','+tabId)
-
-	var winSettings = this.getWindowSettings(winId);
-
+  console.log('removeWinTimers '+winId+','+tabId)
     
-	var intvlCleared = {tab:0, win:0};
+	let intvlCleared = {win:null, tabs: []};
     if ( tabId ) {
-		var tabSettings = this.getTabSettings(winId,tabId);
-		tabSettings.intvl = null;
-        tabSettings.ts = null;
-        if (null!=tabSettings.timer){
-            clearInterval(tabSettings.timer);
-            tabSettings.timer = null;
-            intvlCleared.tab++;
-            console.log('Cleared timer for tab '+tabId+' in win '+winId);
+      timers.tabs[tabId].intvl = 'none';
+      timers.tabs[tabId].ts = null;
+      if (null!=timers.tabs[tabId].timer){
+          clearInterval(timers.tabs[tabId].timer);
+          timers.tabs[tabId].timer = null;
+          intvlCleared.tabs.push(timers.tabs[tabId].title);
+          console.log('Cleared timer for tab '+tabId+' in win '+winId);
+      }
+    } else if ( winId ) {
+      timers.windows[winId].intvl = 'none';
+      timers.windows[winId].ts = null;
+      if (null!=timers.windows[winId].timer){
+          clearInterval(timers.windows[winId].timer);
+          timers.windows[winId].timer = null;
+          intvlCleared.win = true;
+          console.log('cleared timer for Window '+winId);
+      } 
+      let tabsCount = 0;
+      for ( var i in timers.tabs ) {
+        if (timers.tabs[i].windowId != winId) continue; 
+        tabsCount++
+        timers.tabs[i].intvl = 'none';
+        timers.tabs[i].ts = null;
+        if (null!=timers.tabs[i].timer){
+            clearInterval(timers.tabs[i].timer);
+            timers.tabs[i].timer = null;
+            intvlCleared.tabs.push(timers.tabs[i].title);
+            console.log('cleared timer for tab '+i+' in win '+winId);
         }
-    } else {
-        winSettings.intvl = null;
-        winSettings.ts = null;
-        if (null!=winSettings.timer){
-            clearInterval(winSettings.timer);
-            winSettings.timer = null;
-            intvlCleared.win++;
-            console.log('cleared timer for Window '+winId);
-        }
-        for ( var i in this.timers.tabs ) {
-			if (this.timers.tabs[i].windowId != winId) continue; 
-            this.timers.tabs[i].intvl = null;
-            this.timers.tabs[i].ts = null;
-            if (null!=this.timers.tabs[i].timer){
-                clearInterval(this.timers.tabs[i].timer);
-                this.timers.tabs[i].timer = null;
-                intvlCleared.tab++;
-                console.log('cleared timer for tab '+i+' in win '+winId);
-            }
-        }
+      }
     }
     return intvlCleared;
 }
 
-ReloadController.prototype.removeAllTimers = function () {
+async function removeAllTimers() {
 /**
 *    remove all timers for all windows
 **/
-    for (var i in this.timers.windows) {
-        this.removeWinTimers(i);
+    for (var i in timers.windows) {
+      timers.windows[i].intvl = 'none';
+      timers.windows[i].ts = null;
+      if (null!=timers.windows[i].timer){
+          clearInterval(timers.windows[i].timer);
+          timers.windows[i].timer = null;
+          console.log('cleared timer for '+winId);
+      }
     }
 
+    for ( var i in timers.tabs ) {
+      timers.tabs[i].intvl = 'none';
+      timers.tabs[i].ts = null;
+      if (null!=timers.tabs[i].timer){
+          clearInterval(timers.tabs[i].timer);
+          timers.tabs[i].timer = null;
+          console.log('cleared timer for tab '+i+' in win '+timers.tabs[i].windowId);
+      }
+    }
 }
-
-ReloadController.prototype.createNewTimer = function (winId, tabId, intvl, msg) {    
-    var rlc = this;
-    console.log('setting timer for win/tab '+winId+"/"+tabId+" - "+msg+', '+this.formatIntvl(intvl))
+function createNewTimer(winId, tabId, intvl, msg) {    
+    console.log('setting timer for win/tab '+winId+"/"+tabId+" - "+msg+', '+formatIntvl(intvl))
 
     return setInterval( 
         function (){
-            rlc.doTimedReload(winId, tabId, msg);
+            doTimedReload(winId, tabId, msg);
         }, intvl*1000 );
 }
 
-ReloadController.prototype.doTimedReload = function(winId, tabId, msg) {
+async function doTimedReload(winId, tabId, msg) {
+
 /**
  * called by the set interval.
  * reload that specific tab
  */
  
 //    console.log('timed reload: win/tab/msg : '+winId+', '+tabId+', '+msg)
-	var bpc = this.cachedSettings.bypassCache;
-    function doit(title,tabid,bpc,reloadCounter){    
-        setTimeout(function(){
-            chrome.tabs.reload(tabid, { bypassCache: bpc }, function(){
-                console.log('Reloading '+title+' ('+tabid+'), '+(bpc?'cache bypassed':'')+' at '+new Date().toLocaleString());
-            })
-        }, reloadCounter*500);        
-    }
-	var n = new Date().getTime();
-    if ( null!=tabId ) { // single tab
-        var tabSettings = this.getTabSettings(winId, tabId);
-		tabSettings.ts = n+1000;
-        doit(tabSettings.title, tabId, bpc, 0)
-    } else { // all window tabs
-		var winSettings = this.getWindowSettings(winId);
-		winSettings.ts = n+1000;
-        chrome.tabs.getAllInWindow(winId, function (tabs) {
-            var reloadCounter = 0; // counter to stagger reloads
-            for (var i=0; i<tabs.length; i++) {
-                var tab = tabs[i];
-                doit(tab.title, tab.id, bpc, reloadCounter);
-				reloadCounter++;
-            }
-        });
-    }
+  const { bypassCache } = await getSetting(['bypassCache']);
+  
+  function doit(title,tabid,bypassCache,reloadCounter){    
+    setTimeout(function(){
+        chrome.tabs.reload(tabid, { bypassCache: bypassCache }, function(){
+            console.log('Reloading '+title+' ('+tabid+'), '+(bypassCache?'cache bypassed':'')+' at '+new Date().toLocaleString());
+        })
+    }, reloadCounter*500);        
+  }
+  var n = new Date().getTime();
+  if ( null!=tabId ) { // single tab
+    timers.tabs[tabId].ts = n+1000;
+    doit(timers.tabs[tabId].title, tabId, bypassCache, 0)
+  } else { // all window tabs
+    timers.windows[winId].ts = n+1000;
+    chrome.tabs.query({ windowId: winId }, async (tabs) => {
+      var reloadCounter = 0; // counter to stagger reloads
+      for (const i in tabs) {
+        var tab = tabs[i];
+        doit(tab.title, tab.id, bypassCache, reloadCounter);
+        reloadCounter++;
+      }
+    });
+  }
 }
 
-ReloadController.prototype.getWindowSettings = function (winId) {
+function createWindowSettings(winId) {
 /**
 *     get settings from BGpage by winId
 **/
-    this.timers.windows[winId] = this.timers.windows[winId] || {
-        intvl: 'none',
-        scope: 'window',
-        ts: null,
-        title : null,
-        timer: null,
-        enabled : false,
-		id: winId
-    };
-    return this.timers.windows[winId];
+  return {
+    intvl: 'none',
+    scope: 'window',
+    ts: null,
+    title : null,
+    timer: null,
+    enabled : false,
+    id: winId
+  };
 }
 
-ReloadController.prototype.getTabSettings = function (winId,tabId) {
+function createTabSettings(winId,tabId) {
 /**
 *     get settings from BGpage by tabId
 **/
-
-    this.timers.tabs[tabId] = this.timers.tabs[tabId] || {
-        intvl: 'none',
-        title : null,
-        url : null,
-        timer: null,
-        id: tabId,
-		windowId: winId
+    return {
+      intvl: 'none',
+      title : null,
+      url : null,
+      timer: null,
+      id: tabId,
+      windowId: winId
     };
-	if ( this.timers.tabs[tabId].windowId != winId )
-		this.timers.tabs[tabId].windowId = winId;
-    return this.timers.tabs[tabId];
+//	if ( timers.tabs[tabId].windowId != winId )
+//		timers.tabs[tabId].windowId = winId;
 }
 
-ReloadController.prototype.buildTimerObject = function(cb){
+function buildTimerObject(cb){
 	// called only at init
-	console.log("init timers obj")
-    this.timers = {windows: {}, tabs:{}};
-    var rlc = this;
+	console.log("populate timers obj")
+  
+  chrome.windows.getAll({populate:true, windowTypes:['normal']}, function(windows) {
+       
+    for ( var w=0; w<windows.length; w++ ){
+        timers.windows[windows[w].id] = createWindowSettings(windows[w].id);
 
-    chrome.windows.getAll({populate:true, windowTypes:['normal']}, function(windows) {
-//        console.log("build timers object");
-        for ( var w=0; w<windows.length; w++ ){
-            var winSettings = rlc.getWindowSettings(windows[w].id);
-
-            for ( var t=0; t<windows[w].tabs.length; t++ ){
-                var tabSettings = rlc.getTabSettings(windows[w].id, windows[w].tabs[t].id);
-                tabSettings.title=windows[w].tabs[t].title; 
-                tabSettings.url=windows[w].tabs[t].url;
-                tabSettings.id=windows[w].tabs[t].id;
-            }
+        for ( var t=0; t<windows[w].tabs.length; t++ ){
+            timers.tabs[windows[w].tabs[t].id] = createTabSettings(windows[w].id, windows[w].tabs[t].id);
+            timers.tabs[windows[w].tabs[t].id].title=windows[w].tabs[t].title; 
+            timers.tabs[windows[w].tabs[t].id].url=windows[w].tabs[t].url;
+            timers.tabs[windows[w].tabs[t].id].id=windows[w].tabs[t].id;
         }
-		if ( cb && typeof(cb)=="function" ){
-			cb(rlc.timers);
-		}
-    })
+    }
+
+    if ( cb && typeof(cb)=="function" ){
+      cb();
+    }
+
+  })
 }
 
-ReloadController.prototype.formatIntvl = function (i) {
+function formatIntvl(i) {
     
     return (i>=60?(i/60)+'min':i+'sec')
     
 }
+async function removeWinSetting(winId) {  
+  if ( undefined == timers.windows[winId] ) return;
+	if ( timers.windows[winId].timer != null ) {
+		clearInterval(timers.windows[winId].timer);
+	}
+	delete timers.windows[winId];
+}
 
-ReloadController.prototype.onWindowClosed = function(winId)
+async function removeTabSetting(tabId) {
+  if ( undefined == timers.tabs[tabId] ) return;
+	if ( timers.tabs[tabId].timer != null ) {
+		clearInterval(timers.tabs[tabId].timer);
+	}
+	delete timers.tabs[tabId];
+}
+
+async function onWindowClosed(winId)
 {
 /**
  * called then a window is closed
  * if theres a window timer - kill it, then remove win object
 */
+  if ( winId == -1 ) return;
 	console.log("win closed")
-	var winSettings = this.getWindowSettings(winId);
-	if ( winSettings.timer != null ) {
-		clearInterval(winSettings.timer);
-	}
-	delete winSettings;
+  await removeWinSetting(winId);
 }
 
-ReloadController.prototype.onWindowFocused = function(winId)
+function onWindowFocused(winId)
 {
-    var rlc = this;
     chrome.tabs.query({
             "active":true,
             "windowType":"normal",
             "currentWindow":true}, 
             function (tabs) {
                 if ( tabs.length == 0 || tabs[0].id == -1 ) return;
-                rlc.onTabActivate({windowId: winId,tabId:tabs[0].id})
+                onTabActivate({windowId: winId,tabId:tabs[0].id})
             }
     );
 }
 
-ReloadController.prototype.onTabAttached = function(tabid, info)
+function onTabAttached(tabid, info)
 {
 /**
  * called then a tab is attached
  * 
 */
     if ( tabid == -1 ||  tabid == undefined ) return
-	this.getTabSettings(info.windowId, tabid);
+    
+    if ( timers.tabs[tabId].windowId != info.windowId )
+      timers.tabs[tabId].windowId = info.windowId;
+
+
 //console.log("attached")
 //console.log(info) // if detached winId = -1
-//console.log(this.timers)
+//console.log(timers)
 }
 
-ReloadController.prototype.onTabDetached = function(tabid, info)
+function onTabDetached(tabid, info)
 {
 /**
  * called then a tab is detached
@@ -1060,10 +1091,10 @@ ReloadController.prototype.onTabDetached = function(tabid, info)
 */
 //console.log("detached")
 //console.log(info) // if detached winId = -1
-//console.log(this.timers)
+//console.log(timers)
 }
 
-ReloadController.prototype.onTabActivate = function(info)
+async function onTabActivate(info)
 {
 /**
  * called then a tab is activated
@@ -1071,26 +1102,25 @@ ReloadController.prototype.onTabActivate = function(info)
 */
 // info.tabId
 // info.windowId
-
-    if ( info.windowId == -1 ) return
-    var rlc = this;
+    
+    if ( info.windowId == -1 || info.tabId == -1 ) return
+    
 	// get the curr tab and window
     chrome.tabs.get(info.tabId, function (tab){
-		if ( rlc.timers.windows[tab.windowId] ) 
-		
-		
-        var tabSettings = rlc.getTabSettings(tab.windowId, tab.id);
-            tabSettings.title=tab.title; 
-            tabSettings.url=tab.url;
-            tabSettings.id=tab.id;
-        rlc.updateContextMenu(tab, "tab activated");        
+      if (tab.status == "loading") return; 
+      timers.tabs[tab.id].title=tab.title; 
+      timers.tabs[tab.id].url=tab.url;
+      timers.tabs[tab.id].id=tab.id;
+      timers.tabs[tab.id].windowId=tab.windowId;
+
+      updateContextMenu(tab, "tab activated"); 
 //console.log("activated")
 //console.log(info) // if detached winId = -1
-//console.log(rlc.timers)
+//console.log(timers)
     });
 }
 
-ReloadController.prototype.onTabUpdated = function(tabId, changeInfo, tab)
+function onTabUpdated(tabId, changeInfo, tab)
 { 
 /**
  * called then a tab is opened
@@ -1098,31 +1128,28 @@ ReloadController.prototype.onTabUpdated = function(tabId, changeInfo, tab)
 */
 //console.log("updated")
 //console.log("tab "+tabId)
-//console.log(changeInfo)
-//console.log(this.timers)
-
+console.log(changeInfo)
+//console.log(timers)
+    if (changeInfo.status != "complete") return; 
     if ( tabId == -1 ) return;
 
-    if ( changeInfo.url || changeInfo.title ) {
-        var tabSettings = this.getTabSettings(tab.windowId, tab.id);
-            tabSettings.title=tab.title; 
-            tabSettings.url=tab.url;
-    }
+      timers.tabs[tabId] = timers.tabs[tabId] || createTabSettings(tab.windowId, tab.id)
+      timers.tabs[tabId].title=tab.title; 
+      timers.tabs[tabId].url=tab.url;
+ 
+      updateContextMenu(tab, "tab activated"); 
 }
 
-ReloadController.prototype.onTabRemoved = function(tabId, info)
+async function onTabRemoved(tabId, info)
 {
 /**
  * called then a tab is closed
  * if theres a tab timer - kill it; remove the tab object
 */
-console.log("tab removed")
-    if ( tabId == -1 ) return
+  if ( tabId == -1 ) return
+  console.log("tab removed")
 
 	// single tab closed
-	var tabSettings = this.getTabSettings(info.windowId,tabId);
-	if ( tabSettings.timer != null ) {
-		clearInterval(tabSettings.timer);
-	}
-	delete tabSettings;
+  await removeTabSetting(tabId);
 }
+  
