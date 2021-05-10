@@ -74,7 +74,6 @@ function onRestore() {
     'reloadAllRight',
     'closeAllLeft',
     'closeAllRight',
-    'reloadStartup',
     'bypassCache',
     'buttonDefaultAction',
     'enableTimedReloads',
@@ -95,8 +94,6 @@ function onRestore() {
     setupCheckbox('bypassCache', settings.bypassCache)
     setupCheckbox('enableTimedReloads', settings.enableTimedReloads)
 
-
-    setupDropdown('reloadStartup', settings.reloadStartup, 'none')
     setupDropdown('buttonDefaultAction', settings.buttonDefaultAction, 'window')
   })
 
