@@ -16,9 +16,13 @@ async function getSetting(keys) {
           case 'reloadWindow':
             result = (value == 'undefined') ? true : (value == true)
             break
+          case 'reloadAllMatched':
+            result = value;
+            break;
           case 'reloadAllWindows':
           case 'reloadPinnedOnly':
           case 'reloadUnpinnedOnly':
+          case 'reloadGroupedOnly':
           case 'reloadAllRight':
           case 'reloadAllLeft':
           case 'closeAllRight':
@@ -74,7 +78,9 @@ async function onStorageChanged(changes) {
 }
 
 function onMenuClicked(info) {
-  switch (info.menuItemId) {
+  const { parentMenuItemId, menuItemId } = info;
+  const itemId = parentMenuItemId || menuItemId;
+  switch (itemId) {
     case 'reloadWindow':
       chrome.windows.getCurrent((win) => reloadWindow(win))
       break
@@ -92,6 +98,12 @@ function onMenuClicked(info) {
       break
     case 'reloadAllRight':
       chrome.windows.getCurrent((win) => reloadWindow(win, { reloadAllRight: true }))
+      break
+    case 'reloadAllMatched':
+      chrome.windows.getCurrent((win) => reloadWindow(win, { reloadAllMatched: true }))
+      break
+    case 'reloadGroupedOnly':
+      chrome.windows.getCurrent((win) => reloadGroupedTabs(win.id, +menuItemId))
       break
     case 'closeAllLeft':
       chrome.windows.getCurrent((win) => closeWindow(win, { closeAllLeft: true }))
@@ -143,6 +155,8 @@ async function updateContextMenu() {
     'reloadUnpinnedOnly',
     'reloadAllLeft',
     'reloadAllRight',
+    'reloadAllMatched',
+    'reloadGroupedOnly',
     'closeAllLeft',
     'closeAllRight'
   ])
@@ -204,6 +218,36 @@ async function updateContextMenu() {
       title: `Reload all tabs to the right${attributions}`,
       contexts: ['all']
     })
+  }
+
+  if (setting.reloadAllMatched) {
+    chrome.contextMenus.create({
+      id: 'reloadAllMatched',
+      type: 'normal',
+      title: `Reload all tabs with matched urls${attributions}`,
+      contexts: ['all']
+    })
+  }
+
+  if (setting.reloadGroupedOnly) {
+    chrome.contextMenus.create({
+      id: 'reloadGroupedOnly',
+      type: 'normal',
+      title: `Reload all grouped tabs${attributions}`,
+      contexts: ['all']
+    })
+    const { id: windowId } = await chrome.windows.getCurrent();
+    const tabGroups = await chrome.tabGroups.query({ windowId });
+    for (const i in tabGroups) {
+      const tabGroup = tabGroups[i];
+      chrome.contextMenus.create({
+        id: `${tabGroup.id}`,
+        parentId: 'reloadGroupedOnly',
+        type: 'normal',
+        title: `${tabGroup.title}(${tabGroup.color})`,
+        contexts: ['all']
+      })
+    }
   }
 
   if (setting.closeAllLeft) {
@@ -324,9 +368,33 @@ async function reloadStrategy(tab, strategy, options = {}) {
     }
   }
 
+  if (options.reloadAllMatched) {
+    const { reloadAllMatched: urlString } = await getSetting(['reloadAllMatched']);
+    const isUrlMatched = urlString.split(',').map(url => url.trim()).some(url => tab.url.startsWith(url));
+    if(!isUrlMatched) {
+      issueReload = false;
+    }
+  }
+
   if (issueReload) {
     const { bypassCache } = await getSetting(['bypassCache'])
     console.log(`reloading ${tab.url}, cache bypassed: ${bypassCache}`)
+    chrome.tabs.reload(tab.id, { bypassCache }, null)
+  }
+}
+
+/**
+ * Reload grouped tabs.
+ *
+ * @param win Window to reload.
+ * @param groupId tab group to reload
+ */
+
+async function reloadGroupedTabs(windowId, groupId) {
+  const tabs = await chrome.tabs.query({ windowId, groupId });
+  const { bypassCache } = await getSetting(['bypassCache']);
+  for (const i in tabs) {
+    const tab = tabs[i]
     chrome.tabs.reload(tab.id, { bypassCache }, null)
   }
 }
