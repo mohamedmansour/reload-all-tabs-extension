@@ -1,12 +1,45 @@
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f4f6fc;
+  --bg-header: #ebeff9;
+  --text-primary: #000000;
+  --text-link: blue;
+  --border-primary: #cdcdcd;
+  --border-secondary: #b5c7de;
+  --border-tertiary: #edeff5;
+  --info-bg: #FDFFBD;
+  --note-bg: #c80000;
+  --note-text: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #2d2d30;
+    --bg-header: #252526;
+    --text-primary: #e0e0e0;
+    --text-link: #4db8ff;
+    --border-primary: #3e3e42;
+    --border-secondary: #454545;
+    --border-tertiary: #2d2d30;
+    --info-bg: #3a3a1a;
+    --note-bg: #8b0000;
+    --note-text: #ffffff;
+  }
+}
+
 body {
   font-size: 87%;
   font-family: Helvetica, Arial, sans-serif;
   margin: 10px;
   min-width: 47em;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  color-scheme: light dark;
 }
 
 a {
-  color: blue;
+  color: var(--text-link);
   font-size: 100%;
 }
 
@@ -36,6 +69,15 @@ h1 {
 
 button {
   font-size: 100%;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(1.1);
 }
 
 em {
@@ -53,20 +95,20 @@ em {
 }
 
 .extension-template {
-  border-bottom: 1px solid #cdcdcd;
+  border-bottom: 1px solid var(--border-primary);
   margin: 10px 0;
 }
 
 .extension-header {
-  background: #ebeff9;
-  border-top: 1px solid #b5c7de;
+  background: var(--bg-header);
+  border-top: 1px solid var(--border-secondary);
   padding: 3px 5px;
   font-weight: bold;
 }
 
 .extension-options {
-  background: #f4f6fc;
-  border-bottom: 1px solid #edeff5;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-tertiary);
   font-size: 85%;
   padding: 0.8em 10px;
 }
@@ -84,26 +126,26 @@ em {
 
 #info-message {
   position: fixed;
-  transition: opacity;
-  transition-duration: 1s;
+  transition: opacity 1s;
   display: inline;
   opacity: 0;
-  background: #FDFFBD none repeat scroll 0 0;
-  border-radius: 5px;
+  background: var(--info-bg);
   border-radius: 5px;
   padding: 7px 10px;
   margin-left: 10px;
+  color: var(--text-primary);
 }
 
 .note {
   border-radius: 10px;
-  background: #c80000;
+  background: var(--note-bg);
   padding: 10px;
   width: 500px;
+  color: var(--note-text);
 }
 
 #keyboardShortcutUpdate {
-  color: blue;
+  color: var(--text-link);
   font-size: 100%;
   cursor: pointer;
   display: inline;

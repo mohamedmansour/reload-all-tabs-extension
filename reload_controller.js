@@ -244,7 +244,7 @@ async function updateContextMenu() {
         id: `${tabGroup.id}`,
         parentId: 'reloadGroupedOnly',
         type: 'normal',
-        title: `${tabGroup.title}(${tabGroup.color})`,
+        title: `${tabGroup.title} (${tabGroup.color})`,
         contexts: ['all']
       })
     }
