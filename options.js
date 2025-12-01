@@ -157,8 +157,6 @@ const onRestore = async () => {
     'reloadAllRight',
     'reloadAllMatched',
     'reloadGroupedOnly',
-    'closeAllLeft',
-    'closeAllRight',
     'bypassCache',
     'buttonDefaultAction',
     'version'
@@ -175,8 +173,6 @@ const onRestore = async () => {
   setupCheckbox('reloadGroupedOnly', settings.reloadGroupedOnly);
   setupCheckbox('reloadAllLeft', settings.reloadAllLeft);
   setupCheckbox('reloadAllRight', settings.reloadAllRight);
-  setupCheckbox('closeAllLeft', settings.closeAllLeft);
-  setupCheckbox('closeAllRight', settings.closeAllRight);
   setupCheckbox('bypassCache', settings.bypassCache);
 
   setupDropdown('buttonDefaultAction', settings.buttonDefaultAction, 'window');

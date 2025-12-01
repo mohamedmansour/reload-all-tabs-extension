@@ -1,151 +1,128 @@
-async function getSetting(keys) {
-  return new Promise((resolve) => {
-    chrome.storage.sync.get(keys, (values) => {
-      let results = {}
-      keys.forEach(key => {
-        let result = undefined
-        const value = values[key]
-
-        switch (key) {
-          case 'version':
-            result = value
-            break
-          case 'buttonDefaultAction':
-            result = (typeof value == 'undefined') ? 'window' : value
-            break
-          case 'reloadWindow':
-            result = (value == 'undefined') ? true : (value == true)
-            break
-          case 'reloadAllMatched':
-            result = value;
-            break;
-          case 'reloadAllWindows':
-          case 'reloadPinnedOnly':
-          case 'reloadUnpinnedOnly':
-          case 'reloadGroupedOnly':
-          case 'reloadAllRight':
-          case 'reloadAllLeft':
-          case 'closeAllRight':
-          case 'closeAllLeft':
-          case 'bypassCache':
-            result = value == true
-            break
-          default:
-            result = undefined
-            break
-        }
-
-        results[key] = result
-      })
-
-      resolve(results)
-    })
-  })
-}
+/**
+ * Get settings from storage with proper defaults
+ * @param {string[]} keys Settings keys to fetch
+ * @returns {Promise<Object>} Settings object
+ */
+const getSetting = async (keys) => {
+  const values = await chrome.storage.sync.get(keys);
+  const results = {};
+  
+  for (const key of keys) {
+    switch (key) {
+      case 'version':
+        results[key] = values[key];
+        break;
+      case 'buttonDefaultAction':
+        results[key] = values[key] ?? 'window';
+        break;
+      case 'reloadWindow':
+        results[key] = values[key] === 'undefined' ? true : values[key] === true;
+        break;
+      case 'reloadAllMatched':
+        results[key] = values[key];
+        break;
+      case 'reloadAllWindows':
+      case 'reloadPinnedOnly':
+      case 'reloadUnpinnedOnly':
+      case 'reloadGroupedOnly':
+      case 'reloadAllRight':
+      case 'reloadAllLeft':
+      case 'bypassCache':
+        results[key] = values[key] === true;
+        break;
+      default:
+        results[key] = undefined;
+        break;
+    }
+  }
+  
+  return results;
+};
 
 /**
  * Initializes the reload extension.
  */
-async function init() {
-  chrome.action.onClicked.addListener(async () => await reload())
-  chrome.storage.onChanged.addListener(async (changes) => await onStorageChanged(changes))
+const init = async () => {
+  chrome.action.onClicked.addListener(async () => await reload());
+  chrome.storage.onChanged.addListener(async (changes) => await onStorageChanged(changes));
   chrome.commands.onCommand.addListener(async () => await reload());
 
-  await updateContextMenu()
+  await updateContextMenu();
 
   // Version Check.
-  const currVersion = chrome.runtime.getManifest().version
-  const { version } = await getSetting(['version'])
+  const currVersion = chrome.runtime.getManifest().version;
+  const { version } = await getSetting(['version']);
 
-  if (currVersion != version) {
-
+  if (currVersion !== version) {
     // Check if we just installed this extension.
-    if (typeof version == 'undefined') {
-      onInstall()
+    if (!version) {
+      onInstall();
     }
 
     // Update the version incase we want to do something in future.
-    chrome.storage.sync.set({ 'version': currVersion })
+    await chrome.storage.sync.set({ version: currVersion });
   }
-}
+};
 
-async function onStorageChanged(changes) {
-  for (key in changes) {
-    if (key.startsWith('reload') || key == 'bypassCache' || key.startsWith('close')) {
-      await updateContextMenu()
+/**
+ * Handle storage changes
+ * @param {Object} changes Storage changes object
+ */
+const onStorageChanged = async (changes) => {
+  for (const key in changes) {
+    if (key.startsWith('reload') || key === 'bypassCache') {
+      await updateContextMenu();
+      break;
     }
   }
-}
+};
 
-function onMenuClicked(info) {
+/**
+ * Handle context menu clicks
+ * @param {Object} info Click info
+ */
+const onMenuClicked = (info) => {
   const { parentMenuItemId, menuItemId } = info;
   const itemId = parentMenuItemId || menuItemId;
-  switch (itemId) {
-    case 'reloadWindow':
-      chrome.windows.getCurrent((win) => reloadWindow(win))
-      break
-    case 'reloadAllWindows':
-      reloadAllWindows()
-      break
-    case 'reloadPinnedOnly':
-      chrome.windows.getCurrent((win) => reloadWindow(win, { reloadPinnedOnly: true }))
-      break
-    case 'reloadUnpinnedOnly':
-      chrome.windows.getCurrent((win) => reloadWindow(win, { reloadUnpinnedOnly: true }))
-      break
-    case 'reloadAllLeft':
-      chrome.windows.getCurrent((win) => reloadWindow(win, { reloadAllLeft: true }))
-      break
-    case 'reloadAllRight':
-      chrome.windows.getCurrent((win) => reloadWindow(win, { reloadAllRight: true }))
-      break
-    case 'reloadAllMatched':
-      chrome.windows.getCurrent((win) => reloadWindow(win, { reloadAllMatched: true }))
-      break
-    case 'reloadGroupedOnly':
-      chrome.windows.getCurrent((win) => reloadGroupedTabs(win.id, +menuItemId))
-      break
-    case 'closeAllLeft':
-      chrome.windows.getCurrent((win) => closeWindow(win, { closeAllLeft: true }))
-      break
-    case 'closeAllRight':
-      chrome.windows.getCurrent((win) => closeWindow(win, { closeAllRight: true }))
-      break
-    default:
-      break
-  }
-}
+  
+  const menuActions = {
+    reloadWindow: () => chrome.windows.getCurrent((win) => reloadWindow(win)),
+    reloadAllWindows: () => reloadAllWindows(),
+    reloadPinnedOnly: () => chrome.windows.getCurrent((win) => reloadWindow(win, { reloadPinnedOnly: true })),
+    reloadUnpinnedOnly: () => chrome.windows.getCurrent((win) => reloadWindow(win, { reloadUnpinnedOnly: true })),
+    reloadAllLeft: () => chrome.windows.getCurrent((win) => reloadWindow(win, { reloadAllLeft: true })),
+    reloadAllRight: () => chrome.windows.getCurrent((win) => reloadWindow(win, { reloadAllRight: true })),
+    reloadAllMatched: () => chrome.windows.getCurrent((win) => reloadWindow(win, { reloadAllMatched: true })),
+    reloadGroupedOnly: () => chrome.windows.getCurrent((win) => reloadGroupedTabs(win.id, +menuItemId))
+  };
+  
+  menuActions[itemId]?.();
+};
 
 /**
  * Reload Routine. It checks which option the user has allowed (All windows, or
  * or just the current window) then initiates the request.
  */
-async function reload() {
-  const { buttonDefaultAction } = await getSetting(['buttonDefaultAction'])
-  switch (buttonDefaultAction) {
-    case 'allWindows':
-      reloadAllWindows()
-      break
-    case 'pinned':
-      chrome.windows.getCurrent((win) => reloadWindow(win, { reloadPinnedOnly: true }))
-      break
-    case 'unpinned':
-      chrome.windows.getCurrent((win) => reloadWindow(win, { reloadUnpinnedOnly: true }))
-      break
-    default:
-      chrome.windows.getCurrent((win) => this.reloadWindow(win))
-      break
-  }
-}
-
+const reload = async () => {
+  const { buttonDefaultAction } = await getSetting(['buttonDefaultAction']);
+  
+  const actions = {
+    allWindows: () => reloadAllWindows(),
+    pinned: () => chrome.windows.getCurrent((win) => reloadWindow(win, { reloadPinnedOnly: true })),
+    unpinned: () => chrome.windows.getCurrent((win) => reloadWindow(win, { reloadUnpinnedOnly: true })),
+    default: () => chrome.windows.getCurrent((win) => reloadWindow(win))
+  };
+  
+  (actions[buttonDefaultAction] || actions.default)();
+};
 
 /**
- * Handles the request coming back from an external extension.
+ * Update context menu based on user settings
  */
-async function updateContextMenu() {
-  chrome.contextMenus.removeAll()
+const updateContextMenu = async () => {
+  await chrome.contextMenus.removeAll();
 
-  chrome.contextMenus.onClicked.addListener((info) => onMenuClicked(info))
+  chrome.contextMenus.onClicked.addListener((info) => onMenuClicked(info));
 
   const setting = await getSetting([
     'bypassCache',
@@ -156,77 +133,30 @@ async function updateContextMenu() {
     'reloadAllLeft',
     'reloadAllRight',
     'reloadAllMatched',
-    'reloadGroupedOnly',
-    'closeAllLeft',
-    'closeAllRight'
-  ])
+    'reloadGroupedOnly'
+  ]);
 
-  let attributions = ''
-  if (setting.bypassCache) {
-    attributions = ' (cache bypassed)'
-  }
+  const attributions = setting.bypassCache ? ' (cache bypassed)' : '';
 
-  if (setting.reloadWindow) {
-    chrome.contextMenus.create({
-      id: 'reloadWindow',
-      type: 'normal',
-      title: `Reload this window${attributions}`,
-      contexts: ['all']
-    })
-  }
+  const menuItems = [
+    { id: 'reloadWindow', enabled: setting.reloadWindow, title: `Reload this window${attributions}` },
+    { id: 'reloadAllWindows', enabled: setting.reloadAllWindows, title: `Reload all windows${attributions}` },
+    { id: 'reloadPinnedOnly', enabled: setting.reloadPinnedOnly, title: `Reload pinned tabs${attributions}` },
+    { id: 'reloadUnpinnedOnly', enabled: setting.reloadUnpinnedOnly, title: `Reload unpinned tabs${attributions}` },
+    { id: 'reloadAllLeft', enabled: setting.reloadAllLeft, title: `Reload all tabs to the left${attributions}` },
+    { id: 'reloadAllRight', enabled: setting.reloadAllRight, title: `Reload all tabs to the right${attributions}` },
+    { id: 'reloadAllMatched', enabled: setting.reloadAllMatched, title: `Reload all tabs with matched urls${attributions}` }
+  ];
 
-  if (setting.reloadAllWindows) {
-    chrome.contextMenus.create({
-      id: 'reloadAllWindows',
-      type: 'normal',
-      title: `Reload all windows${attributions}`,
-      contexts: ['all']
-    })
-  }
-
-  if (setting.reloadPinnedOnly) {
-    chrome.contextMenus.create({
-      id: 'reloadPinnedOnly',
-      type: 'normal',
-      title: `Reload pinned tabs${attributions}`,
-      contexts: ['all']
-    })
-  }
-
-  if (setting.reloadUnpinnedOnly) {
-    chrome.contextMenus.create({
-      id: 'reloadUnpinnedOnly',
-      type: 'normal',
-      title: `Reload unpinned tabs${attributions}`,
-      contexts: ['all']
-    })
-  }
-
-  if (setting.reloadAllLeft) {
-    chrome.contextMenus.create({
-      id: 'reloadAllLeft',
-      type: 'normal',
-      title: `Reload all tabs to the left${attributions}`,
-      contexts: ['all']
-    })
-  }
-
-  if (setting.reloadAllRight) {
-    chrome.contextMenus.create({
-      id: 'reloadAllRight',
-      type: 'normal',
-      title: `Reload all tabs to the right${attributions}`,
-      contexts: ['all']
-    })
-  }
-
-  if (setting.reloadAllMatched) {
-    chrome.contextMenus.create({
-      id: 'reloadAllMatched',
-      type: 'normal',
-      title: `Reload all tabs with matched urls${attributions}`,
-      contexts: ['all']
-    })
+  for (const item of menuItems) {
+    if (item.enabled) {
+      chrome.contextMenus.create({
+        id: item.id,
+        type: 'normal',
+        title: item.title,
+        contexts: ['all']
+      });
+    }
   }
 
   if (setting.reloadGroupedOnly) {
@@ -235,184 +165,133 @@ async function updateContextMenu() {
       type: 'normal',
       title: `Reload all tab groups${attributions}`,
       contexts: ['all']
-    })
+    });
+    
     const { id: windowId } = await chrome.windows.getCurrent();
     const tabGroups = await chrome.tabGroups.query({ windowId });
-    for (const i in tabGroups) {
-      const tabGroup = tabGroups[i];
+    
+    for (const tabGroup of tabGroups) {
       chrome.contextMenus.create({
         id: `${tabGroup.id}`,
         parentId: 'reloadGroupedOnly',
         type: 'normal',
         title: `${tabGroup.title} (${tabGroup.color})`,
         contexts: ['all']
-      })
+      });
     }
   }
-
-  if (setting.closeAllLeft) {
-    chrome.contextMenus.create({
-      id: 'closeAllLeft',
-      type: 'normal',
-      title: `Close all tabs to the left${attributions}`,
-      contexts: ['all']
-    })
-  }
-
-  if (setting.closeAllRight) {
-    chrome.contextMenus.create({
-      id: 'closeAllRight',
-      type: 'normal',
-      title: `Close all tabs to the right${attributions}`,
-      contexts: ['all']
-    })
-  }
-}
+};
 
 /**
  * When the extension first installed.
  */
-function onInstall() {
-  chrome.runtime.openOptionsPage()
-}
-
-/**
- * Close tabs to left or right one by one.
- *
- * @param win Window to close.
- */
-function closeWindow(win, options = {}) {
-  chrome.tabs.query({ windowId: win.id }, (tabs) => {
-    const tabsToClose = []
-    let passedCurrent = false
-
-    for (const i in tabs) {
-      const tab = tabs[i]
-
-      if (tab.active) {
-        passedCurrent = true
-        continue
-      }
-
-      if (passedCurrent) { // right of current
-        if (options.closeAllLeft) {
-          break
-        }
-
-        if (options.closeAllRight) {
-          tabsToClose.push(tab.id)
-        }
-      } else if (options.closeAllLeft) {
-        tabsToClose.push(tab.id)
-      }
-    }
-
-    if (tabsToClose.length) {
-      chrome.tabs.remove(tabsToClose).then(() => { })
-    }
-  })
-}
+const onInstall = () => {
+  chrome.runtime.openOptionsPage();
+};
 
 /**
  * Reload all |tabs| one by one.
- *
- * @param win Window to reload.
+ * @param {Object} win Window to reload.
+ * @param {Object} options Reload options
  */
-function reloadWindow(win, options = {}) {
-  chrome.tabs.query({ windowId: win.id }, async (tabs) => {
-    const strategy = {}
-    for (const i in tabs) {
-      const tab = tabs[i]
-      await reloadStrategy(tab, strategy, options)
-    }
-  })
-}
+const reloadWindow = async (win, options = {}) => {
+  const tabs = await chrome.tabs.query({ windowId: win.id });
+  const strategy = {};
+  
+  for (const tab of tabs) {
+    await reloadStrategy(tab, strategy, options);
+  }
+};
 
-// When this gets complicated, create a strategy pattern.
-async function reloadStrategy(tab, strategy, options = {}) {
-  let issueReload = true
+/**
+ * Determine if a tab should be reloaded based on options
+ * @param {Object} tab Tab to check
+ * @param {Object} strategy Strategy state
+ * @param {Object} options Reload options
+ */
+const reloadStrategy = async (tab, strategy, options = {}) => {
+  let issueReload = true;
 
   if (options.reloadPinnedOnly && !tab.pinned) {
-    issueReload = false
+    issueReload = false;
   }
 
   if (options.reloadUnpinnedOnly && tab.pinned) {
-    issueReload = false
+    issueReload = false;
   }
 
   if (options.reloadAllLeft) {
     if (tab.active) {
-      strategy.stop = true
+      strategy.stop = true;
     }
-
     if (strategy.stop) {
-      issueReload = false
+      issueReload = false;
     }
   }
 
   if (options.reloadAllRight) {
     if (!strategy.reset) {
       if (!tab.active) {
-        strategy.stop = true
-      }
-      else {
-        strategy.reset = true
+        strategy.stop = true;
+      } else {
+        strategy.reset = true;
       }
     }
-
     if (strategy.stop) {
-      issueReload = false
+      issueReload = false;
       if (strategy.reset) {
-        strategy.stop = false
+        strategy.stop = false;
       }
     }
   }
 
   if (options.reloadAllMatched) {
     const { reloadAllMatched: urlString } = await getSetting(['reloadAllMatched']);
-    const isUrlMatched = urlString.split(',').map(url => url.trim()).some(url => tab.url.startsWith(url));
-    if(!isUrlMatched) {
+    const isUrlMatched = urlString
+      .split(',')
+      .map(url => url.trim())
+      .some(url => tab.url.startsWith(url));
+    
+    if (!isUrlMatched) {
       issueReload = false;
     }
   }
 
   if (issueReload) {
-    const { bypassCache } = await getSetting(['bypassCache'])
-    console.log(`reloading ${tab.url}, cache bypassed: ${bypassCache}`)
-    chrome.tabs.reload(tab.id, { bypassCache }, null)
+    const { bypassCache } = await getSetting(['bypassCache']);
+    console.log(`Reloading ${tab.url}, cache bypassed: ${bypassCache}`);
+    await chrome.tabs.reload(tab.id, { bypassCache });
   }
-}
+};
 
 /**
  * Reload grouped tabs.
- *
- * @param win Window to reload.
- * @param groupId tab group to reload
+ * @param {number} windowId Window ID
+ * @param {number} groupId Tab group ID to reload
  */
-
-async function reloadGroupedTabs(windowId, groupId) {
+const reloadGroupedTabs = async (windowId, groupId) => {
   const tabs = await chrome.tabs.query({ windowId, groupId });
   const { bypassCache } = await getSetting(['bypassCache']);
-  for (const i in tabs) {
-    const tab = tabs[i]
-    chrome.tabs.reload(tab.id, { bypassCache }, null)
+  
+  for (const tab of tabs) {
+    await chrome.tabs.reload(tab.id, { bypassCache });
   }
-}
+};
 
 /**
  * Reload all tabs in all windows one by one.
  */
-function reloadAllWindows() {
-  chrome.windows.getAll({}, (windows) => {
-    for (const i in windows) {
-      reloadWindow(windows[i])
-    }
-  })
-}
+const reloadAllWindows = async () => {
+  const windows = await chrome.windows.getAll({});
+  
+  for (const win of windows) {
+    await reloadWindow(win);
+  }
+};
 
+// Initialize the extension
 try {
-  init()
-}
-catch (e) {
-  console.error(e)
+  init();
+} catch (e) {
+  console.error('Failed to initialize extension:', e);
 }
