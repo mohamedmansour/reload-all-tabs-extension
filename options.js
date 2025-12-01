@@ -158,6 +158,7 @@ const onRestore = async () => {
     'reloadAllMatched',
     'reloadGroupedOnly',
     'bypassCache',
+    'reloadDelay',
     'buttonDefaultAction',
     'version'
   ];
@@ -176,6 +177,7 @@ const onRestore = async () => {
   setupCheckbox('bypassCache', settings.bypassCache);
 
   setupDropdown('buttonDefaultAction', settings.buttonDefaultAction, 'window');
+  setupDropdown('reloadDelay', settings.reloadDelay, '0');
   setupTextarea('reloadAllMatched', settings.reloadAllMatched);
 
   const commands = await chrome.commands.getAll();

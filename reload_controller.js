@@ -21,6 +21,9 @@ const getSetting = async (keys) => {
       case 'reloadAllMatched':
         results[key] = values[key];
         break;
+      case 'reloadDelay':
+        results[key] = parseInt(values[key] ?? '0', 10);
+        break;
       case 'reloadAllWindows':
       case 'reloadPinnedOnly':
       case 'reloadUnpinnedOnly':
@@ -218,9 +221,13 @@ const onInstall = () => {
 const reloadWindow = async (win, options = {}) => {
   const tabs = await chrome.tabs.query({ windowId: win.id });
   const strategy = {};
+  const { reloadDelay } = await getSetting(['reloadDelay']);
   
   for (const tab of tabs) {
     await reloadStrategy(tab, strategy, options);
+    if (reloadDelay > 0) {
+      await new Promise(resolve => setTimeout(resolve, reloadDelay));
+    }
   }
 };
 
@@ -292,10 +299,13 @@ const reloadStrategy = async (tab, strategy, options = {}) => {
  */
 const reloadGroupedTabs = async (windowId, groupId) => {
   const tabs = await chrome.tabs.query({ windowId, groupId });
-  const { bypassCache } = await getSetting(['bypassCache']);
+  const { bypassCache, reloadDelay } = await getSetting(['bypassCache', 'reloadDelay']);
   
   for (const tab of tabs) {
     await chrome.tabs.reload(tab.id, { bypassCache });
+    if (reloadDelay > 0) {
+      await new Promise(resolve => setTimeout(resolve, reloadDelay));
+    }
   }
 };
 
