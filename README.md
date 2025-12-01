@@ -9,8 +9,8 @@ This Google Chrome extension reloads or refreshes all tabs.
    don't want it.
  - You can reload all tabs from the context menu. You can disable it too if you
    don't like it.
- - You can customize the preference whether to refresh all windows, pinned tabs
-   or just the current one, as well as all tabs to the right or left.
+ - You can customize the preference whether to refresh all windows, pinned tabs,
+   tab groups, or just the current one, as well as all tabs to the right or left.
  - You can have it reload tabs on startup.
  - You can optionally bypass cache while reloading.
 

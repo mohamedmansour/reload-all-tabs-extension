@@ -233,7 +233,7 @@ async function updateContextMenu() {
     chrome.contextMenus.create({
       id: 'reloadGroupedOnly',
       type: 'normal',
-      title: `Reload all grouped tabs${attributions}`,
+      title: `Reload all tab groups${attributions}`,
       contexts: ['all']
     })
     const { id: windowId } = await chrome.windows.getCurrent();
