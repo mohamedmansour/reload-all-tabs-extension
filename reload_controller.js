@@ -46,6 +46,11 @@ const init = async () => {
   chrome.action.onClicked.addListener(async () => await reload());
   chrome.storage.onChanged.addListener(async (changes) => await onStorageChanged(changes));
   chrome.commands.onCommand.addListener(async () => await reload());
+  
+  // Listen for tab group changes
+  chrome.tabGroups.onCreated.addListener(async () => await updateContextMenu());
+  chrome.tabGroups.onRemoved.addListener(async () => await updateContextMenu());
+  chrome.tabGroups.onUpdated.addListener(async () => await updateContextMenu());
 
   await updateContextMenu();
 
@@ -170,12 +175,28 @@ const updateContextMenu = async () => {
     const { id: windowId } = await chrome.windows.getCurrent();
     const tabGroups = await chrome.tabGroups.query({ windowId });
     
+    // Color emoji mapping for tab groups
+    const colorEmojis = {
+      grey: '⬛',
+      blue: '🟦',
+      red: '🟥',
+      yellow: '🟨',
+      green: '🟩',
+      pink: '⬜',
+      purple: '🟪',
+      cyan: '🟦',
+      orange: '🟧'
+    };
+    
     for (const tabGroup of tabGroups) {
+      const colorEmoji = colorEmojis[tabGroup.color] || '⬛';
+      const groupTitle = tabGroup.title || 'Unnamed';
+      
       chrome.contextMenus.create({
         id: `${tabGroup.id}`,
         parentId: 'reloadGroupedOnly',
         type: 'normal',
-        title: `${tabGroup.title} (${tabGroup.color})`,
+        title: `${colorEmoji} ${groupTitle}`,
         contexts: ['all']
       });
     }

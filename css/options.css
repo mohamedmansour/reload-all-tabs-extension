@@ -228,23 +228,26 @@ main {
   background: var(--bg-secondary);
   border-block-end: 0.0625em solid var(--border-tertiary);
   padding: 0.8em 0.625em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 
   & p {
-    margin-block: var(--spacing-sm);
+    margin: 0;
   }
 
   & img {
     display: block;
     max-width: 100%;
+    width: auto;
     height: auto;
-    margin-block: var(--spacing-md);
+    align-self: flex-start;
     border-radius: var(--border-radius-sm);
   }
 }
 
 .option-group {
   gap: var(--spacing-xs);
-  margin-block: var(--spacing-md);
 
   & label {
     display: flex;
@@ -261,6 +264,10 @@ main {
       align-items: flex-start;
       font-weight: bold;
     }
+  }
+
+  &:last-child {
+    margin-block-end: 0;
   }
 }
 
