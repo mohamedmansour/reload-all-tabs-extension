@@ -1,0 +1,266 @@
+{
+  "extName": {
+    "message": "Alle Tabs neu laden",
+    "description": "Name of the extension"
+  },
+  "extDescription": {
+    "message": "Laden Sie alle Tabs mit Tastenkombination (Alt + Umschalt + R), Kontextmenü oder Browser-Aktionsschaltfläche neu.",
+    "description": "Description of the extension"
+  },
+  "extActionTitle": {
+    "message": "Alle Tabs neu laden",
+    "description": "Title for the browser action button"
+  },
+  "commandToggleReload": {
+    "message": "Neuladen umschalten",
+    "description": "Description for the keyboard command"
+  },
+  "optionsTitle": {
+    "message": "Optionen für Alle Tabs neu laden",
+    "description": "Title for the options page"
+  },
+  "optionsHeader": {
+    "message": "Alle Tabs neu laden",
+    "description": "Header text for options page"
+  },
+  "optionsSaveNote": {
+    "message": "Stellen Sie sicher, dass Sie die Einstellungen speichern, nachdem Sie die Bearbeitung abgeschlossen haben!",
+    "description": "Note about saving settings"
+  },
+  "visitExtensionPage": {
+    "message": "Erweiterungsseite besuchen",
+    "description": "Link text to visit extension page"
+  },
+  "fileBugs": {
+    "message": "Fehler und Vorschläge melden",
+    "description": "Link text to file bugs"
+  },
+  "followOnTwitter": {
+    "message": "Sie sollten mir auf Twitter folgen",
+    "description": "Text before Twitter link"
+  },
+  "forFeatureRequests": {
+    "message": "für Feature-Anfragen oder Fehlerberichte!",
+    "description": "Text after Twitter handle"
+  },
+  "browserActionHeading": {
+    "message": "Browser-Aktion",
+    "description": "Heading for browser action section"
+  },
+  "hideButtonInstruction": {
+    "message": "Um die Schaltfläche zu entfernen, klicken Sie mit der rechten Maustaste auf das Symbol und wählen Sie",
+    "description": "Instructions for hiding the browser action button"
+  },
+  "hideButton": {
+    "message": "Schaltfläche ausblenden",
+    "description": "Text for hide button option"
+  },
+  "showButtonInstruction": {
+    "message": "Um die Schaltfläche wieder anzuzeigen, besuchen Sie die",
+    "description": "Instructions for showing the browser action button"
+  },
+  "page": {
+    "message": "Seite, und",
+    "description": "Text for page reference"
+  },
+  "extensionsPage": {
+    "message": "chrome://extensions/",
+    "description": "Extensions page URL"
+  },
+  "showButton": {
+    "message": "Schaltfläche anzeigen",
+    "description": "Text for show button option"
+  },
+  "clickOn": {
+    "message": "klicken Sie auf",
+    "description": "Text for click on instruction"
+  },
+  "buttonDefaultActionLabel": {
+    "message": "Beim Klicken auf die Browser-Aktion neu laden:",
+    "description": "Label for browser action dropdown"
+  },
+  "allWindows": {
+    "message": "Alle Fenster",
+    "description": "Option to reload all windows"
+  },
+  "currentWindow": {
+    "message": "Aktuelles Fenster",
+    "description": "Option to reload current window"
+  },
+  "pinnedTabs": {
+    "message": "Aktuelles Fenster, Angeheftete Tabs",
+    "description": "Option to reload pinned tabs"
+  },
+  "unpinnedTabs": {
+    "message": "Aktuelles Fenster, Nicht angeheftete Tabs",
+    "description": "Option to reload unpinned tabs"
+  },
+  "contextMenuHeading": {
+    "message": "Kontextmenü (Rechtsklick)",
+    "description": "Heading for context menu section"
+  },
+  "contextMenuMultipleNote": {
+    "message": "Wenn Sie mehrere Kontrollkästchen aktiviert haben, werden alle Kontextmenüs unter einem übergeordneten Menü \"Alle Tabs neu laden\" platziert.",
+    "description": "Note about multiple context menu items"
+  },
+  "contextMenuSingleNote": {
+    "message": "Wenn Sie nur ein Kontextmenü ausgewählt haben, wird es kein übergeordnetes Menü geben.",
+    "description": "Note about single context menu item"
+  },
+  "reloadWindowLabel": {
+    "message": "Alle Tabs im aktuellen Fenster neu laden",
+    "description": "Label for reload window checkbox"
+  },
+  "reloadAllWindowsLabel": {
+    "message": "Alle Tabs in allen Fenstern neu laden",
+    "description": "Label for reload all windows checkbox"
+  },
+  "reloadPinnedOnlyLabel": {
+    "message": "Nur angeheftete Tabs im aktuellen Fenster neu laden",
+    "description": "Label for reload pinned only checkbox"
+  },
+  "reloadUnpinnedOnlyLabel": {
+    "message": "Nur nicht angeheftete Tabs im aktuellen Fenster neu laden",
+    "description": "Label for reload unpinned only checkbox"
+  },
+  "reloadGroupedOnlyLabel": {
+    "message": "Nur Tab-Gruppen im aktuellen Fenster neu laden",
+    "description": "Label for reload grouped only checkbox"
+  },
+  "reloadAllLeftLabel": {
+    "message": "Alle Tabs links neu laden",
+    "description": "Label for reload all left checkbox"
+  },
+  "reloadAllRightLabel": {
+    "message": "Alle Tabs rechts neu laden",
+    "description": "Label for reload all right checkbox"
+  },
+  "reloadAllMatchedLabel": {
+    "message": "Alle Tabs neu laden, die mit URLs beginnen (durch Kommas getrennt):",
+    "description": "Label for reload matched URLs textarea"
+  },
+  "reloadAllMatchedPlaceholder": {
+    "message": "www.beispiel1.de, www.beispiel2.de",
+    "description": "Placeholder for matched URLs textarea"
+  },
+  "advancedHeading": {
+    "message": "Erweiterte Optionen",
+    "description": "Heading for advanced options section"
+  },
+  "bypassCacheLabel": {
+    "message": "Cache beim Neuladen umgehen",
+    "description": "Label for bypass cache checkbox"
+  },
+  "excludeActiveTabLabel": {
+    "message": "Aktiven Tab vom Neuladen ausschließen",
+    "description": "Label for exclude active tab checkbox"
+  },
+  "excludeAudioTabsLabel": {
+    "message": "Tabs mit Audio vom Neuladen ausschließen",
+    "description": "Label for exclude audio tabs checkbox"
+  },
+  "reloadDelayLabel": {
+    "message": "Verzögerung zwischen dem Neuladen von Tabs:",
+    "description": "Label for reload delay dropdown"
+  },
+  "delayNone": {
+    "message": "Keine",
+    "description": "No delay option"
+  },
+  "keyboardShortcutHeading": {
+    "message": "Tastenkombinations-Optionen",
+    "description": "Heading for keyboard shortcut section"
+  },
+  "keyboardShortcutSetup": {
+    "message": "Um die Tastenkombination einzurichten oder zu ändern, besuchen Sie bitte die Shortcuts-Seite in Chrome:",
+    "description": "Instructions for setting up keyboard shortcuts"
+  },
+  "keyboardShortcutCurrent": {
+    "message": "Aktuelle Tastenkombination:",
+    "description": "Label for current keyboard shortcut"
+  },
+  "keyboardShortcutNotSet": {
+    "message": "Nicht festgelegt",
+    "description": "Text when keyboard shortcut is not set"
+  },
+  "closeButton": {
+    "message": "Schließen",
+    "description": "Text for close button"
+  },
+  "savedMessage": {
+    "message": "Gespeichert!",
+    "description": "Message shown when settings are saved"
+  },
+  "extensionDeveloper": {
+    "message": "Erweiterung entwickelt von",
+    "description": "Text before developer name"
+  },
+  "sourceCodeAvailable": {
+    "message": "Quellcode verfügbar auf",
+    "description": "Text before GitHub link"
+  },
+  "iconBy": {
+    "message": "Symbol von",
+    "description": "Text before icon designer name"
+  },
+  "reloadThisWindow": {
+    "message": "Dieses Fenster neu laden",
+    "description": "Context menu item for reloading current window"
+  },
+  "reloadAllWindowsContext": {
+    "message": "Alle Fenster neu laden",
+    "description": "Context menu item for reloading all windows"
+  },
+  "reloadPinnedTabsContext": {
+    "message": "Angeheftete Tabs neu laden",
+    "description": "Context menu item for reloading pinned tabs"
+  },
+  "reloadUnpinnedTabsContext": {
+    "message": "Nicht angeheftete Tabs neu laden",
+    "description": "Context menu item for reloading unpinned tabs"
+  },
+  "reloadAllLeftContext": {
+    "message": "Alle Tabs links neu laden",
+    "description": "Context menu item for reloading tabs to the left"
+  },
+  "reloadAllRightContext": {
+    "message": "Alle Tabs rechts neu laden",
+    "description": "Context menu item for reloading tabs to the right"
+  },
+  "reloadAllMatchedContext": {
+    "message": "Alle Tabs mit übereinstimmenden URLs neu laden",
+    "description": "Context menu item for reloading matched URLs"
+  },
+  "reloadAllTabGroups": {
+    "message": "Alle Tab-Gruppen neu laden",
+    "description": "Context menu item for reloading tab groups"
+  },
+  "cacheBypassed": {
+    "message": " (Cache umgangen)",
+    "description": "Suffix for context menu items when cache is bypassed"
+  },
+  "unnamedGroup": {
+    "message": "Unbenannt",
+    "description": "Text for unnamed tab groups"
+  },
+  "clipboardCopySuccess": {
+    "message": "Folgender Link '$1' wurde in die Zwischenablage kopiert. Sie können dort die Standardeinstellungen ändern. Aufgrund der Chrome-Sicherheit müssen Sie ihn manuell besuchen.",
+    "description": "Alert message when link is copied to clipboard",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://extensions/shortcuts"
+      }
+    }
+  },
+  "clipboardCopyFailed": {
+    "message": "Kopieren in die Zwischenablage fehlgeschlagen. Bitte navigieren Sie manuell zu: $1",
+    "description": "Alert message when clipboard copy fails",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://extensions/shortcuts"
+      }
+    }
+  }
+}

@@ -1,0 +1,266 @@
+{
+  "extName": {
+    "message": "Recarregar Todas as Abas",
+    "description": "Name of the extension"
+  },
+  "extDescription": {
+    "message": "Recarregue todas as abas usando atalho de teclado (alt + shift + r), menu de contexto ou botão de ação do navegador.",
+    "description": "Description of the extension"
+  },
+  "extActionTitle": {
+    "message": "Recarregar Todas as Abas",
+    "description": "Title for the browser action button"
+  },
+  "commandToggleReload": {
+    "message": "Alternar recarga",
+    "description": "Description for the keyboard command"
+  },
+  "optionsTitle": {
+    "message": "Opções de Recarregar Todas as Abas",
+    "description": "Title for the options page"
+  },
+  "optionsHeader": {
+    "message": "Recarregar Todas as Abas",
+    "description": "Header text for options page"
+  },
+  "optionsSaveNote": {
+    "message": "Certifique-se de salvar as configurações após terminar a edição!",
+    "description": "Note about saving settings"
+  },
+  "visitExtensionPage": {
+    "message": "Visitar página da extensão",
+    "description": "Link text to visit extension page"
+  },
+  "fileBugs": {
+    "message": "Relatar bugs e sugestões",
+    "description": "Link text to file bugs"
+  },
+  "followOnTwitter": {
+    "message": "Você deveria me seguir no Twitter",
+    "description": "Text before Twitter link"
+  },
+  "forFeatureRequests": {
+    "message": "para solicitações de recursos ou relatar bugs!",
+    "description": "Text after Twitter handle"
+  },
+  "browserActionHeading": {
+    "message": "Ação do Navegador",
+    "description": "Heading for browser action section"
+  },
+  "hideButtonInstruction": {
+    "message": "Para remover o botão, clique com o botão direito no ícone e escolha",
+    "description": "Instructions for hiding the browser action button"
+  },
+  "hideButton": {
+    "message": "Ocultar botão",
+    "description": "Text for hide button option"
+  },
+  "showButtonInstruction": {
+    "message": "Para mostrar o botão novamente, visite a",
+    "description": "Instructions for showing the browser action button"
+  },
+  "page": {
+    "message": "página, e",
+    "description": "Text for page reference"
+  },
+  "extensionsPage": {
+    "message": "chrome://extensions/",
+    "description": "Extensions page URL"
+  },
+  "showButton": {
+    "message": "Mostrar botão",
+    "description": "Text for show button option"
+  },
+  "clickOn": {
+    "message": "clique em",
+    "description": "Text for click on instruction"
+  },
+  "buttonDefaultActionLabel": {
+    "message": "Ao clicar na ação do navegador, recarregar:",
+    "description": "Label for browser action dropdown"
+  },
+  "allWindows": {
+    "message": "Todas as Janelas",
+    "description": "Option to reload all windows"
+  },
+  "currentWindow": {
+    "message": "Janela Atual",
+    "description": "Option to reload current window"
+  },
+  "pinnedTabs": {
+    "message": "Janela Atual, Abas fixadas",
+    "description": "Option to reload pinned tabs"
+  },
+  "unpinnedTabs": {
+    "message": "Janela Atual, Abas não fixadas",
+    "description": "Option to reload unpinned tabs"
+  },
+  "contextMenuHeading": {
+    "message": "Menu de Contexto (Clique Direito)",
+    "description": "Heading for context menu section"
+  },
+  "contextMenuMultipleNote": {
+    "message": "Quando você tem várias caixas de seleção marcadas, todos os menus de contexto serão colocados sob um menu pai \"Recarregar Todas as Abas\".",
+    "description": "Note about multiple context menu items"
+  },
+  "contextMenuSingleNote": {
+    "message": "Quando você tem apenas um menu de contexto selecionado, não haverá menu pai.",
+    "description": "Note about single context menu item"
+  },
+  "reloadWindowLabel": {
+    "message": "Recarregar todas as abas na janela atual",
+    "description": "Label for reload window checkbox"
+  },
+  "reloadAllWindowsLabel": {
+    "message": "Recarregar todas as abas em todas as janelas",
+    "description": "Label for reload all windows checkbox"
+  },
+  "reloadPinnedOnlyLabel": {
+    "message": "Recarregar apenas abas fixadas na janela atual",
+    "description": "Label for reload pinned only checkbox"
+  },
+  "reloadUnpinnedOnlyLabel": {
+    "message": "Recarregar apenas abas não fixadas na janela atual",
+    "description": "Label for reload unpinned only checkbox"
+  },
+  "reloadGroupedOnlyLabel": {
+    "message": "Recarregar apenas grupos de abas na janela atual",
+    "description": "Label for reload grouped only checkbox"
+  },
+  "reloadAllLeftLabel": {
+    "message": "Recarregar todas as abas à esquerda",
+    "description": "Label for reload all left checkbox"
+  },
+  "reloadAllRightLabel": {
+    "message": "Recarregar todas as abas à direita",
+    "description": "Label for reload all right checkbox"
+  },
+  "reloadAllMatchedLabel": {
+    "message": "Recarregar todas as abas que começam com URLs (separadas por vírgula):",
+    "description": "Label for reload matched URLs textarea"
+  },
+  "reloadAllMatchedPlaceholder": {
+    "message": "www.exemplo1.com, www.exemplo2.com",
+    "description": "Placeholder for matched URLs textarea"
+  },
+  "advancedHeading": {
+    "message": "Opções Avançadas",
+    "description": "Heading for advanced options section"
+  },
+  "bypassCacheLabel": {
+    "message": "Ignorar cache ao recarregar",
+    "description": "Label for bypass cache checkbox"
+  },
+  "excludeActiveTabLabel": {
+    "message": "Excluir aba ativa atual da recarga",
+    "description": "Label for exclude active tab checkbox"
+  },
+  "excludeAudioTabsLabel": {
+    "message": "Excluir abas reproduzindo áudio da recarga",
+    "description": "Label for exclude audio tabs checkbox"
+  },
+  "reloadDelayLabel": {
+    "message": "Atraso entre recarregar abas:",
+    "description": "Label for reload delay dropdown"
+  },
+  "delayNone": {
+    "message": "Nenhum",
+    "description": "No delay option"
+  },
+  "keyboardShortcutHeading": {
+    "message": "Opções de Atalho de Teclado",
+    "description": "Heading for keyboard shortcut section"
+  },
+  "keyboardShortcutSetup": {
+    "message": "Para configurar o atalho de teclado ou alterá-lo, visite a página de atalhos no Chrome:",
+    "description": "Instructions for setting up keyboard shortcuts"
+  },
+  "keyboardShortcutCurrent": {
+    "message": "Atalho de teclado atual:",
+    "description": "Label for current keyboard shortcut"
+  },
+  "keyboardShortcutNotSet": {
+    "message": "Não Configurado",
+    "description": "Text when keyboard shortcut is not set"
+  },
+  "closeButton": {
+    "message": "Fechar",
+    "description": "Text for close button"
+  },
+  "savedMessage": {
+    "message": "Salvo!",
+    "description": "Message shown when settings are saved"
+  },
+  "extensionDeveloper": {
+    "message": "Extensão desenvolvida por",
+    "description": "Text before developer name"
+  },
+  "sourceCodeAvailable": {
+    "message": "Código fonte disponível no",
+    "description": "Text before GitHub link"
+  },
+  "iconBy": {
+    "message": "Ícone por",
+    "description": "Text before icon designer name"
+  },
+  "reloadThisWindow": {
+    "message": "Recarregar esta janela",
+    "description": "Context menu item for reloading current window"
+  },
+  "reloadAllWindowsContext": {
+    "message": "Recarregar todas as janelas",
+    "description": "Context menu item for reloading all windows"
+  },
+  "reloadPinnedTabsContext": {
+    "message": "Recarregar abas fixadas",
+    "description": "Context menu item for reloading pinned tabs"
+  },
+  "reloadUnpinnedTabsContext": {
+    "message": "Recarregar abas não fixadas",
+    "description": "Context menu item for reloading unpinned tabs"
+  },
+  "reloadAllLeftContext": {
+    "message": "Recarregar todas as abas à esquerda",
+    "description": "Context menu item for reloading tabs to the left"
+  },
+  "reloadAllRightContext": {
+    "message": "Recarregar todas as abas à direita",
+    "description": "Context menu item for reloading tabs to the right"
+  },
+  "reloadAllMatchedContext": {
+    "message": "Recarregar todas as abas com URLs correspondentes",
+    "description": "Context menu item for reloading matched URLs"
+  },
+  "reloadAllTabGroups": {
+    "message": "Recarregar todos os grupos de abas",
+    "description": "Context menu item for reloading tab groups"
+  },
+  "cacheBypassed": {
+    "message": " (cache ignorado)",
+    "description": "Suffix for context menu items when cache is bypassed"
+  },
+  "unnamedGroup": {
+    "message": "Sem nome",
+    "description": "Text for unnamed tab groups"
+  },
+  "clipboardCopySuccess": {
+    "message": "Copiado o seguinte link '$1' para a área de transferência. Você pode alterar seus padrões lá. Devido à segurança do Chrome, você precisa visitá-lo manualmente.",
+    "description": "Alert message when link is copied to clipboard",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://extensions/shortcuts"
+      }
+    }
+  },
+  "clipboardCopyFailed": {
+    "message": "Falha ao copiar para a área de transferência. Por favor, navegue manualmente para: $1",
+    "description": "Alert message when clipboard copy fails",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://extensions/shortcuts"
+      }
+    }
+  }
+}
