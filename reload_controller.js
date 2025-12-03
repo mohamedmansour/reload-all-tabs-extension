@@ -146,16 +146,16 @@ const updateContextMenu = async () => {
     'reloadGroupedOnly'
   ]);
 
-  const attributions = setting.bypassCache ? ' (cache bypassed)' : '';
+  const attributions = setting.bypassCache ? chrome.i18n.getMessage('cacheBypassed') : '';
 
   const menuItems = [
-    { id: 'reloadWindow', enabled: setting.reloadWindow, title: `Reload this window${attributions}` },
-    { id: 'reloadAllWindows', enabled: setting.reloadAllWindows, title: `Reload all windows${attributions}` },
-    { id: 'reloadPinnedOnly', enabled: setting.reloadPinnedOnly, title: `Reload pinned tabs${attributions}` },
-    { id: 'reloadUnpinnedOnly', enabled: setting.reloadUnpinnedOnly, title: `Reload unpinned tabs${attributions}` },
-    { id: 'reloadAllLeft', enabled: setting.reloadAllLeft, title: `Reload all tabs to the left${attributions}` },
-    { id: 'reloadAllRight', enabled: setting.reloadAllRight, title: `Reload all tabs to the right${attributions}` },
-    { id: 'reloadAllMatched', enabled: setting.reloadAllMatched, title: `Reload all tabs with matched urls${attributions}` }
+    { id: 'reloadWindow', enabled: setting.reloadWindow, title: `${chrome.i18n.getMessage('reloadThisWindow')}${attributions}` },
+    { id: 'reloadAllWindows', enabled: setting.reloadAllWindows, title: `${chrome.i18n.getMessage('reloadAllWindowsContext')}${attributions}` },
+    { id: 'reloadPinnedOnly', enabled: setting.reloadPinnedOnly, title: `${chrome.i18n.getMessage('reloadPinnedTabsContext')}${attributions}` },
+    { id: 'reloadUnpinnedOnly', enabled: setting.reloadUnpinnedOnly, title: `${chrome.i18n.getMessage('reloadUnpinnedTabsContext')}${attributions}` },
+    { id: 'reloadAllLeft', enabled: setting.reloadAllLeft, title: `${chrome.i18n.getMessage('reloadAllLeftContext')}${attributions}` },
+    { id: 'reloadAllRight', enabled: setting.reloadAllRight, title: `${chrome.i18n.getMessage('reloadAllRightContext')}${attributions}` },
+    { id: 'reloadAllMatched', enabled: setting.reloadAllMatched, title: `${chrome.i18n.getMessage('reloadAllMatchedContext')}${attributions}` }
   ];
 
   for (const item of menuItems) {
@@ -173,7 +173,7 @@ const updateContextMenu = async () => {
     chrome.contextMenus.create({
       id: 'reloadGroupedOnly',
       type: 'normal',
-      title: `Reload all tab groups${attributions}`,
+      title: `${chrome.i18n.getMessage('reloadAllTabGroups')}${attributions}`,
       contexts: ['all']
     });
     
@@ -195,7 +195,7 @@ const updateContextMenu = async () => {
     
     for (const tabGroup of tabGroups) {
       const colorEmoji = colorEmojis[tabGroup.color] || '⬛';
-      const groupTitle = tabGroup.title || 'Unnamed';
+      const groupTitle = tabGroup.title || chrome.i18n.getMessage('unnamedGroup');
       
       chrome.contextMenus.create({
         id: `${tabGroup.id}`,

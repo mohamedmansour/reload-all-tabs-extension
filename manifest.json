@@ -1,8 +1,9 @@
 {
-  "name": "Reload All Tabs",
+  "name": "__MSG_extName__",
   "version": "6.2.0",
   "manifest_version": 3,
-  "description": "Reload All tabs using keyboard shortcut (alt + shift + r), context menu or browser action button.",
+  "description": "__MSG_extDescription__",
+  "default_locale": "en",
   "icons": {
     "16": "img/icon16.png",
     "48": "img/icon48.png",
@@ -10,7 +11,7 @@
   },
   "action": {
     "default_icon": "img/icon128.png",
-    "default_title": "Reload All Tabs"
+    "default_title": "__MSG_extActionTitle__"
   },
   "background": {
     "service_worker": "reload_controller.js"
@@ -28,7 +29,7 @@
         "default": "Ctrl+Shift+R",
         "mac": "Command+Shift+R"
       },
-      "description": "Toggle reload"
+      "description": "__MSG_commandToggleReload__"
     }
   }
 }

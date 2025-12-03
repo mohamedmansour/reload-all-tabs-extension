@@ -1,0 +1,266 @@
+{
+  "extName": {
+    "message": "Recargar Todas las Pestañas",
+    "description": "Name of the extension"
+  },
+  "extDescription": {
+    "message": "Recarga todas las pestañas usando un atajo de teclado (alt + shift + r), menú contextual o botón de acción del navegador.",
+    "description": "Description of the extension"
+  },
+  "extActionTitle": {
+    "message": "Recargar Todas las Pestañas",
+    "description": "Title for the browser action button"
+  },
+  "commandToggleReload": {
+    "message": "Activar recarga",
+    "description": "Description for the keyboard command"
+  },
+  "optionsTitle": {
+    "message": "Opciones de Recargar Todas las Pestañas",
+    "description": "Title for the options page"
+  },
+  "optionsHeader": {
+    "message": "Recargar Todas las Pestañas",
+    "description": "Header text for options page"
+  },
+  "optionsSaveNote": {
+    "message": "¡Asegúrate de guardar la configuración después de terminar de editar!",
+    "description": "Note about saving settings"
+  },
+  "visitExtensionPage": {
+    "message": "Visitar página de la extensión",
+    "description": "Link text to visit extension page"
+  },
+  "fileBugs": {
+    "message": "Reportar errores y sugerencias",
+    "description": "Link text to file bugs"
+  },
+  "followOnTwitter": {
+    "message": "Deberías seguirme en Twitter",
+    "description": "Text before Twitter link"
+  },
+  "forFeatureRequests": {
+    "message": "¡para solicitudes de funciones o reportar errores!",
+    "description": "Text after Twitter handle"
+  },
+  "browserActionHeading": {
+    "message": "Acción del Navegador",
+    "description": "Heading for browser action section"
+  },
+  "hideButtonInstruction": {
+    "message": "Para eliminar el botón, haz clic derecho en el ícono y elige",
+    "description": "Instructions for hiding the browser action button"
+  },
+  "hideButton": {
+    "message": "Ocultar botón",
+    "description": "Text for hide button option"
+  },
+  "showButtonInstruction": {
+    "message": "Para mostrar el botón nuevamente, visita la",
+    "description": "Instructions for showing the browser action button"
+  },
+  "page": {
+    "message": "página, y",
+    "description": "Text for page reference"
+  },
+  "extensionsPage": {
+    "message": "chrome://extensions/",
+    "description": "Extensions page URL"
+  },
+  "showButton": {
+    "message": "Mostrar botón",
+    "description": "Text for show button option"
+  },
+  "clickOn": {
+    "message": "haz clic en",
+    "description": "Text for click on instruction"
+  },
+  "buttonDefaultActionLabel": {
+    "message": "Al hacer clic en la acción del navegador, recargar:",
+    "description": "Label for browser action dropdown"
+  },
+  "allWindows": {
+    "message": "Todas las Ventanas",
+    "description": "Option to reload all windows"
+  },
+  "currentWindow": {
+    "message": "Ventana Actual",
+    "description": "Option to reload current window"
+  },
+  "pinnedTabs": {
+    "message": "Ventana Actual, Pestañas fijadas",
+    "description": "Option to reload pinned tabs"
+  },
+  "unpinnedTabs": {
+    "message": "Ventana Actual, Pestañas no fijadas",
+    "description": "Option to reload unpinned tabs"
+  },
+  "contextMenuHeading": {
+    "message": "Menú Contextual (Clic Derecho)",
+    "description": "Heading for context menu section"
+  },
+  "contextMenuMultipleNote": {
+    "message": "Cuando tienes múltiples casillas marcadas, colocará todos los menús contextuales bajo un menú padre \"Recargar Todas las Pestañas\".",
+    "description": "Note about multiple context menu items"
+  },
+  "contextMenuSingleNote": {
+    "message": "Cuando tienes solo un menú contextual seleccionado, no habrá menú padre.",
+    "description": "Note about single context menu item"
+  },
+  "reloadWindowLabel": {
+    "message": "Recargar todas las pestañas en la ventana actual",
+    "description": "Label for reload window checkbox"
+  },
+  "reloadAllWindowsLabel": {
+    "message": "Recargar todas las pestañas en todas las ventanas",
+    "description": "Label for reload all windows checkbox"
+  },
+  "reloadPinnedOnlyLabel": {
+    "message": "Recargar solo pestañas fijadas en la ventana actual",
+    "description": "Label for reload pinned only checkbox"
+  },
+  "reloadUnpinnedOnlyLabel": {
+    "message": "Recargar solo pestañas no fijadas en la ventana actual",
+    "description": "Label for reload unpinned only checkbox"
+  },
+  "reloadGroupedOnlyLabel": {
+    "message": "Recargar solo grupos de pestañas en la ventana actual",
+    "description": "Label for reload grouped only checkbox"
+  },
+  "reloadAllLeftLabel": {
+    "message": "Recargar todas las pestañas a la izquierda",
+    "description": "Label for reload all left checkbox"
+  },
+  "reloadAllRightLabel": {
+    "message": "Recargar todas las pestañas a la derecha",
+    "description": "Label for reload all right checkbox"
+  },
+  "reloadAllMatchedLabel": {
+    "message": "Recargar todas las pestañas que comienzan con URLs (separadas por comas):",
+    "description": "Label for reload matched URLs textarea"
+  },
+  "reloadAllMatchedPlaceholder": {
+    "message": "www.ejemplo1.com, www.ejemplo2.com",
+    "description": "Placeholder for matched URLs textarea"
+  },
+  "advancedHeading": {
+    "message": "Opciones Avanzadas",
+    "description": "Heading for advanced options section"
+  },
+  "bypassCacheLabel": {
+    "message": "Omitir caché al recargar",
+    "description": "Label for bypass cache checkbox"
+  },
+  "excludeActiveTabLabel": {
+    "message": "Excluir la pestaña activa actual de la recarga",
+    "description": "Label for exclude active tab checkbox"
+  },
+  "excludeAudioTabsLabel": {
+    "message": "Excluir pestañas reproduciendo audio de la recarga",
+    "description": "Label for exclude audio tabs checkbox"
+  },
+  "reloadDelayLabel": {
+    "message": "Retraso entre recargar pestañas:",
+    "description": "Label for reload delay dropdown"
+  },
+  "delayNone": {
+    "message": "Ninguno",
+    "description": "No delay option"
+  },
+  "keyboardShortcutHeading": {
+    "message": "Opciones de Atajo de Teclado",
+    "description": "Heading for keyboard shortcut section"
+  },
+  "keyboardShortcutSetup": {
+    "message": "Para configurar el atajo de teclado o cambiarlo, visita la página de atajos en Chrome:",
+    "description": "Instructions for setting up keyboard shortcuts"
+  },
+  "keyboardShortcutCurrent": {
+    "message": "Atajo de teclado actual:",
+    "description": "Label for current keyboard shortcut"
+  },
+  "keyboardShortcutNotSet": {
+    "message": "No Configurado",
+    "description": "Text when keyboard shortcut is not set"
+  },
+  "closeButton": {
+    "message": "Cerrar",
+    "description": "Text for close button"
+  },
+  "savedMessage": {
+    "message": "¡Guardado!",
+    "description": "Message shown when settings are saved"
+  },
+  "extensionDeveloper": {
+    "message": "Extensión desarrollada por",
+    "description": "Text before developer name"
+  },
+  "sourceCodeAvailable": {
+    "message": "Código fuente disponible en",
+    "description": "Text before GitHub link"
+  },
+  "iconBy": {
+    "message": "Ícono por",
+    "description": "Text before icon designer name"
+  },
+  "reloadThisWindow": {
+    "message": "Recargar esta ventana",
+    "description": "Context menu item for reloading current window"
+  },
+  "reloadAllWindowsContext": {
+    "message": "Recargar todas las ventanas",
+    "description": "Context menu item for reloading all windows"
+  },
+  "reloadPinnedTabsContext": {
+    "message": "Recargar pestañas fijadas",
+    "description": "Context menu item for reloading pinned tabs"
+  },
+  "reloadUnpinnedTabsContext": {
+    "message": "Recargar pestañas no fijadas",
+    "description": "Context menu item for reloading unpinned tabs"
+  },
+  "reloadAllLeftContext": {
+    "message": "Recargar todas las pestañas a la izquierda",
+    "description": "Context menu item for reloading tabs to the left"
+  },
+  "reloadAllRightContext": {
+    "message": "Recargar todas las pestañas a la derecha",
+    "description": "Context menu item for reloading tabs to the right"
+  },
+  "reloadAllMatchedContext": {
+    "message": "Recargar todas las pestañas con URLs coincidentes",
+    "description": "Context menu item for reloading matched URLs"
+  },
+  "reloadAllTabGroups": {
+    "message": "Recargar todos los grupos de pestañas",
+    "description": "Context menu item for reloading tab groups"
+  },
+  "cacheBypassed": {
+    "message": " (caché omitida)",
+    "description": "Suffix for context menu items when cache is bypassed"
+  },
+  "unnamedGroup": {
+    "message": "Sin nombre",
+    "description": "Text for unnamed tab groups"
+  },
+  "clipboardCopySuccess": {
+    "message": "Copiado el siguiente enlace '$1' al portapapeles. Puedes cambiar sus valores predeterminados allí. Debido a la seguridad de Chrome, debes visitarlo manualmente.",
+    "description": "Alert message when link is copied to clipboard",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://extensions/shortcuts"
+      }
+    }
+  },
+  "clipboardCopyFailed": {
+    "message": "Error al copiar al portapapeles. Por favor navega manualmente a: $1",
+    "description": "Alert message when clipboard copy fails",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://extensions/shortcuts"
+      }
+    }
+  }
+}

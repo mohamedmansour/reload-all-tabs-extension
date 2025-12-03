@@ -1,0 +1,266 @@
+{
+  "extName": {
+    "message": "Reload All Tabs",
+    "description": "Name of the extension"
+  },
+  "extDescription": {
+    "message": "Reload All tabs using keyboard shortcut (alt + shift + r), context menu or browser action button.",
+    "description": "Description of the extension"
+  },
+  "extActionTitle": {
+    "message": "Reload All Tabs",
+    "description": "Title for the browser action button"
+  },
+  "commandToggleReload": {
+    "message": "Toggle reload",
+    "description": "Description for the keyboard command"
+  },
+  "optionsTitle": {
+    "message": "Reload All Tabs Options",
+    "description": "Title for the options page"
+  },
+  "optionsHeader": {
+    "message": "Reload All Tabs",
+    "description": "Header text for options page"
+  },
+  "optionsSaveNote": {
+    "message": "Make sure you save the settings after you're done editing!",
+    "description": "Note about saving settings"
+  },
+  "visitExtensionPage": {
+    "message": "Visit extension page",
+    "description": "Link text to visit extension page"
+  },
+  "fileBugs": {
+    "message": "File bugs and suggestions",
+    "description": "Link text to file bugs"
+  },
+  "followOnTwitter": {
+    "message": "You should follow me on Twitter",
+    "description": "Text before Twitter link"
+  },
+  "forFeatureRequests": {
+    "message": "for feature requests or reporting bugs!",
+    "description": "Text after Twitter handle"
+  },
+  "browserActionHeading": {
+    "message": "Browser Action",
+    "description": "Heading for browser action section"
+  },
+  "hideButtonInstruction": {
+    "message": "To remove the button, right click on the icon and choose",
+    "description": "Instructions for hiding the browser action button"
+  },
+  "hideButton": {
+    "message": "Hide button",
+    "description": "Text for hide button option"
+  },
+  "showButtonInstruction": {
+    "message": "To show that the button again, visit the",
+    "description": "Instructions for showing the browser action button"
+  },
+  "page": {
+    "message": "page, and",
+    "description": "Text for page reference"
+  },
+  "extensionsPage": {
+    "message": "chrome://extensions/",
+    "description": "Extensions page URL"
+  },
+  "showButton": {
+    "message": "Show button",
+    "description": "Text for show button option"
+  },
+  "clickOn": {
+    "message": "click on",
+    "description": "Text for click on instruction"
+  },
+  "buttonDefaultActionLabel": {
+    "message": "When clicking the browser action, reload:",
+    "description": "Label for browser action dropdown"
+  },
+  "allWindows": {
+    "message": "All Windows",
+    "description": "Option to reload all windows"
+  },
+  "currentWindow": {
+    "message": "Current Window",
+    "description": "Option to reload current window"
+  },
+  "pinnedTabs": {
+    "message": "Current Window, Pinned tabs",
+    "description": "Option to reload pinned tabs"
+  },
+  "unpinnedTabs": {
+    "message": "Current Window, Unpinned tabs",
+    "description": "Option to reload unpinned tabs"
+  },
+  "contextMenuHeading": {
+    "message": "Context Menu (Right Click)",
+    "description": "Heading for context menu section"
+  },
+  "contextMenuMultipleNote": {
+    "message": "When you have multiple checkboxes checked, it will place all context menus under one parent \"Reload All Tabs\" menu.",
+    "description": "Note about multiple context menu items"
+  },
+  "contextMenuSingleNote": {
+    "message": "When you have just a single context menu selected, there will be no parent.",
+    "description": "Note about single context menu item"
+  },
+  "reloadWindowLabel": {
+    "message": "Reload all tabs in current window",
+    "description": "Label for reload window checkbox"
+  },
+  "reloadAllWindowsLabel": {
+    "message": "Reload all tabs in all windows",
+    "description": "Label for reload all windows checkbox"
+  },
+  "reloadPinnedOnlyLabel": {
+    "message": "Reload only pinned tabs in current window",
+    "description": "Label for reload pinned only checkbox"
+  },
+  "reloadUnpinnedOnlyLabel": {
+    "message": "Reload only unpinned tabs in current window",
+    "description": "Label for reload unpinned only checkbox"
+  },
+  "reloadGroupedOnlyLabel": {
+    "message": "Reload only tab groups in current window",
+    "description": "Label for reload grouped only checkbox"
+  },
+  "reloadAllLeftLabel": {
+    "message": "Reload all tabs to the left",
+    "description": "Label for reload all left checkbox"
+  },
+  "reloadAllRightLabel": {
+    "message": "Reload all tabs to the right",
+    "description": "Label for reload all right checkbox"
+  },
+  "reloadAllMatchedLabel": {
+    "message": "Reload all tabs that starts with urls (comma separated):",
+    "description": "Label for reload matched URLs textarea"
+  },
+  "reloadAllMatchedPlaceholder": {
+    "message": "www.example1.com, www.example2.com",
+    "description": "Placeholder for matched URLs textarea"
+  },
+  "advancedHeading": {
+    "message": "Advanced Options",
+    "description": "Heading for advanced options section"
+  },
+  "bypassCacheLabel": {
+    "message": "Bypass Cache when reloading",
+    "description": "Label for bypass cache checkbox"
+  },
+  "excludeActiveTabLabel": {
+    "message": "Exclude current active tab from reload",
+    "description": "Label for exclude active tab checkbox"
+  },
+  "excludeAudioTabsLabel": {
+    "message": "Exclude tabs playing audio from reload",
+    "description": "Label for exclude audio tabs checkbox"
+  },
+  "reloadDelayLabel": {
+    "message": "Delay between reloading tabs:",
+    "description": "Label for reload delay dropdown"
+  },
+  "delayNone": {
+    "message": "None",
+    "description": "No delay option"
+  },
+  "keyboardShortcutHeading": {
+    "message": "Keyboard Shortcut Options",
+    "description": "Heading for keyboard shortcut section"
+  },
+  "keyboardShortcutSetup": {
+    "message": "To setup the keyboard shortcut or change it, please visit the shortcuts page in Chrome:",
+    "description": "Instructions for setting up keyboard shortcuts"
+  },
+  "keyboardShortcutCurrent": {
+    "message": "Current keyboard shortcut:",
+    "description": "Label for current keyboard shortcut"
+  },
+  "keyboardShortcutNotSet": {
+    "message": "Not Set",
+    "description": "Text when keyboard shortcut is not set"
+  },
+  "closeButton": {
+    "message": "Close",
+    "description": "Text for close button"
+  },
+  "savedMessage": {
+    "message": "Saved!",
+    "description": "Message shown when settings are saved"
+  },
+  "extensionDeveloper": {
+    "message": "Extension developed by",
+    "description": "Text before developer name"
+  },
+  "sourceCodeAvailable": {
+    "message": "Source Code available in",
+    "description": "Text before GitHub link"
+  },
+  "iconBy": {
+    "message": "Icon by",
+    "description": "Text before icon designer name"
+  },
+  "reloadThisWindow": {
+    "message": "Reload this window",
+    "description": "Context menu item for reloading current window"
+  },
+  "reloadAllWindowsContext": {
+    "message": "Reload all windows",
+    "description": "Context menu item for reloading all windows"
+  },
+  "reloadPinnedTabsContext": {
+    "message": "Reload pinned tabs",
+    "description": "Context menu item for reloading pinned tabs"
+  },
+  "reloadUnpinnedTabsContext": {
+    "message": "Reload unpinned tabs",
+    "description": "Context menu item for reloading unpinned tabs"
+  },
+  "reloadAllLeftContext": {
+    "message": "Reload all tabs to the left",
+    "description": "Context menu item for reloading tabs to the left"
+  },
+  "reloadAllRightContext": {
+    "message": "Reload all tabs to the right",
+    "description": "Context menu item for reloading tabs to the right"
+  },
+  "reloadAllMatchedContext": {
+    "message": "Reload all tabs with matched urls",
+    "description": "Context menu item for reloading matched URLs"
+  },
+  "reloadAllTabGroups": {
+    "message": "Reload all tab groups",
+    "description": "Context menu item for reloading tab groups"
+  },
+  "cacheBypassed": {
+    "message": " (cache bypassed)",
+    "description": "Suffix for context menu items when cache is bypassed"
+  },
+  "unnamedGroup": {
+    "message": "Unnamed",
+    "description": "Text for unnamed tab groups"
+  },
+  "clipboardCopySuccess": {
+    "message": "Copied the following link '$1' to clipboard. You can change its defaults there. Due to Chrome security, you need to visit it manually.",
+    "description": "Alert message when link is copied to clipboard",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://extensions/shortcuts"
+      }
+    }
+  },
+  "clipboardCopyFailed": {
+    "message": "Failed to copy to clipboard. Please manually navigate to: $1",
+    "description": "Alert message when clipboard copy fails",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://extensions/shortcuts"
+      }
+    }
+  }
+}

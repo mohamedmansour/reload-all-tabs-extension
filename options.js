@@ -6,6 +6,33 @@
 const $ = (id) => document.getElementById(id);
 
 /**
+ * Localize the page by replacing data-i18n attributes with localized messages
+ */
+const localizePage = () => {
+  // Localize elements with data-i18n attribute (for text content)
+  document.querySelectorAll('[data-i18n]').forEach(element => {
+    const messageKey = element.getAttribute('data-i18n');
+    const message = chrome.i18n.getMessage(messageKey);
+    if (message) {
+      if (element.tagName === 'TITLE') {
+        element.textContent = message;
+      } else {
+        element.textContent = message;
+      }
+    }
+  });
+
+  // Localize elements with data-i18n-placeholder attribute
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+    const messageKey = element.getAttribute('data-i18n-placeholder');
+    const message = chrome.i18n.getMessage(messageKey);
+    if (message) {
+      element.placeholder = message;
+    }
+  });
+};
+
+/**
  * Debounce utility function
  * @param {Function} func The function to debounce
  * @param {number} delay The delay in milliseconds
@@ -155,10 +182,10 @@ const onKeyboardShortcut = async (e) => {
   
   try {
     await navigator.clipboard.writeText(text);
-    alert(`Copied the following link '${text}' to clipboard. You can change its defaults there. Due to Chrome security, you need to visit it manually.`);
+    alert(chrome.i18n.getMessage('clipboardCopySuccess', [text]));
   } catch (err) {
     console.error('Failed to copy text: ', err);
-    alert(`Failed to copy to clipboard. Please manually navigate to: ${text}`);
+    alert(chrome.i18n.getMessage('clipboardCopyFailed', [text]));
   }
 };
 
@@ -203,7 +230,7 @@ const onRestore = async () => {
   await setupTextarea('reloadAllMatched', settings.reloadAllMatched);
 
   const commands = await chrome.commands.getAll();
-  $('keyboardShortcut').innerText = commands[0]?.shortcut || 'Not Set';
+  $('keyboardShortcut').innerText = commands[0]?.shortcut || chrome.i18n.getMessage('keyboardShortcutNotSet');
 };
 
 /**
@@ -217,6 +244,7 @@ const onClose = () => {
  * Initialize the options page
  */
 const onLoad = () => {
+  localizePage();
   onRestore();
   $('button-close').addEventListener('click', onClose);
   $('button-extension').addEventListener('click', onExtension);

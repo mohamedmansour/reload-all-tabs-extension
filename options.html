@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Reload All Tabs Options</title>
+  <title data-i18n="optionsTitle">Reload All Tabs Options</title>
   <link rel="stylesheet" type="text/css" href="/css/options.css" />
   <script type="text/javascript" src="/options.js"></script>
 </head>
@@ -13,128 +13,127 @@
 <body>
   <div id="body-container">
     <header id="header">
-      <h1>Reload All Tabs <em id="version" aria-label="Version"></em></h1>
+      <h1><span data-i18n="optionsHeader">Reload All Tabs</span> <em id="version" aria-label="Version"></em></h1>
     </header>
     
     <main>
       <p>
-        Make sure you save the settings after you're done editing!
-        <a href="https://chrome.google.com/webstore/detail/midkcinmplflboepnahkboeonkam" rel="noopener noreferrer">
+        <span data-i18n="optionsSaveNote">Make sure you save the settings after you're done editing!</span>
+        <a href="https://chrome.google.com/webstore/detail/midkcinmplflboepnahkboeonkam" rel="noopener noreferrer" data-i18n="visitExtensionPage">
           Visit extension page
         </a>,
-        <a href="https://github.com/mohamedmansour/reload-all-tabs-extension/issues" rel="noopener noreferrer">
+        <a href="https://github.com/mohamedmansour/reload-all-tabs-extension/issues" rel="noopener noreferrer" data-i18n="fileBugs">
           File bugs and suggestions
         </a>
       </p>
       <p>
-        You should follow me on Twitter <a href="http://twitter.com/mohamedmansour" rel="noopener noreferrer">@mohamedmansour</a> for feature requests or reporting bugs!
+        <span data-i18n="followOnTwitter">You should follow me on Twitter</span> <a href="http://twitter.com/mohamedmansour" rel="noopener noreferrer">@mohamedmansour</a> <span data-i18n="forFeatureRequests">for feature requests or reporting bugs!</span>
       </p>
       
       <section class="extension-template" aria-labelledby="browser-action-heading">
-        <h2 class="extension-header" id="browser-action-heading">Browser Action</h2>
+        <h2 class="extension-header" id="browser-action-heading" data-i18n="browserActionHeading">Browser Action</h2>
         <div class="extension-options">
           <img src="/img/browser-action.png" alt="Reload All Tabs Browser Action" loading="lazy" />
-          <p>To remove the button, right click on the icon and choose
-            <strong>Hide button</strong>.
+          <p><span data-i18n="hideButtonInstruction">To remove the button, right click on the icon and choose</span>
+            <strong data-i18n="hideButton">Hide button</strong>.
           </p>
-          <p>To show that the button again, visit the
-            <a href="#" id="button-extension">chrome://extensions/</a> page, and
-            click on <strong>Show button</strong>.
+          <p><span data-i18n="showButtonInstruction">To show that the button again, visit the</span>
+            <a href="#" id="button-extension" data-i18n="extensionsPage">chrome://extensions/</a> <span data-i18n="page">page</span>, <span data-i18n="clickOn">click on</span> <strong data-i18n="showButton">Show button</strong>.
           </p>
           <div class="option-group">
-            <label for="buttonDefaultAction">When clicking the browser action, reload:</label>
+            <label for="buttonDefaultAction" data-i18n="buttonDefaultActionLabel">When clicking the browser action, reload:</label>
             <select id="buttonDefaultAction" name="buttonDefaultAction">
-              <option value="allWindows">All Windows</option>
-              <option value="window">Current Window</option>
-              <option value="pinned">Current Window, Pinned tabs</option>
-              <option value="unpinned">Current Window, Unpinned tabs</option>
+              <option value="allWindows" data-i18n="allWindows">All Windows</option>
+              <option value="window" data-i18n="currentWindow">Current Window</option>
+              <option value="pinned" data-i18n="pinnedTabs">Current Window, Pinned tabs</option>
+              <option value="unpinned" data-i18n="unpinnedTabs">Current Window, Unpinned tabs</option>
             </select>
           </div>
         </div>
       </section>
       
       <section class="extension-template" aria-labelledby="context-menu-heading">
-        <h2 class="extension-header" id="context-menu-heading">Context Menu (Right Click)</h2>
+        <h2 class="extension-header" id="context-menu-heading" data-i18n="contextMenuHeading">Context Menu (Right Click)</h2>
         <div class="extension-options">
-          <p>When you have multiple checkboxes checked, it will place all context menus under one parent "Reload All Tabs"
+          <p data-i18n="contextMenuMultipleNote">When you have multiple checkboxes checked, it will place all context menus under one parent "Reload All Tabs"
             menu.</p>
-          <p>When you have just a single context menu selected, there will be no parent.</p>
+          <p data-i18n="contextMenuSingleNote">When you have just a single context menu selected, there will be no parent.</p>
           <div class="option-group">
             <label for="reloadWindow">
               <input id="reloadWindow" type="checkbox" name="reloadWindow" />
-              Reload all tabs in current window
+              <span data-i18n="reloadWindowLabel">Reload all tabs in current window</span>
             </label>
           </div>
           <div class="option-group">
             <label for="reloadAllWindows">
               <input id="reloadAllWindows" type="checkbox" name="reloadAllWindows" />
-              Reload all tabs in all windows
+              <span data-i18n="reloadAllWindowsLabel">Reload all tabs in all windows</span>
             </label>
           </div>
           <div class="option-group">
             <label for="reloadPinnedOnly">
               <input id="reloadPinnedOnly" type="checkbox" name="reloadPinnedOnly" />
-              Reload only pinned tabs in current window
+              <span data-i18n="reloadPinnedOnlyLabel">Reload only pinned tabs in current window</span>
             </label>
           </div>
           <div class="option-group">
             <label for="reloadUnpinnedOnly">
               <input id="reloadUnpinnedOnly" type="checkbox" name="reloadUnpinnedOnly" />
-              Reload only unpinned tabs in current window
+              <span data-i18n="reloadUnpinnedOnlyLabel">Reload only unpinned tabs in current window</span>
             </label>
           </div>
           <div class="option-group">
             <label for="reloadGroupedOnly">
               <input id="reloadGroupedOnly" type="checkbox" name="reloadGroupedOnly" />
-              Reload only tab groups in current window
+              <span data-i18n="reloadGroupedOnlyLabel">Reload only tab groups in current window</span>
             </label>
           </div>
           <div class="option-group">
             <label for="reloadAllLeft">
               <input id="reloadAllLeft" type="checkbox" name="reloadAllLeft" />
-              Reload all tabs to the left
+              <span data-i18n="reloadAllLeftLabel">Reload all tabs to the left</span>
             </label>
           </div>
           <div class="option-group">
             <label for="reloadAllRight">
               <input id="reloadAllRight" type="checkbox" name="reloadAllRight" />
-              Reload all tabs to the right
+              <span data-i18n="reloadAllRightLabel">Reload all tabs to the right</span>
             </label>
           </div>
           <div class="option-group">
             <label for="reloadAllMatched">
-              Reload all tabs that starts with urls (comma separated):
+              <span data-i18n="reloadAllMatchedLabel">Reload all tabs that starts with urls (comma separated):</span>
             </label>
-            <textarea id="reloadAllMatched" name="reloadAllMatched" placeholder="www.example1.com, www.example2.com" maxlength="1000" rows="3"></textarea>
+            <textarea id="reloadAllMatched" name="reloadAllMatched" data-i18n-placeholder="reloadAllMatchedPlaceholder" placeholder="www.example1.com, www.example2.com" maxlength="1000" rows="3"></textarea>
           </div>
         </div>
       </section>
       
       <section class="extension-template" aria-labelledby="advanced-heading">
-        <h2 class="extension-header" id="advanced-heading">Advanced Options</h2>
+        <h2 class="extension-header" id="advanced-heading" data-i18n="advancedHeading">Advanced Options</h2>
         <div class="extension-options">
           <div class="option-group">
             <label for="bypassCache">
               <input id="bypassCache" type="checkbox" name="bypassCache" />
-              Bypass Cache when reloading
+              <span data-i18n="bypassCacheLabel">Bypass Cache when reloading</span>
             </label>
           </div>
           <div class="option-group">
             <label for="excludeActiveTab">
               <input id="excludeActiveTab" type="checkbox" name="excludeActiveTab" />
-              Exclude current active tab from reload
+              <span data-i18n="excludeActiveTabLabel">Exclude current active tab from reload</span>
             </label>
           </div>
           <div class="option-group">
             <label for="excludeAudioTabs">
               <input id="excludeAudioTabs" type="checkbox" name="excludeAudioTabs" />
-              Exclude tabs playing audio from reload
+              <span data-i18n="excludeAudioTabsLabel">Exclude tabs playing audio from reload</span>
             </label>
           </div>
           <div class="option-group">
-            <label for="reloadDelay">Delay between reloading tabs:</label>
+            <label for="reloadDelay" data-i18n="reloadDelayLabel">Delay between reloading tabs:</label>
             <select id="reloadDelay" name="reloadDelay">
-              <option value="0">None</option>
+              <option value="0" data-i18n="delayNone">None</option>
               <option value="10">10ms</option>
               <option value="50">50ms</option>
               <option value="100">100ms</option>
@@ -150,14 +149,14 @@
       </section>
       
       <section class="extension-template" aria-labelledby="keyboard-heading">
-        <h2 class="extension-header" id="keyboard-heading">Keyboard Shortcut Options</h2>
+        <h2 class="extension-header" id="keyboard-heading" data-i18n="keyboardShortcutHeading">Keyboard Shortcut Options</h2>
         <div class="extension-options">
-          <p>To setup the keyboard shortcut or change it, please visit the shortcuts page in Chrome:
+          <p><span data-i18n="keyboardShortcutSetup">To setup the keyboard shortcut or change it, please visit the shortcuts page in Chrome:</span>
             <button type="button" id="keyboardShortcutUpdate" class="link-button">chrome://extensions/shortcuts</button>
           </p>
           <img src="/img/keyboard-shortcut.png" alt="Reload All Tabs Keyboard Shortcut" loading="lazy" />
           <div class="option-group">
-            <span class="option-label">Current keyboard shortcut:</span>
+            <span class="option-label" data-i18n="keyboardShortcutCurrent">Current keyboard shortcut:</span>
             <span id="keyboardShortcut" aria-live="polite"></span>
           </div>
         </div>
@@ -165,17 +164,17 @@
     </main>
     
     <footer id="extension-footer">
-      <button id="button-close" type="button">Close</button>
+      <button id="button-close" type="button" data-i18n="closeButton">Close</button>
     </footer>
     
     <aside id="credits">
-      Extension developed by <a href="http://mohamedmansour.com" rel="noopener noreferrer">Mohamed Mansour</a>,
-      Source Code available in <a href="http://github.com/mohamedmansour/reload-all-tabs-extension" rel="noopener noreferrer">GitHub</a>,
-      Icon by <a href="http://erensong.com/" rel="noopener noreferrer">Eren Song</a>
+      <span data-i18n="extensionDeveloper">Extension developed by</span> <a href="http://mohamedmansour.com" rel="noopener noreferrer">Mohamed Mansour</a>,
+      <span data-i18n="sourceCodeAvailable">Source Code available in</span> <a href="http://github.com/mohamedmansour/reload-all-tabs-extension" rel="noopener noreferrer">GitHub</a>,
+      <span data-i18n="iconBy">Icon by</span> <a href="http://erensong.com/" rel="noopener noreferrer">Eren Song</a>
     </aside>
   </div>
 
-  <span id="info-message" role="status" aria-live="polite">Saved!</span>
+  <span id="info-message" role="status" aria-live="polite" data-i18n="savedMessage">Saved!</span>
 </body>
 
 </html>
