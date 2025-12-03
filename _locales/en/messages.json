@@ -56,7 +56,7 @@
     "description": "Text for hide button option"
   },
   "showButtonInstruction": {
-    "message": "To show that the button again, visit the",
+    "message": "To show the button again, visit the",
     "description": "Instructions for showing the browser action button"
   },
   "page": {
@@ -136,7 +136,7 @@
     "description": "Label for reload all right checkbox"
   },
   "reloadAllMatchedLabel": {
-    "message": "Reload all tabs that starts with urls (comma separated):",
+    "message": "Reload all tabs that start with urls (comma separated):",
     "description": "Label for reload matched URLs textarea"
   },
   "reloadAllMatchedPlaceholder": {

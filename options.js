@@ -14,11 +14,7 @@ const localizePage = () => {
     const messageKey = element.getAttribute('data-i18n');
     const message = chrome.i18n.getMessage(messageKey);
     if (message) {
-      if (element.tagName === 'TITLE') {
-        element.textContent = message;
-      } else {
-        element.textContent = message;
-      }
+      element.textContent = message;
     }
   });
 
