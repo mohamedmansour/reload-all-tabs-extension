@@ -1,0 +1,191 @@
+{
+  "extName": {
+    "message": "إعادة تحميل جميع علامات التبويب"
+  },
+  "extDescription": {
+    "message": "أعد تحميل جميع علامات التبويب باستخدام اختصار لوحة المفاتيح (alt + shift + r)، أو قائمة السياق أو زر إجراء المتصفح."
+  },
+  "extActionTitle": {
+    "message": "إعادة تحميل جميع علامات التبويب"
+  },
+  "commandToggleReload": {
+    "message": "تبديل إعادة التحميل"
+  },
+  "optionsTitle": {
+    "message": "خيارات إعادة تحميل جميع علامات التبويب"
+  },
+  "optionsHeader": {
+    "message": "إعادة تحميل جميع علامات التبويب"
+  },
+  "optionsSaveNote": {
+    "message": "تأكد من حفظ الإعدادات بعد الانتهاء من التحرير!"
+  },
+  "visitExtensionPage": {
+    "message": "زيارة صفحة الإضافة"
+  },
+  "fileBugs": {
+    "message": "الإبلاغ عن الأخطاء والاقتراحات"
+  },
+  "followOnTwitter": {
+    "message": "يجب عليك متابعتي على تويتر"
+  },
+  "forFeatureRequests": {
+    "message": "لطلبات الميزات أو الإبلاغ عن الأخطاء!"
+  },
+  "browserActionHeading": {
+    "message": "إجراء المتصفح"
+  },
+  "hideButtonInstruction": {
+    "message": "لإزالة الزر، انقر بزر الماوس الأيمن على الأيقونة واختر"
+  },
+  "hideButton": {
+    "message": "إخفاء الزر"
+  },
+  "showButtonInstruction": {
+    "message": "لإظهار الزر مرة أخرى، قم بزيارة"
+  },
+  "page": {
+    "message": "الصفحة، و"
+  },
+  "extensionsPage": {
+    "message": "chrome://extensions/"
+  },
+  "showButton": {
+    "message": "إظهار الزر"
+  },
+  "clickOn": {
+    "message": "انقر على"
+  },
+  "buttonDefaultActionLabel": {
+    "message": "عند النقر على إجراء المتصفح، أعد تحميل:"
+  },
+  "allWindows": {
+    "message": "جميع النوافذ"
+  },
+  "currentWindow": {
+    "message": "النافذة الحالية"
+  },
+  "pinnedTabs": {
+    "message": "النافذة الحالية، علامات التبويب المثبتة"
+  },
+  "unpinnedTabs": {
+    "message": "النافذة الحالية، علامات التبويب غير المثبتة"
+  },
+  "contextMenuHeading": {
+    "message": "قائمة السياق (النقر بزر الماوس الأيمن)"
+  },
+  "contextMenuMultipleNote": {
+    "message": "عندما يكون لديك خانات اختيار متعددة محددة، سيتم وضع جميع قوائم السياق تحت قائمة أصلية \"إعادة تحميل جميع علامات التبويب\"."
+  },
+  "contextMenuSingleNote": {
+    "message": "عندما يكون لديك قائمة سياق واحدة فقط محددة، لن يكون هناك قائمة أصلية."
+  },
+  "reloadWindowLabel": {
+    "message": "إعادة تحميل جميع علامات التبويب في النافذة الحالية"
+  },
+  "reloadAllWindowsLabel": {
+    "message": "إعادة تحميل جميع علامات التبويب في جميع النوافذ"
+  },
+  "reloadPinnedOnlyLabel": {
+    "message": "إعادة تحميل علامات التبويب المثبتة فقط في النافذة الحالية"
+  },
+  "reloadUnpinnedOnlyLabel": {
+    "message": "إعادة تحميل علامات التبويب غير المثبتة فقط في النافذة الحالية"
+  },
+  "reloadGroupedOnlyLabel": {
+    "message": "إعادة تحميل مجموعات علامات التبويب فقط في النافذة الحالية"
+  },
+  "reloadAllLeftLabel": {
+    "message": "إعادة تحميل جميع علامات التبويب على اليسار"
+  },
+  "reloadAllRightLabel": {
+    "message": "إعادة تحميل جميع علامات التبويب على اليمين"
+  },
+  "reloadAllMatchedLabel": {
+    "message": "إعادة تحميل جميع علامات التبويب التي تبدأ بعناوين URL (مفصولة بفواصل):"
+  },
+  "reloadAllMatchedPlaceholder": {
+    "message": "www.example1.com, www.example2.com"
+  },
+  "advancedHeading": {
+    "message": "الخيارات المتقدمة"
+  },
+  "bypassCacheLabel": {
+    "message": "تجاوز ذاكرة التخزين المؤقت عند إعادة التحميل"
+  },
+  "excludeActiveTabLabel": {
+    "message": "استبعاد علامة التبويب النشطة الحالية من إعادة التحميل"
+  },
+  "excludeAudioTabsLabel": {
+    "message": "استبعاد علامات التبويب التي تشغل الصوت من إعادة التحميل"
+  },
+  "reloadDelayLabel": {
+    "message": "التأخير بين إعادة تحميل علامات التبويب:"
+  },
+  "delayNone": {
+    "message": "لا شيء"
+  },
+  "keyboardShortcutHeading": {
+    "message": "خيارات اختصار لوحة المفاتيح"
+  },
+  "keyboardShortcutSetup": {
+    "message": "لإعداد اختصار لوحة المفاتيح أو تغييره، يرجى زيارة صفحة الاختصارات في Chrome:"
+  },
+  "keyboardShortcutCurrent": {
+    "message": "اختصار لوحة المفاتيح الحالي:"
+  },
+  "keyboardShortcutNotSet": {
+    "message": "غير محدد"
+  },
+  "closeButton": {
+    "message": "إغلاق"
+  },
+  "savedMessage": {
+    "message": "تم الحفظ!"
+  },
+  "extensionDeveloper": {
+    "message": "تم تطوير الإضافة بواسطة"
+  },
+  "sourceCodeAvailable": {
+    "message": "الكود المصدري متاح في"
+  },
+  "iconBy": {
+    "message": "الأيقونة بواسطة"
+  },
+  "reloadThisWindow": {
+    "message": "إعادة تحميل هذه النافذة"
+  },
+  "reloadAllWindowsContext": {
+    "message": "إعادة تحميل جميع النوافذ"
+  },
+  "reloadPinnedTabsContext": {
+    "message": "إعادة تحميل علامات التبويب المثبتة"
+  },
+  "reloadUnpinnedTabsContext": {
+    "message": "إعادة تحميل علامات التبويب غير المثبتة"
+  },
+  "reloadAllLeftContext": {
+    "message": "إعادة تحميل جميع علامات التبويب على اليسار"
+  },
+  "reloadAllRightContext": {
+    "message": "إعادة تحميل جميع علامات التبويب على اليمين"
+  },
+  "reloadAllMatchedContext": {
+    "message": "إعادة تحميل جميع علامات التبويب ذات عناوين URL المطابقة"
+  },
+  "reloadAllTabGroups": {
+    "message": "إعادة تحميل جميع مجموعات علامات التبويب"
+  },
+  "cacheBypassed": {
+    "message": " (تم تجاوز ذاكرة التخزين المؤقت)"
+  },
+  "unnamedGroup": {
+    "message": "بدون اسم"
+  },
+  "clipboardCopySuccess": {
+    "message": "تم نسخ الرابط التالي '$1' إلى الحافظة. يمكنك تغيير القيم الافتراضية هناك. بسبب أمان Chrome، تحتاج إلى زيارته يدويًا."
+  },
+  "clipboardCopyFailed": {
+    "message": "فشل النسخ إلى الحافظة. يرجى الانتقال يدويًا إلى: $1"
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "extName": {
+    "message": "すべてのタブを再読み込み"
+  },
+  "extDescription": {
+    "message": "キーボードショートカット（Alt + Shift + R）、コンテキストメニュー、またはブラウザアクションボタンを使用して、すべてのタブを再読み込みします。"
+  },
+  "extActionTitle": {
+    "message": "すべてのタブを再読み込み"
+  },
+  "commandToggleReload": {
+    "message": "再読み込みを切り替え"
+  },
+  "optionsTitle": {
+    "message": "すべてのタブを再読み込みのオプション"
+  },
+  "optionsHeader": {
+    "message": "すべてのタブを再読み込み"
+  },
+  "optionsSaveNote": {
+    "message": "編集が完了したら、必ず設定を保存してください！"
+  },
+  "visitExtensionPage": {
+    "message": "拡張機能のページにアクセス"
+  },
+  "fileBugs": {
+    "message": "バグと提案を報告"
+  },
+  "followOnTwitter": {
+    "message": "Twitterでフォローしてください"
+  },
+  "forFeatureRequests": {
+    "message": "機能リクエストやバグ報告のために！"
+  },
+  "browserActionHeading": {
+    "message": "ブラウザアクション"
+  },
+  "hideButtonInstruction": {
+    "message": "ボタンを削除するには、アイコンを右クリックして次を選択します"
+  },
+  "hideButton": {
+    "message": "ボタンを非表示"
+  },
+  "showButtonInstruction": {
+    "message": "ボタンを再度表示するには、次を訪問してください"
+  },
+  "page": {
+    "message": "ページ、そして"
+  },
+  "extensionsPage": {
+    "message": "chrome://extensions/"
+  },
+  "showButton": {
+    "message": "ボタンを表示"
+  },
+  "clickOn": {
+    "message": "クリック"
+  },
+  "buttonDefaultActionLabel": {
+    "message": "ブラウザアクションをクリックすると、次を再読み込み："
+  },
+  "allWindows": {
+    "message": "すべてのウィンドウ"
+  },
+  "currentWindow": {
+    "message": "現在のウィンドウ"
+  },
+  "pinnedTabs": {
+    "message": "現在のウィンドウ、固定タブ"
+  },
+  "unpinnedTabs": {
+    "message": "現在のウィンドウ、固定されていないタブ"
+  },
+  "contextMenuHeading": {
+    "message": "コンテキストメニュー（右クリック）"
+  },
+  "contextMenuMultipleNote": {
+    "message": "複数のチェックボックスをチェックすると、すべてのコンテキストメニューが「すべてのタブを再読み込み」という親メニューの下に配置されます。"
+  },
+  "contextMenuSingleNote": {
+    "message": "コンテキストメニューを1つだけ選択した場合、親メニューはありません。"
+  },
+  "reloadWindowLabel": {
+    "message": "現在のウィンドウのすべてのタブを再読み込み"
+  },
+  "reloadAllWindowsLabel": {
+    "message": "すべてのウィンドウのすべてのタブを再読み込み"
+  },
+  "reloadPinnedOnlyLabel": {
+    "message": "現在のウィンドウの固定タブのみを再読み込み"
+  },
+  "reloadUnpinnedOnlyLabel": {
+    "message": "現在のウィンドウの固定されていないタブのみを再読み込み"
+  },
+  "reloadGroupedOnlyLabel": {
+    "message": "現在のウィンドウのタブグループのみを再読み込み"
+  },
+  "reloadAllLeftLabel": {
+    "message": "左側のすべてのタブを再読み込み"
+  },
+  "reloadAllRightLabel": {
+    "message": "右側のすべてのタブを再読み込み"
+  },
+  "reloadAllMatchedLabel": {
+    "message": "URLで始まるすべてのタブを再読み込み（カンマ区切り）："
+  },
+  "reloadAllMatchedPlaceholder": {
+    "message": "www.example1.com, www.example2.com"
+  },
+  "advancedHeading": {
+    "message": "詳細オプション"
+  },
+  "bypassCacheLabel": {
+    "message": "再読み込み時にキャッシュをバイパス"
+  },
+  "excludeActiveTabLabel": {
+    "message": "再読み込みから現在のアクティブタブを除外"
+  },
+  "excludeAudioTabsLabel": {
+    "message": "オーディオを再生しているタブを再読み込みから除外"
+  },
+  "reloadDelayLabel": {
+    "message": "タブの再読み込み間の遅延："
+  },
+  "delayNone": {
+    "message": "なし"
+  },
+  "keyboardShortcutHeading": {
+    "message": "キーボードショートカットオプション"
+  },
+  "keyboardShortcutSetup": {
+    "message": "キーボードショートカットを設定または変更するには、Chromeのショートカットページにアクセスしてください："
+  },
+  "keyboardShortcutCurrent": {
+    "message": "現在のキーボードショートカット："
+  },
+  "keyboardShortcutNotSet": {
+    "message": "未設定"
+  },
+  "closeButton": {
+    "message": "閉じる"
+  },
+  "savedMessage": {
+    "message": "保存しました！"
+  },
+  "extensionDeveloper": {
+    "message": "拡張機能開発者"
+  },
+  "sourceCodeAvailable": {
+    "message": "ソースコードは次で利用可能"
+  },
+  "iconBy": {
+    "message": "アイコン制作"
+  },
+  "reloadThisWindow": {
+    "message": "このウィンドウを再読み込み"
+  },
+  "reloadAllWindowsContext": {
+    "message": "すべてのウィンドウを再読み込み"
+  },
+  "reloadPinnedTabsContext": {
+    "message": "固定タブを再読み込み"
+  },
+  "reloadUnpinnedTabsContext": {
+    "message": "固定されていないタブを再読み込み"
+  },
+  "reloadAllLeftContext": {
+    "message": "左側のすべてのタブを再読み込み"
+  },
+  "reloadAllRightContext": {
+    "message": "右側のすべてのタブを再読み込み"
+  },
+  "reloadAllMatchedContext": {
+    "message": "一致するURLのすべてのタブを再読み込み"
+  },
+  "reloadAllTabGroups": {
+    "message": "すべてのタブグループを再読み込み"
+  },
+  "cacheBypassed": {
+    "message": "（キャッシュをバイパス）"
+  },
+  "unnamedGroup": {
+    "message": "名前なし"
+  },
+  "clipboardCopySuccess": {
+    "message": "次のリンク「$1」をクリップボードにコピーしました。そこでデフォルト値を変更できます。Chromeのセキュリティのため、手動でアクセスする必要があります。"
+  },
+  "clipboardCopyFailed": {
+    "message": "クリップボードへのコピーに失敗しました。手動で次にアクセスしてください：$1"
+  }
+}

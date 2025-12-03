@@ -1,0 +1,191 @@
+{
+  "extName": {
+    "message": "모든 탭 새로고침"
+  },
+  "extDescription": {
+    "message": "키보드 단축키(alt + shift + r), 컨텍스트 메뉴 또는 브라우저 작업 버튼을 사용하여 모든 탭을 새로고침합니다."
+  },
+  "extActionTitle": {
+    "message": "모든 탭 새로고침"
+  },
+  "commandToggleReload": {
+    "message": "새로고침 전환"
+  },
+  "optionsTitle": {
+    "message": "모든 탭 새로고침 옵션"
+  },
+  "optionsHeader": {
+    "message": "모든 탭 새로고침"
+  },
+  "optionsSaveNote": {
+    "message": "편집을 마친 후 설정을 저장해야 합니다!"
+  },
+  "visitExtensionPage": {
+    "message": "확장 프로그램 페이지 방문"
+  },
+  "fileBugs": {
+    "message": "버그 및 제안 보고"
+  },
+  "followOnTwitter": {
+    "message": "Twitter에서 팔로우하세요"
+  },
+  "forFeatureRequests": {
+    "message": "기능 요청이나 버그 보고를 위해!"
+  },
+  "browserActionHeading": {
+    "message": "브라우저 작업"
+  },
+  "hideButtonInstruction": {
+    "message": "버튼을 제거하려면 아이콘을 마우스 오른쪽 버튼으로 클릭하고 다음을 선택하세요"
+  },
+  "hideButton": {
+    "message": "버튼 숨기기"
+  },
+  "showButtonInstruction": {
+    "message": "버튼을 다시 표시하려면 다음을 방문하세요"
+  },
+  "page": {
+    "message": "페이지, 그리고"
+  },
+  "extensionsPage": {
+    "message": "chrome://extensions/"
+  },
+  "showButton": {
+    "message": "버튼 표시"
+  },
+  "clickOn": {
+    "message": "클릭"
+  },
+  "buttonDefaultActionLabel": {
+    "message": "브라우저 작업을 클릭하면 새로고침:"
+  },
+  "allWindows": {
+    "message": "모든 창"
+  },
+  "currentWindow": {
+    "message": "현재 창"
+  },
+  "pinnedTabs": {
+    "message": "현재 창, 고정된 탭"
+  },
+  "unpinnedTabs": {
+    "message": "현재 창, 고정되지 않은 탭"
+  },
+  "contextMenuHeading": {
+    "message": "컨텍스트 메뉴 (마우스 오른쪽 버튼 클릭)"
+  },
+  "contextMenuMultipleNote": {
+    "message": "여러 체크박스를 선택하면 모든 컨텍스트 메뉴가 \"모든 탭 새로고침\" 상위 메뉴 아래에 배치됩니다."
+  },
+  "contextMenuSingleNote": {
+    "message": "하나의 컨텍스트 메뉴만 선택하면 상위 메뉴가 없습니다."
+  },
+  "reloadWindowLabel": {
+    "message": "현재 창의 모든 탭 새로고침"
+  },
+  "reloadAllWindowsLabel": {
+    "message": "모든 창의 모든 탭 새로고침"
+  },
+  "reloadPinnedOnlyLabel": {
+    "message": "현재 창의 고정된 탭만 새로고침"
+  },
+  "reloadUnpinnedOnlyLabel": {
+    "message": "현재 창의 고정되지 않은 탭만 새로고침"
+  },
+  "reloadGroupedOnlyLabel": {
+    "message": "현재 창의 탭 그룹만 새로고침"
+  },
+  "reloadAllLeftLabel": {
+    "message": "왼쪽의 모든 탭 새로고침"
+  },
+  "reloadAllRightLabel": {
+    "message": "오른쪽의 모든 탭 새로고침"
+  },
+  "reloadAllMatchedLabel": {
+    "message": "URL로 시작하는 모든 탭 새로고침 (쉼표로 구분):"
+  },
+  "reloadAllMatchedPlaceholder": {
+    "message": "www.example1.com, www.example2.com"
+  },
+  "advancedHeading": {
+    "message": "고급 옵션"
+  },
+  "bypassCacheLabel": {
+    "message": "새로고침 시 캐시 우회"
+  },
+  "excludeActiveTabLabel": {
+    "message": "새로고침에서 현재 활성 탭 제외"
+  },
+  "excludeAudioTabsLabel": {
+    "message": "오디오를 재생하는 탭을 새로고침에서 제외"
+  },
+  "reloadDelayLabel": {
+    "message": "탭 새로고침 사이의 지연:"
+  },
+  "delayNone": {
+    "message": "없음"
+  },
+  "keyboardShortcutHeading": {
+    "message": "키보드 단축키 옵션"
+  },
+  "keyboardShortcutSetup": {
+    "message": "키보드 단축키를 설정하거나 변경하려면 Chrome의 단축키 페이지를 방문하세요:"
+  },
+  "keyboardShortcutCurrent": {
+    "message": "현재 키보드 단축키:"
+  },
+  "keyboardShortcutNotSet": {
+    "message": "설정되지 않음"
+  },
+  "closeButton": {
+    "message": "닫기"
+  },
+  "savedMessage": {
+    "message": "저장됨!"
+  },
+  "extensionDeveloper": {
+    "message": "확장 프로그램 개발자"
+  },
+  "sourceCodeAvailable": {
+    "message": "소스 코드 사용 가능"
+  },
+  "iconBy": {
+    "message": "아이콘 제작"
+  },
+  "reloadThisWindow": {
+    "message": "이 창 새로고침"
+  },
+  "reloadAllWindowsContext": {
+    "message": "모든 창 새로고침"
+  },
+  "reloadPinnedTabsContext": {
+    "message": "고정된 탭 새로고침"
+  },
+  "reloadUnpinnedTabsContext": {
+    "message": "고정되지 않은 탭 새로고침"
+  },
+  "reloadAllLeftContext": {
+    "message": "왼쪽의 모든 탭 새로고침"
+  },
+  "reloadAllRightContext": {
+    "message": "오른쪽의 모든 탭 새로고침"
+  },
+  "reloadAllMatchedContext": {
+    "message": "일치하는 URL의 모든 탭 새로고침"
+  },
+  "reloadAllTabGroups": {
+    "message": "모든 탭 그룹 새로고침"
+  },
+  "cacheBypassed": {
+    "message": " (캐시 우회됨)"
+  },
+  "unnamedGroup": {
+    "message": "이름 없음"
+  },
+  "clipboardCopySuccess": {
+    "message": "다음 링크 '$1'을(를) 클립보드에 복사했습니다. 거기에서 기본값을 변경할 수 있습니다. Chrome 보안으로 인해 수동으로 방문해야 합니다."
+  },
+  "clipboardCopyFailed": {
+    "message": "클립보드에 복사하지 못했습니다. 수동으로 다음으로 이동하세요: $1"
+  }
+}

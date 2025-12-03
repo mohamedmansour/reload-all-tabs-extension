@@ -1,0 +1,191 @@
+{
+  "extName": {
+    "message": "Ricarica Tutte le Schede"
+  },
+  "extDescription": {
+    "message": "Ricarica tutte le schede utilizzando la scorciatoia da tastiera (alt + shift + r), il menu contestuale o il pulsante azione del browser."
+  },
+  "extActionTitle": {
+    "message": "Ricarica Tutte le Schede"
+  },
+  "commandToggleReload": {
+    "message": "Attiva/disattiva ricarica"
+  },
+  "optionsTitle": {
+    "message": "Opzioni Ricarica Tutte le Schede"
+  },
+  "optionsHeader": {
+    "message": "Ricarica Tutte le Schede"
+  },
+  "optionsSaveNote": {
+    "message": "Assicurati di salvare le impostazioni dopo aver terminato la modifica!"
+  },
+  "visitExtensionPage": {
+    "message": "Visita la pagina dell'estensione"
+  },
+  "fileBugs": {
+    "message": "Segnala bug e suggerimenti"
+  },
+  "followOnTwitter": {
+    "message": "Dovresti seguirmi su Twitter"
+  },
+  "forFeatureRequests": {
+    "message": "per richieste di funzionalità o segnalazioni di bug!"
+  },
+  "browserActionHeading": {
+    "message": "Azione del Browser"
+  },
+  "hideButtonInstruction": {
+    "message": "Per rimuovere il pulsante, fai clic destro sull'icona e scegli"
+  },
+  "hideButton": {
+    "message": "Nascondi pulsante"
+  },
+  "showButtonInstruction": {
+    "message": "Per mostrare di nuovo il pulsante, visita"
+  },
+  "page": {
+    "message": "la pagina, e"
+  },
+  "extensionsPage": {
+    "message": "chrome://extensions/"
+  },
+  "showButton": {
+    "message": "Mostra pulsante"
+  },
+  "clickOn": {
+    "message": "fai clic su"
+  },
+  "buttonDefaultActionLabel": {
+    "message": "Quando si fa clic sull'azione del browser, ricarica:"
+  },
+  "allWindows": {
+    "message": "Tutte le Finestre"
+  },
+  "currentWindow": {
+    "message": "Finestra Corrente"
+  },
+  "pinnedTabs": {
+    "message": "Finestra Corrente, Schede bloccate"
+  },
+  "unpinnedTabs": {
+    "message": "Finestra Corrente, Schede non bloccate"
+  },
+  "contextMenuHeading": {
+    "message": "Menu Contestuale (Clic Destro)"
+  },
+  "contextMenuMultipleNote": {
+    "message": "Quando hai più caselle di controllo selezionate, tutti i menu contestuali saranno posizionati sotto un menu principale \"Ricarica Tutte le Schede\"."
+  },
+  "contextMenuSingleNote": {
+    "message": "Quando hai solo un menu contestuale selezionato, non ci sarà un menu principale."
+  },
+  "reloadWindowLabel": {
+    "message": "Ricarica tutte le schede nella finestra corrente"
+  },
+  "reloadAllWindowsLabel": {
+    "message": "Ricarica tutte le schede in tutte le finestre"
+  },
+  "reloadPinnedOnlyLabel": {
+    "message": "Ricarica solo le schede bloccate nella finestra corrente"
+  },
+  "reloadUnpinnedOnlyLabel": {
+    "message": "Ricarica solo le schede non bloccate nella finestra corrente"
+  },
+  "reloadGroupedOnlyLabel": {
+    "message": "Ricarica solo i gruppi di schede nella finestra corrente"
+  },
+  "reloadAllLeftLabel": {
+    "message": "Ricarica tutte le schede a sinistra"
+  },
+  "reloadAllRightLabel": {
+    "message": "Ricarica tutte le schede a destra"
+  },
+  "reloadAllMatchedLabel": {
+    "message": "Ricarica tutte le schede che iniziano con URL (separati da virgola):"
+  },
+  "reloadAllMatchedPlaceholder": {
+    "message": "www.esempio1.com, www.esempio2.com"
+  },
+  "advancedHeading": {
+    "message": "Opzioni Avanzate"
+  },
+  "bypassCacheLabel": {
+    "message": "Ignora cache durante il ricaricamento"
+  },
+  "excludeActiveTabLabel": {
+    "message": "Escludi la scheda attiva corrente dal ricaricamento"
+  },
+  "excludeAudioTabsLabel": {
+    "message": "Escludi le schede che riproducono audio dal ricaricamento"
+  },
+  "reloadDelayLabel": {
+    "message": "Ritardo tra il ricaricamento delle schede:"
+  },
+  "delayNone": {
+    "message": "Nessuno"
+  },
+  "keyboardShortcutHeading": {
+    "message": "Opzioni Scorciatoia da Tastiera"
+  },
+  "keyboardShortcutSetup": {
+    "message": "Per configurare la scorciatoia da tastiera o modificarla, visita la pagina delle scorciatoie in Chrome:"
+  },
+  "keyboardShortcutCurrent": {
+    "message": "Scorciatoia da tastiera corrente:"
+  },
+  "keyboardShortcutNotSet": {
+    "message": "Non Impostata"
+  },
+  "closeButton": {
+    "message": "Chiudi"
+  },
+  "savedMessage": {
+    "message": "Salvato!"
+  },
+  "extensionDeveloper": {
+    "message": "Estensione sviluppata da"
+  },
+  "sourceCodeAvailable": {
+    "message": "Codice sorgente disponibile su"
+  },
+  "iconBy": {
+    "message": "Icona di"
+  },
+  "reloadThisWindow": {
+    "message": "Ricarica questa finestra"
+  },
+  "reloadAllWindowsContext": {
+    "message": "Ricarica tutte le finestre"
+  },
+  "reloadPinnedTabsContext": {
+    "message": "Ricarica schede bloccate"
+  },
+  "reloadUnpinnedTabsContext": {
+    "message": "Ricarica schede non bloccate"
+  },
+  "reloadAllLeftContext": {
+    "message": "Ricarica tutte le schede a sinistra"
+  },
+  "reloadAllRightContext": {
+    "message": "Ricarica tutte le schede a destra"
+  },
+  "reloadAllMatchedContext": {
+    "message": "Ricarica tutte le schede con URL corrispondenti"
+  },
+  "reloadAllTabGroups": {
+    "message": "Ricarica tutti i gruppi di schede"
+  },
+  "cacheBypassed": {
+    "message": " (cache ignorata)"
+  },
+  "unnamedGroup": {
+    "message": "Senza nome"
+  },
+  "clipboardCopySuccess": {
+    "message": "Copiato il seguente link '$1' negli appunti. Puoi modificare i valori predefiniti lì. A causa della sicurezza di Chrome, devi visitarlo manualmente."
+  },
+  "clipboardCopyFailed": {
+    "message": "Impossibile copiare negli appunti. Naviga manualmente a: $1"
+  }
+}

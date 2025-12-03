@@ -1,0 +1,191 @@
+{
+  "extName": {
+    "message": "Reîncarcă Toate Filele"
+  },
+  "extDescription": {
+    "message": "Reîncarcă toate filele folosind combinația de taste (alt + shift + r), meniul contextual sau butonul de acțiune al browserului."
+  },
+  "extActionTitle": {
+    "message": "Reîncarcă Toate Filele"
+  },
+  "commandToggleReload": {
+    "message": "Comută reîncărcarea"
+  },
+  "optionsTitle": {
+    "message": "Opțiuni Reîncarcă Toate Filele"
+  },
+  "optionsHeader": {
+    "message": "Reîncarcă Toate Filele"
+  },
+  "optionsSaveNote": {
+    "message": "Asigură-te că salvezi setările după ce ai terminat editarea!"
+  },
+  "visitExtensionPage": {
+    "message": "Vizitează pagina extensiei"
+  },
+  "fileBugs": {
+    "message": "Raportează erori și sugestii"
+  },
+  "followOnTwitter": {
+    "message": "Ar trebui să mă urmărești pe Twitter"
+  },
+  "forFeatureRequests": {
+    "message": "pentru solicitări de funcții sau raportare de erori!"
+  },
+  "browserActionHeading": {
+    "message": "Acțiunea Browserului"
+  },
+  "hideButtonInstruction": {
+    "message": "Pentru a elimina butonul, faceți clic dreapta pe pictogramă și alegeți"
+  },
+  "hideButton": {
+    "message": "Ascunde butonul"
+  },
+  "showButtonInstruction": {
+    "message": "Pentru a afișa din nou butonul, vizitați"
+  },
+  "page": {
+    "message": "pagina, și"
+  },
+  "extensionsPage": {
+    "message": "chrome://extensions/"
+  },
+  "showButton": {
+    "message": "Afișează butonul"
+  },
+  "clickOn": {
+    "message": "faceți clic pe"
+  },
+  "buttonDefaultActionLabel": {
+    "message": "La clic pe acțiunea browserului, reîncarcă:"
+  },
+  "allWindows": {
+    "message": "Toate Ferestrele"
+  },
+  "currentWindow": {
+    "message": "Fereastra Curentă"
+  },
+  "pinnedTabs": {
+    "message": "Fereastra Curentă, File fixate"
+  },
+  "unpinnedTabs": {
+    "message": "Fereastra Curentă, File nefixate"
+  },
+  "contextMenuHeading": {
+    "message": "Meniu Contextual (Clic Dreapta)"
+  },
+  "contextMenuMultipleNote": {
+    "message": "Când aveți mai multe casete de selectare bifate, toate meniurile contextuale vor fi plasate sub un meniu părinte \"Reîncarcă Toate Filele\"."
+  },
+  "contextMenuSingleNote": {
+    "message": "Când aveți doar un singur meniu contextual selectat, nu va exista un meniu părinte."
+  },
+  "reloadWindowLabel": {
+    "message": "Reîncarcă toate filele din fereastra curentă"
+  },
+  "reloadAllWindowsLabel": {
+    "message": "Reîncarcă toate filele din toate ferestrele"
+  },
+  "reloadPinnedOnlyLabel": {
+    "message": "Reîncarcă doar filele fixate din fereastra curentă"
+  },
+  "reloadUnpinnedOnlyLabel": {
+    "message": "Reîncarcă doar filele nefixate din fereastra curentă"
+  },
+  "reloadGroupedOnlyLabel": {
+    "message": "Reîncarcă doar grupurile de file din fereastra curentă"
+  },
+  "reloadAllLeftLabel": {
+    "message": "Reîncarcă toate filele din stânga"
+  },
+  "reloadAllRightLabel": {
+    "message": "Reîncarcă toate filele din dreapta"
+  },
+  "reloadAllMatchedLabel": {
+    "message": "Reîncarcă toate filele care încep cu URL-uri (separate prin virgulă):"
+  },
+  "reloadAllMatchedPlaceholder": {
+    "message": "www.exemplu1.com, www.exemplu2.com"
+  },
+  "advancedHeading": {
+    "message": "Opțiuni Avansate"
+  },
+  "bypassCacheLabel": {
+    "message": "Ocolește memoria cache la reîncărcare"
+  },
+  "excludeActiveTabLabel": {
+    "message": "Exclude fila activă curentă de la reîncărcare"
+  },
+  "excludeAudioTabsLabel": {
+    "message": "Exclude filele care redau audio de la reîncărcare"
+  },
+  "reloadDelayLabel": {
+    "message": "Întârziere între reîncărcarea filelor:"
+  },
+  "delayNone": {
+    "message": "Niciuna"
+  },
+  "keyboardShortcutHeading": {
+    "message": "Opțiuni Combinație de Taste"
+  },
+  "keyboardShortcutSetup": {
+    "message": "Pentru a configura combinația de taste sau a o schimba, vă rugăm să vizitați pagina de comenzi rapide în Chrome:"
+  },
+  "keyboardShortcutCurrent": {
+    "message": "Combinația de taste curentă:"
+  },
+  "keyboardShortcutNotSet": {
+    "message": "Nesetată"
+  },
+  "closeButton": {
+    "message": "Închide"
+  },
+  "savedMessage": {
+    "message": "Salvat!"
+  },
+  "extensionDeveloper": {
+    "message": "Extensie dezvoltată de"
+  },
+  "sourceCodeAvailable": {
+    "message": "Codul sursă disponibil în"
+  },
+  "iconBy": {
+    "message": "Pictogramă de"
+  },
+  "reloadThisWindow": {
+    "message": "Reîncarcă această fereastră"
+  },
+  "reloadAllWindowsContext": {
+    "message": "Reîncarcă toate ferestrele"
+  },
+  "reloadPinnedTabsContext": {
+    "message": "Reîncarcă filele fixate"
+  },
+  "reloadUnpinnedTabsContext": {
+    "message": "Reîncarcă filele nefixate"
+  },
+  "reloadAllLeftContext": {
+    "message": "Reîncarcă toate filele din stânga"
+  },
+  "reloadAllRightContext": {
+    "message": "Reîncarcă toate filele din dreapta"
+  },
+  "reloadAllMatchedContext": {
+    "message": "Reîncarcă toate filele cu URL-uri potrivite"
+  },
+  "reloadAllTabGroups": {
+    "message": "Reîncarcă toate grupurile de file"
+  },
+  "cacheBypassed": {
+    "message": " (memoria cache ocolită)"
+  },
+  "unnamedGroup": {
+    "message": "Fără nume"
+  },
+  "clipboardCopySuccess": {
+    "message": "Am copiat următorul link '$1' în clipboard. Puteți schimba valorile implicite acolo. Din cauza securității Chrome, trebuie să îl vizitați manual."
+  },
+  "clipboardCopyFailed": {
+    "message": "Eșec la copierea în clipboard. Vă rugăm să navigați manual la: $1"
+  }
+}

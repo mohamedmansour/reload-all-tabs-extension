@@ -1,0 +1,191 @@
+{
+  "extName": {
+    "message": "Перезагрузить Все Вкладки"
+  },
+  "extDescription": {
+    "message": "Перезагружайте все вкладки с помощью сочетания клавиш (alt + shift + r), контекстного меню или кнопки действия браузера."
+  },
+  "extActionTitle": {
+    "message": "Перезагрузить Все Вкладки"
+  },
+  "commandToggleReload": {
+    "message": "Переключить перезагрузку"
+  },
+  "optionsTitle": {
+    "message": "Параметры Перезагрузки Всех Вкладок"
+  },
+  "optionsHeader": {
+    "message": "Перезагрузить Все Вкладки"
+  },
+  "optionsSaveNote": {
+    "message": "Обязательно сохраните настройки после завершения редактирования!"
+  },
+  "visitExtensionPage": {
+    "message": "Посетить страницу расширения"
+  },
+  "fileBugs": {
+    "message": "Сообщить об ошибках и предложениях"
+  },
+  "followOnTwitter": {
+    "message": "Вы должны подписаться на меня в Twitter"
+  },
+  "forFeatureRequests": {
+    "message": "для запросов функций или сообщений об ошибках!"
+  },
+  "browserActionHeading": {
+    "message": "Действие Браузера"
+  },
+  "hideButtonInstruction": {
+    "message": "Чтобы удалить кнопку, щелкните правой кнопкой мыши на значке и выберите"
+  },
+  "hideButton": {
+    "message": "Скрыть кнопку"
+  },
+  "showButtonInstruction": {
+    "message": "Чтобы снова показать кнопку, посетите"
+  },
+  "page": {
+    "message": "страницу, и"
+  },
+  "extensionsPage": {
+    "message": "chrome://extensions/"
+  },
+  "showButton": {
+    "message": "Показать кнопку"
+  },
+  "clickOn": {
+    "message": "нажмите на"
+  },
+  "buttonDefaultActionLabel": {
+    "message": "При нажатии на действие браузера, перезагрузить:"
+  },
+  "allWindows": {
+    "message": "Все Окна"
+  },
+  "currentWindow": {
+    "message": "Текущее Окно"
+  },
+  "pinnedTabs": {
+    "message": "Текущее Окно, Закрепленные вкладки"
+  },
+  "unpinnedTabs": {
+    "message": "Текущее Окно, Незакрепленные вкладки"
+  },
+  "contextMenuHeading": {
+    "message": "Контекстное Меню (Правый Клик)"
+  },
+  "contextMenuMultipleNote": {
+    "message": "Когда у вас отмечено несколько флажков, все контекстные меню будут размещены под одним родительским меню \"Перезагрузить Все Вкладки\"."
+  },
+  "contextMenuSingleNote": {
+    "message": "Когда у вас выбрано только одно контекстное меню, родительского меню не будет."
+  },
+  "reloadWindowLabel": {
+    "message": "Перезагрузить все вкладки в текущем окне"
+  },
+  "reloadAllWindowsLabel": {
+    "message": "Перезагрузить все вкладки во всех окнах"
+  },
+  "reloadPinnedOnlyLabel": {
+    "message": "Перезагрузить только закрепленные вкладки в текущем окне"
+  },
+  "reloadUnpinnedOnlyLabel": {
+    "message": "Перезагрузить только незакрепленные вкладки в текущем окне"
+  },
+  "reloadGroupedOnlyLabel": {
+    "message": "Перезагрузить только группы вкладок в текущем окне"
+  },
+  "reloadAllLeftLabel": {
+    "message": "Перезагрузить все вкладки слева"
+  },
+  "reloadAllRightLabel": {
+    "message": "Перезагрузить все вкладки справа"
+  },
+  "reloadAllMatchedLabel": {
+    "message": "Перезагрузить все вкладки, начинающиеся с URL-адресов (через запятую):"
+  },
+  "reloadAllMatchedPlaceholder": {
+    "message": "www.пример1.com, www.пример2.com"
+  },
+  "advancedHeading": {
+    "message": "Дополнительные Параметры"
+  },
+  "bypassCacheLabel": {
+    "message": "Обойти кэш при перезагрузке"
+  },
+  "excludeActiveTabLabel": {
+    "message": "Исключить текущую активную вкладку из перезагрузки"
+  },
+  "excludeAudioTabsLabel": {
+    "message": "Исключить вкладки с воспроизведением аудио из перезагрузки"
+  },
+  "reloadDelayLabel": {
+    "message": "Задержка между перезагрузкой вкладок:"
+  },
+  "delayNone": {
+    "message": "Нет"
+  },
+  "keyboardShortcutHeading": {
+    "message": "Параметры Сочетания Клавиш"
+  },
+  "keyboardShortcutSetup": {
+    "message": "Чтобы настроить или изменить сочетание клавиш, посетите страницу сочетаний клавиш в Chrome:"
+  },
+  "keyboardShortcutCurrent": {
+    "message": "Текущее сочетание клавиш:"
+  },
+  "keyboardShortcutNotSet": {
+    "message": "Не Установлено"
+  },
+  "closeButton": {
+    "message": "Закрыть"
+  },
+  "savedMessage": {
+    "message": "Сохранено!"
+  },
+  "extensionDeveloper": {
+    "message": "Расширение разработано"
+  },
+  "sourceCodeAvailable": {
+    "message": "Исходный код доступен на"
+  },
+  "iconBy": {
+    "message": "Иконка от"
+  },
+  "reloadThisWindow": {
+    "message": "Перезагрузить это окно"
+  },
+  "reloadAllWindowsContext": {
+    "message": "Перезагрузить все окна"
+  },
+  "reloadPinnedTabsContext": {
+    "message": "Перезагрузить закрепленные вкладки"
+  },
+  "reloadUnpinnedTabsContext": {
+    "message": "Перезагрузить незакрепленные вкладки"
+  },
+  "reloadAllLeftContext": {
+    "message": "Перезагрузить все вкладки слева"
+  },
+  "reloadAllRightContext": {
+    "message": "Перезагрузить все вкладки справа"
+  },
+  "reloadAllMatchedContext": {
+    "message": "Перезагрузить все вкладки с соответствующими URL"
+  },
+  "reloadAllTabGroups": {
+    "message": "Перезагрузить все группы вкладок"
+  },
+  "cacheBypassed": {
+    "message": " (кэш обойден)"
+  },
+  "unnamedGroup": {
+    "message": "Без имени"
+  },
+  "clipboardCopySuccess": {
+    "message": "Скопирована следующая ссылка '$1' в буфер обмена. Вы можете изменить значения по умолчанию там. Из-за безопасности Chrome вам нужно посетить её вручную."
+  },
+  "clipboardCopyFailed": {
+    "message": "Не удалось скопировать в буфер обмена. Пожалуйста, перейдите вручную на: $1"
+  }
+}
