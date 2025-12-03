@@ -31,6 +31,7 @@ const getSetting = async (keys) => {
       case 'reloadAllRight':
       case 'reloadAllLeft':
       case 'bypassCache':
+      case 'excludeActiveTab':
         results[key] = values[key] === true;
         break;
       default:
@@ -240,6 +241,13 @@ const reloadWindow = async (win, options = {}) => {
 const reloadStrategy = async (tab, strategy, options = {}) => {
   let issueReload = true;
 
+  if (tab.active) {
+    const { excludeActiveTab } = await getSetting(['excludeActiveTab']);
+    if (excludeActiveTab) {
+      issueReload = false;
+    }
+  }
+
   if (options.reloadPinnedOnly && !tab.pinned) {
     issueReload = false;
   }
@@ -299,10 +307,11 @@ const reloadStrategy = async (tab, strategy, options = {}) => {
  */
 const reloadGroupedTabs = async (windowId, groupId) => {
   const tabs = await chrome.tabs.query({ windowId, groupId });
-  const { bypassCache, reloadDelay } = await getSetting(['bypassCache', 'reloadDelay']);
+  const { reloadDelay } = await getSetting(['reloadDelay']);
+  const strategy = {};
   
   for (const tab of tabs) {
-    await chrome.tabs.reload(tab.id, { bypassCache });
+    await reloadStrategy(tab, strategy, {});
     if (reloadDelay > 0) {
       await new Promise(resolve => setTimeout(resolve, reloadDelay));
     }

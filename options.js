@@ -158,6 +158,7 @@ const onRestore = async () => {
     'reloadAllMatched',
     'reloadGroupedOnly',
     'bypassCache',
+    'excludeActiveTab',
     'reloadDelay',
     'buttonDefaultAction',
     'version'
@@ -175,6 +176,7 @@ const onRestore = async () => {
   setupCheckbox('reloadAllLeft', settings.reloadAllLeft);
   setupCheckbox('reloadAllRight', settings.reloadAllRight);
   setupCheckbox('bypassCache', settings.bypassCache);
+  setupCheckbox('excludeActiveTab', settings.excludeActiveTab);
 
   setupDropdown('buttonDefaultAction', settings.buttonDefaultAction, 'window');
   setupDropdown('reloadDelay', settings.reloadDelay, '0');
