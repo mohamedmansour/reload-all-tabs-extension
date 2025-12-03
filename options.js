@@ -71,9 +71,15 @@ const flashMessage = (() => {
  * @param {boolean} storedValue Current stored value
  * @param {boolean} defaultValue Default value if not stored
  */
-const setupCheckbox = (id, storedValue, defaultValue = false) => {
+const setupCheckbox = async (id, storedValue, defaultValue = false) => {
   const element = $(id);
-  element.checked = storedValue ?? defaultValue;
+  const value = storedValue ?? defaultValue;
+  element.checked = value;
+  
+  // Save default value to storage if not set
+  if (storedValue === undefined && defaultValue !== false) {
+    await chrome.storage.sync.set({ [id]: defaultValue });
+  }
   
   element.addEventListener('change', async (e) => {
     const stopFlashing = flashMessage(e.target);
@@ -88,9 +94,15 @@ const setupCheckbox = (id, storedValue, defaultValue = false) => {
  * @param {string} storedValue Current stored value
  * @param {string} defaultValue Default value if not stored
  */
-const setupDropdown = (id, storedValue, defaultValue = '') => {
+const setupDropdown = async (id, storedValue, defaultValue = '') => {
   const element = $(id);
-  element.value = storedValue ?? defaultValue;
+  const value = storedValue ?? defaultValue;
+  element.value = value;
+  
+  // Save default value to storage if not set
+  if (storedValue === undefined && defaultValue !== '') {
+    await chrome.storage.sync.set({ [id]: defaultValue });
+  }
   
   element.addEventListener('change', async (e) => {
     const stopFlashing = flashMessage(e.target);
@@ -105,9 +117,15 @@ const setupDropdown = (id, storedValue, defaultValue = '') => {
  * @param {string} storedValue Current stored value
  * @param {string} defaultValue Default value if not stored
  */
-const setupTextarea = (id, storedValue, defaultValue = '') => {
+const setupTextarea = async (id, storedValue, defaultValue = '') => {
   const element = $(id);
-  element.value = storedValue ?? defaultValue;
+  const value = storedValue ?? defaultValue;
+  element.value = value;
+  
+  // Save default value to storage if not set
+  if (storedValue === undefined && defaultValue !== '') {
+    await chrome.storage.sync.set({ [id]: defaultValue });
+  }
   
   const debouncedSave = debounce(async (value) => {
     const stopFlashing = flashMessage(element);
@@ -168,19 +186,19 @@ const onRestore = async () => {
   
   $('version').innerText = ` (v${settings.version ?? 'Unknown'})`;
 
-  setupCheckbox('reloadWindow', settings.reloadWindow, true);
-  setupCheckbox('reloadAllWindows', settings.reloadAllWindows);
-  setupCheckbox('reloadPinnedOnly', settings.reloadPinnedOnly);
-  setupCheckbox('reloadUnpinnedOnly', settings.reloadUnpinnedOnly);
-  setupCheckbox('reloadGroupedOnly', settings.reloadGroupedOnly);
-  setupCheckbox('reloadAllLeft', settings.reloadAllLeft);
-  setupCheckbox('reloadAllRight', settings.reloadAllRight);
-  setupCheckbox('bypassCache', settings.bypassCache);
-  setupCheckbox('excludeActiveTab', settings.excludeActiveTab);
+  await setupCheckbox('reloadWindow', settings.reloadWindow, true);
+  await setupCheckbox('reloadAllWindows', settings.reloadAllWindows);
+  await setupCheckbox('reloadPinnedOnly', settings.reloadPinnedOnly);
+  await setupCheckbox('reloadUnpinnedOnly', settings.reloadUnpinnedOnly);
+  await setupCheckbox('reloadGroupedOnly', settings.reloadGroupedOnly);
+  await setupCheckbox('reloadAllLeft', settings.reloadAllLeft);
+  await setupCheckbox('reloadAllRight', settings.reloadAllRight);
+  await setupCheckbox('bypassCache', settings.bypassCache);
+  await setupCheckbox('excludeActiveTab', settings.excludeActiveTab);
 
-  setupDropdown('buttonDefaultAction', settings.buttonDefaultAction, 'window');
-  setupDropdown('reloadDelay', settings.reloadDelay, '0');
-  setupTextarea('reloadAllMatched', settings.reloadAllMatched);
+  await setupDropdown('buttonDefaultAction', settings.buttonDefaultAction, 'window');
+  await setupDropdown('reloadDelay', settings.reloadDelay, '0');
+  await setupTextarea('reloadAllMatched', settings.reloadAllMatched);
 
   const commands = await chrome.commands.getAll();
   $('keyboardShortcut').innerText = commands[0]?.shortcut || 'Not Set';
