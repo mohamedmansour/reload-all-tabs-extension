@@ -177,6 +177,7 @@ const onRestore = async () => {
     'reloadGroupedOnly',
     'bypassCache',
     'excludeActiveTab',
+    'excludeAudioTabs',
     'reloadDelay',
     'buttonDefaultAction',
     'version'
@@ -195,6 +196,7 @@ const onRestore = async () => {
   await setupCheckbox('reloadAllRight', settings.reloadAllRight);
   await setupCheckbox('bypassCache', settings.bypassCache);
   await setupCheckbox('excludeActiveTab', settings.excludeActiveTab);
+  await setupCheckbox('excludeAudioTabs', settings.excludeAudioTabs);
 
   await setupDropdown('buttonDefaultAction', settings.buttonDefaultAction, 'window');
   await setupDropdown('reloadDelay', settings.reloadDelay, '0');

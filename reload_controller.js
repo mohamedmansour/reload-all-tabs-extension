@@ -32,6 +32,7 @@ const getSetting = async (keys) => {
       case 'reloadAllLeft':
       case 'bypassCache':
       case 'excludeActiveTab':
+      case 'excludeAudioTabs':
         results[key] = values[key] === true;
         break;
       default:
@@ -244,6 +245,14 @@ const reloadStrategy = async (tab, strategy, options = {}) => {
   if (tab.active) {
     const { excludeActiveTab } = await getSetting(['excludeActiveTab']);
     if (excludeActiveTab) {
+      issueReload = false;
+    }
+  }
+
+  // Check if tabs with audio should be excluded
+  if (tab.audible) {
+    const { excludeAudioTabs } = await getSetting(['excludeAudioTabs']);
+    if (excludeAudioTabs) {
       issueReload = false;
     }
   }
