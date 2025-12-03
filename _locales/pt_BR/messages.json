@@ -1,251 +1,189 @@
 {
   "extName": {
-    "message": "Recarregar Todas as Abas",
-    "description": "Name of the extension"
+    "message": "Recarregar Todas as Abas"
   },
   "extDescription": {
-    "message": "Recarregue todas as abas usando atalho de teclado (alt + shift + r), menu de contexto ou botão de ação do navegador.",
-    "description": "Description of the extension"
+    "message": "Recarregue todas as abas usando atalho de teclado (alt + shift + r), menu de contexto ou botão de ação do navegador."
   },
   "extActionTitle": {
-    "message": "Recarregar Todas as Abas",
-    "description": "Title for the browser action button"
+    "message": "Recarregar Todas as Abas"
   },
   "commandToggleReload": {
-    "message": "Alternar recarga",
-    "description": "Description for the keyboard command"
+    "message": "Alternar recarga"
   },
   "optionsTitle": {
-    "message": "Opções de Recarregar Todas as Abas",
-    "description": "Title for the options page"
+    "message": "Opções de Recarregar Todas as Abas"
   },
   "optionsHeader": {
-    "message": "Recarregar Todas as Abas",
-    "description": "Header text for options page"
+    "message": "Recarregar Todas as Abas"
   },
   "optionsSaveNote": {
-    "message": "Certifique-se de salvar as configurações após terminar a edição!",
-    "description": "Note about saving settings"
+    "message": "Certifique-se de salvar as configurações após terminar a edição!"
   },
   "visitExtensionPage": {
-    "message": "Visitar página da extensão",
-    "description": "Link text to visit extension page"
+    "message": "Visitar página da extensão"
   },
   "fileBugs": {
-    "message": "Relatar bugs e sugestões",
-    "description": "Link text to file bugs"
+    "message": "Relatar bugs e sugestões"
   },
   "followOnTwitter": {
-    "message": "Você deveria me seguir no Twitter",
-    "description": "Text before Twitter link"
+    "message": "Você deveria me seguir no Twitter"
   },
   "forFeatureRequests": {
-    "message": "para solicitações de recursos ou relatar bugs!",
-    "description": "Text after Twitter handle"
+    "message": "para solicitações de recursos ou relatar bugs!"
   },
   "browserActionHeading": {
-    "message": "Ação do Navegador",
-    "description": "Heading for browser action section"
+    "message": "Ação do Navegador"
   },
   "hideButtonInstruction": {
-    "message": "Para remover o botão, clique com o botão direito no ícone e escolha",
-    "description": "Instructions for hiding the browser action button"
+    "message": "Para remover o botão, clique com o botão direito no ícone e escolha"
   },
   "hideButton": {
-    "message": "Ocultar botão",
-    "description": "Text for hide button option"
+    "message": "Ocultar botão"
   },
   "showButtonInstruction": {
-    "message": "Para mostrar o botão novamente, visite a",
-    "description": "Instructions for showing the browser action button"
+    "message": "Para mostrar o botão novamente, visite a"
   },
   "page": {
-    "message": "página, e",
-    "description": "Text for page reference"
+    "message": "página, e"
   },
   "extensionsPage": {
-    "message": "chrome://extensions/",
-    "description": "Extensions page URL"
+    "message": "chrome://extensions/"
   },
   "showButton": {
-    "message": "Mostrar botão",
-    "description": "Text for show button option"
+    "message": "Mostrar botão"
   },
   "clickOn": {
-    "message": "clique em",
-    "description": "Text for click on instruction"
+    "message": "clique em"
   },
   "buttonDefaultActionLabel": {
-    "message": "Ao clicar na ação do navegador, recarregar:",
-    "description": "Label for browser action dropdown"
+    "message": "Ao clicar na ação do navegador, recarregar:"
   },
   "allWindows": {
-    "message": "Todas as Janelas",
-    "description": "Option to reload all windows"
+    "message": "Todas as Janelas"
   },
   "currentWindow": {
-    "message": "Janela Atual",
-    "description": "Option to reload current window"
+    "message": "Janela Atual"
   },
   "pinnedTabs": {
-    "message": "Janela Atual, Abas fixadas",
-    "description": "Option to reload pinned tabs"
+    "message": "Janela Atual, Abas fixadas"
   },
   "unpinnedTabs": {
-    "message": "Janela Atual, Abas não fixadas",
-    "description": "Option to reload unpinned tabs"
+    "message": "Janela Atual, Abas não fixadas"
   },
   "contextMenuHeading": {
-    "message": "Menu de Contexto (Clique Direito)",
-    "description": "Heading for context menu section"
+    "message": "Menu de Contexto (Clique Direito)"
   },
   "contextMenuMultipleNote": {
-    "message": "Quando você tem várias caixas de seleção marcadas, todos os menus de contexto serão colocados sob um menu pai \"Recarregar Todas as Abas\".",
-    "description": "Note about multiple context menu items"
+    "message": "Quando você tem várias caixas de seleção marcadas, todos os menus de contexto serão colocados sob um menu pai \"Recarregar Todas as Abas\"."
   },
   "contextMenuSingleNote": {
-    "message": "Quando você tem apenas um menu de contexto selecionado, não haverá menu pai.",
-    "description": "Note about single context menu item"
+    "message": "Quando você tem apenas um menu de contexto selecionado, não haverá menu pai."
   },
   "reloadWindowLabel": {
-    "message": "Recarregar todas as abas na janela atual",
-    "description": "Label for reload window checkbox"
+    "message": "Recarregar todas as abas na janela atual"
   },
   "reloadAllWindowsLabel": {
-    "message": "Recarregar todas as abas em todas as janelas",
-    "description": "Label for reload all windows checkbox"
+    "message": "Recarregar todas as abas em todas as janelas"
   },
   "reloadPinnedOnlyLabel": {
-    "message": "Recarregar apenas abas fixadas na janela atual",
-    "description": "Label for reload pinned only checkbox"
+    "message": "Recarregar apenas abas fixadas na janela atual"
   },
   "reloadUnpinnedOnlyLabel": {
-    "message": "Recarregar apenas abas não fixadas na janela atual",
-    "description": "Label for reload unpinned only checkbox"
+    "message": "Recarregar apenas abas não fixadas na janela atual"
   },
   "reloadGroupedOnlyLabel": {
-    "message": "Recarregar apenas grupos de abas na janela atual",
-    "description": "Label for reload grouped only checkbox"
+    "message": "Recarregar apenas grupos de abas na janela atual"
   },
   "reloadAllLeftLabel": {
-    "message": "Recarregar todas as abas à esquerda",
-    "description": "Label for reload all left checkbox"
+    "message": "Recarregar todas as abas à esquerda"
   },
   "reloadAllRightLabel": {
-    "message": "Recarregar todas as abas à direita",
-    "description": "Label for reload all right checkbox"
+    "message": "Recarregar todas as abas à direita"
   },
   "reloadAllMatchedLabel": {
-    "message": "Recarregar todas as abas que começam com URLs (separadas por vírgula):",
-    "description": "Label for reload matched URLs textarea"
+    "message": "Recarregar todas as abas que começam com URLs (separadas por vírgula):"
   },
   "reloadAllMatchedPlaceholder": {
-    "message": "www.exemplo1.com, www.exemplo2.com",
-    "description": "Placeholder for matched URLs textarea"
+    "message": "www.exemplo1.com, www.exemplo2.com"
   },
   "advancedHeading": {
-    "message": "Opções Avançadas",
-    "description": "Heading for advanced options section"
+    "message": "Opções Avançadas"
   },
   "bypassCacheLabel": {
-    "message": "Ignorar cache ao recarregar",
-    "description": "Label for bypass cache checkbox"
+    "message": "Ignorar cache ao recarregar"
   },
   "excludeActiveTabLabel": {
-    "message": "Excluir aba ativa atual da recarga",
-    "description": "Label for exclude active tab checkbox"
+    "message": "Excluir aba ativa atual da recarga"
   },
   "excludeAudioTabsLabel": {
-    "message": "Excluir abas reproduzindo áudio da recarga",
-    "description": "Label for exclude audio tabs checkbox"
+    "message": "Excluir abas reproduzindo áudio da recarga"
   },
   "reloadDelayLabel": {
-    "message": "Atraso entre recarregar abas:",
-    "description": "Label for reload delay dropdown"
+    "message": "Atraso entre recarregar abas:"
   },
   "delayNone": {
-    "message": "Nenhum",
-    "description": "No delay option"
+    "message": "Nenhum"
   },
   "keyboardShortcutHeading": {
-    "message": "Opções de Atalho de Teclado",
-    "description": "Heading for keyboard shortcut section"
+    "message": "Opções de Atalho de Teclado"
   },
   "keyboardShortcutSetup": {
-    "message": "Para configurar o atalho de teclado ou alterá-lo, visite a página de atalhos no Chrome:",
-    "description": "Instructions for setting up keyboard shortcuts"
+    "message": "Para configurar o atalho de teclado ou alterá-lo, visite a página de atalhos no Chrome:"
   },
   "keyboardShortcutCurrent": {
-    "message": "Atalho de teclado atual:",
-    "description": "Label for current keyboard shortcut"
+    "message": "Atalho de teclado atual:"
   },
   "keyboardShortcutNotSet": {
-    "message": "Não Configurado",
-    "description": "Text when keyboard shortcut is not set"
+    "message": "Não Configurado"
   },
   "closeButton": {
-    "message": "Fechar",
-    "description": "Text for close button"
+    "message": "Fechar"
   },
   "savedMessage": {
-    "message": "Salvo!",
-    "description": "Message shown when settings are saved"
+    "message": "Salvo!"
   },
   "extensionDeveloper": {
-    "message": "Extensão desenvolvida por",
-    "description": "Text before developer name"
+    "message": "Extensão desenvolvida por"
   },
   "sourceCodeAvailable": {
-    "message": "Código fonte disponível no",
-    "description": "Text before GitHub link"
+    "message": "Código fonte disponível no"
   },
   "iconBy": {
-    "message": "Ícone por",
-    "description": "Text before icon designer name"
+    "message": "Ícone por"
   },
   "reloadThisWindow": {
-    "message": "Recarregar esta janela",
-    "description": "Context menu item for reloading current window"
+    "message": "Recarregar esta janela"
   },
   "reloadAllWindowsContext": {
-    "message": "Recarregar todas as janelas",
-    "description": "Context menu item for reloading all windows"
+    "message": "Recarregar todas as janelas"
   },
   "reloadPinnedTabsContext": {
-    "message": "Recarregar abas fixadas",
-    "description": "Context menu item for reloading pinned tabs"
+    "message": "Recarregar abas fixadas"
   },
   "reloadUnpinnedTabsContext": {
-    "message": "Recarregar abas não fixadas",
-    "description": "Context menu item for reloading unpinned tabs"
+    "message": "Recarregar abas não fixadas"
   },
   "reloadAllLeftContext": {
-    "message": "Recarregar todas as abas à esquerda",
-    "description": "Context menu item for reloading tabs to the left"
+    "message": "Recarregar todas as abas à esquerda"
   },
   "reloadAllRightContext": {
-    "message": "Recarregar todas as abas à direita",
-    "description": "Context menu item for reloading tabs to the right"
+    "message": "Recarregar todas as abas à direita"
   },
   "reloadAllMatchedContext": {
-    "message": "Recarregar todas as abas com URLs correspondentes",
-    "description": "Context menu item for reloading matched URLs"
+    "message": "Recarregar todas as abas com URLs correspondentes"
   },
   "reloadAllTabGroups": {
-    "message": "Recarregar todos os grupos de abas",
-    "description": "Context menu item for reloading tab groups"
+    "message": "Recarregar todos os grupos de abas"
   },
   "cacheBypassed": {
-    "message": " (cache ignorado)",
-    "description": "Suffix for context menu items when cache is bypassed"
+    "message": " (cache ignorado)"
   },
   "unnamedGroup": {
-    "message": "Sem nome",
-    "description": "Text for unnamed tab groups"
+    "message": "Sem nome"
   },
   "clipboardCopySuccess": {
     "message": "Copiado o seguinte link '$1' para a área de transferência. Você pode alterar seus padrões lá. Devido à segurança do Chrome, você precisa visitá-lo manualmente.",
-    "description": "Alert message when link is copied to clipboard",
     "placeholders": {
       "link": {
         "content": "$1",
@@ -255,7 +193,6 @@
   },
   "clipboardCopyFailed": {
     "message": "Falha ao copiar para a área de transferência. Por favor, navegue manualmente para: $1",
-    "description": "Alert message when clipboard copy fails",
     "placeholders": {
       "link": {
         "content": "$1",

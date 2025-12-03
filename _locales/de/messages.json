@@ -1,251 +1,189 @@
 {
   "extName": {
-    "message": "Alle Tabs neu laden",
-    "description": "Name of the extension"
+    "message": "Alle Tabs neu laden"
   },
   "extDescription": {
-    "message": "Laden Sie alle Tabs mit Tastenkombination (Alt + Umschalt + R), Kontextmenü oder Browser-Aktionsschaltfläche neu.",
-    "description": "Description of the extension"
+    "message": "Laden Sie alle Tabs mit Tastenkombination (Alt + Umschalt + R), Kontextmenü oder Browser-Aktionsschaltfläche neu."
   },
   "extActionTitle": {
-    "message": "Alle Tabs neu laden",
-    "description": "Title for the browser action button"
+    "message": "Alle Tabs neu laden"
   },
   "commandToggleReload": {
-    "message": "Neuladen umschalten",
-    "description": "Description for the keyboard command"
+    "message": "Neuladen umschalten"
   },
   "optionsTitle": {
-    "message": "Optionen für Alle Tabs neu laden",
-    "description": "Title for the options page"
+    "message": "Optionen für Alle Tabs neu laden"
   },
   "optionsHeader": {
-    "message": "Alle Tabs neu laden",
-    "description": "Header text for options page"
+    "message": "Alle Tabs neu laden"
   },
   "optionsSaveNote": {
-    "message": "Stellen Sie sicher, dass Sie die Einstellungen speichern, nachdem Sie die Bearbeitung abgeschlossen haben!",
-    "description": "Note about saving settings"
+    "message": "Stellen Sie sicher, dass Sie die Einstellungen speichern, nachdem Sie die Bearbeitung abgeschlossen haben!"
   },
   "visitExtensionPage": {
-    "message": "Erweiterungsseite besuchen",
-    "description": "Link text to visit extension page"
+    "message": "Erweiterungsseite besuchen"
   },
   "fileBugs": {
-    "message": "Fehler und Vorschläge melden",
-    "description": "Link text to file bugs"
+    "message": "Fehler und Vorschläge melden"
   },
   "followOnTwitter": {
-    "message": "Sie sollten mir auf Twitter folgen",
-    "description": "Text before Twitter link"
+    "message": "Sie sollten mir auf Twitter folgen"
   },
   "forFeatureRequests": {
-    "message": "für Feature-Anfragen oder Fehlerberichte!",
-    "description": "Text after Twitter handle"
+    "message": "für Feature-Anfragen oder Fehlerberichte!"
   },
   "browserActionHeading": {
-    "message": "Browser-Aktion",
-    "description": "Heading for browser action section"
+    "message": "Browser-Aktion"
   },
   "hideButtonInstruction": {
-    "message": "Um die Schaltfläche zu entfernen, klicken Sie mit der rechten Maustaste auf das Symbol und wählen Sie",
-    "description": "Instructions for hiding the browser action button"
+    "message": "Um die Schaltfläche zu entfernen, klicken Sie mit der rechten Maustaste auf das Symbol und wählen Sie"
   },
   "hideButton": {
-    "message": "Schaltfläche ausblenden",
-    "description": "Text for hide button option"
+    "message": "Schaltfläche ausblenden"
   },
   "showButtonInstruction": {
-    "message": "Um die Schaltfläche wieder anzuzeigen, besuchen Sie die",
-    "description": "Instructions for showing the browser action button"
+    "message": "Um die Schaltfläche wieder anzuzeigen, besuchen Sie die"
   },
   "page": {
-    "message": "Seite, und",
-    "description": "Text for page reference"
+    "message": "Seite, und"
   },
   "extensionsPage": {
-    "message": "chrome://extensions/",
-    "description": "Extensions page URL"
+    "message": "chrome://extensions/"
   },
   "showButton": {
-    "message": "Schaltfläche anzeigen",
-    "description": "Text for show button option"
+    "message": "Schaltfläche anzeigen"
   },
   "clickOn": {
-    "message": "klicken Sie auf",
-    "description": "Text for click on instruction"
+    "message": "klicken Sie auf"
   },
   "buttonDefaultActionLabel": {
-    "message": "Beim Klicken auf die Browser-Aktion neu laden:",
-    "description": "Label for browser action dropdown"
+    "message": "Beim Klicken auf die Browser-Aktion neu laden:"
   },
   "allWindows": {
-    "message": "Alle Fenster",
-    "description": "Option to reload all windows"
+    "message": "Alle Fenster"
   },
   "currentWindow": {
-    "message": "Aktuelles Fenster",
-    "description": "Option to reload current window"
+    "message": "Aktuelles Fenster"
   },
   "pinnedTabs": {
-    "message": "Aktuelles Fenster, Angeheftete Tabs",
-    "description": "Option to reload pinned tabs"
+    "message": "Aktuelles Fenster, Angeheftete Tabs"
   },
   "unpinnedTabs": {
-    "message": "Aktuelles Fenster, Nicht angeheftete Tabs",
-    "description": "Option to reload unpinned tabs"
+    "message": "Aktuelles Fenster, Nicht angeheftete Tabs"
   },
   "contextMenuHeading": {
-    "message": "Kontextmenü (Rechtsklick)",
-    "description": "Heading for context menu section"
+    "message": "Kontextmenü (Rechtsklick)"
   },
   "contextMenuMultipleNote": {
-    "message": "Wenn Sie mehrere Kontrollkästchen aktiviert haben, werden alle Kontextmenüs unter einem übergeordneten Menü \"Alle Tabs neu laden\" platziert.",
-    "description": "Note about multiple context menu items"
+    "message": "Wenn Sie mehrere Kontrollkästchen aktiviert haben, werden alle Kontextmenüs unter einem übergeordneten Menü \"Alle Tabs neu laden\" platziert."
   },
   "contextMenuSingleNote": {
-    "message": "Wenn Sie nur ein Kontextmenü ausgewählt haben, wird es kein übergeordnetes Menü geben.",
-    "description": "Note about single context menu item"
+    "message": "Wenn Sie nur ein Kontextmenü ausgewählt haben, wird es kein übergeordnetes Menü geben."
   },
   "reloadWindowLabel": {
-    "message": "Alle Tabs im aktuellen Fenster neu laden",
-    "description": "Label for reload window checkbox"
+    "message": "Alle Tabs im aktuellen Fenster neu laden"
   },
   "reloadAllWindowsLabel": {
-    "message": "Alle Tabs in allen Fenstern neu laden",
-    "description": "Label for reload all windows checkbox"
+    "message": "Alle Tabs in allen Fenstern neu laden"
   },
   "reloadPinnedOnlyLabel": {
-    "message": "Nur angeheftete Tabs im aktuellen Fenster neu laden",
-    "description": "Label for reload pinned only checkbox"
+    "message": "Nur angeheftete Tabs im aktuellen Fenster neu laden"
   },
   "reloadUnpinnedOnlyLabel": {
-    "message": "Nur nicht angeheftete Tabs im aktuellen Fenster neu laden",
-    "description": "Label for reload unpinned only checkbox"
+    "message": "Nur nicht angeheftete Tabs im aktuellen Fenster neu laden"
   },
   "reloadGroupedOnlyLabel": {
-    "message": "Nur Tab-Gruppen im aktuellen Fenster neu laden",
-    "description": "Label for reload grouped only checkbox"
+    "message": "Nur Tab-Gruppen im aktuellen Fenster neu laden"
   },
   "reloadAllLeftLabel": {
-    "message": "Alle Tabs links neu laden",
-    "description": "Label for reload all left checkbox"
+    "message": "Alle Tabs links neu laden"
   },
   "reloadAllRightLabel": {
-    "message": "Alle Tabs rechts neu laden",
-    "description": "Label for reload all right checkbox"
+    "message": "Alle Tabs rechts neu laden"
   },
   "reloadAllMatchedLabel": {
-    "message": "Alle Tabs neu laden, die mit URLs beginnen (durch Kommas getrennt):",
-    "description": "Label for reload matched URLs textarea"
+    "message": "Alle Tabs neu laden, die mit URLs beginnen (durch Kommas getrennt):"
   },
   "reloadAllMatchedPlaceholder": {
-    "message": "www.beispiel1.de, www.beispiel2.de",
-    "description": "Placeholder for matched URLs textarea"
+    "message": "www.beispiel1.de, www.beispiel2.de"
   },
   "advancedHeading": {
-    "message": "Erweiterte Optionen",
-    "description": "Heading for advanced options section"
+    "message": "Erweiterte Optionen"
   },
   "bypassCacheLabel": {
-    "message": "Cache beim Neuladen umgehen",
-    "description": "Label for bypass cache checkbox"
+    "message": "Cache beim Neuladen umgehen"
   },
   "excludeActiveTabLabel": {
-    "message": "Aktiven Tab vom Neuladen ausschließen",
-    "description": "Label for exclude active tab checkbox"
+    "message": "Aktiven Tab vom Neuladen ausschließen"
   },
   "excludeAudioTabsLabel": {
-    "message": "Tabs mit Audio vom Neuladen ausschließen",
-    "description": "Label for exclude audio tabs checkbox"
+    "message": "Tabs mit Audio vom Neuladen ausschließen"
   },
   "reloadDelayLabel": {
-    "message": "Verzögerung zwischen dem Neuladen von Tabs:",
-    "description": "Label for reload delay dropdown"
+    "message": "Verzögerung zwischen dem Neuladen von Tabs:"
   },
   "delayNone": {
-    "message": "Keine",
-    "description": "No delay option"
+    "message": "Keine"
   },
   "keyboardShortcutHeading": {
-    "message": "Tastenkombinations-Optionen",
-    "description": "Heading for keyboard shortcut section"
+    "message": "Tastenkombinations-Optionen"
   },
   "keyboardShortcutSetup": {
-    "message": "Um die Tastenkombination einzurichten oder zu ändern, besuchen Sie bitte die Shortcuts-Seite in Chrome:",
-    "description": "Instructions for setting up keyboard shortcuts"
+    "message": "Um die Tastenkombination einzurichten oder zu ändern, besuchen Sie bitte die Shortcuts-Seite in Chrome:"
   },
   "keyboardShortcutCurrent": {
-    "message": "Aktuelle Tastenkombination:",
-    "description": "Label for current keyboard shortcut"
+    "message": "Aktuelle Tastenkombination:"
   },
   "keyboardShortcutNotSet": {
-    "message": "Nicht festgelegt",
-    "description": "Text when keyboard shortcut is not set"
+    "message": "Nicht festgelegt"
   },
   "closeButton": {
-    "message": "Schließen",
-    "description": "Text for close button"
+    "message": "Schließen"
   },
   "savedMessage": {
-    "message": "Gespeichert!",
-    "description": "Message shown when settings are saved"
+    "message": "Gespeichert!"
   },
   "extensionDeveloper": {
-    "message": "Erweiterung entwickelt von",
-    "description": "Text before developer name"
+    "message": "Erweiterung entwickelt von"
   },
   "sourceCodeAvailable": {
-    "message": "Quellcode verfügbar auf",
-    "description": "Text before GitHub link"
+    "message": "Quellcode verfügbar auf"
   },
   "iconBy": {
-    "message": "Symbol von",
-    "description": "Text before icon designer name"
+    "message": "Symbol von"
   },
   "reloadThisWindow": {
-    "message": "Dieses Fenster neu laden",
-    "description": "Context menu item for reloading current window"
+    "message": "Dieses Fenster neu laden"
   },
   "reloadAllWindowsContext": {
-    "message": "Alle Fenster neu laden",
-    "description": "Context menu item for reloading all windows"
+    "message": "Alle Fenster neu laden"
   },
   "reloadPinnedTabsContext": {
-    "message": "Angeheftete Tabs neu laden",
-    "description": "Context menu item for reloading pinned tabs"
+    "message": "Angeheftete Tabs neu laden"
   },
   "reloadUnpinnedTabsContext": {
-    "message": "Nicht angeheftete Tabs neu laden",
-    "description": "Context menu item for reloading unpinned tabs"
+    "message": "Nicht angeheftete Tabs neu laden"
   },
   "reloadAllLeftContext": {
-    "message": "Alle Tabs links neu laden",
-    "description": "Context menu item for reloading tabs to the left"
+    "message": "Alle Tabs links neu laden"
   },
   "reloadAllRightContext": {
-    "message": "Alle Tabs rechts neu laden",
-    "description": "Context menu item for reloading tabs to the right"
+    "message": "Alle Tabs rechts neu laden"
   },
   "reloadAllMatchedContext": {
-    "message": "Alle Tabs mit übereinstimmenden URLs neu laden",
-    "description": "Context menu item for reloading matched URLs"
+    "message": "Alle Tabs mit übereinstimmenden URLs neu laden"
   },
   "reloadAllTabGroups": {
-    "message": "Alle Tab-Gruppen neu laden",
-    "description": "Context menu item for reloading tab groups"
+    "message": "Alle Tab-Gruppen neu laden"
   },
   "cacheBypassed": {
-    "message": " (Cache umgangen)",
-    "description": "Suffix for context menu items when cache is bypassed"
+    "message": " (Cache umgangen)"
   },
   "unnamedGroup": {
-    "message": "Unbenannt",
-    "description": "Text for unnamed tab groups"
+    "message": "Unbenannt"
   },
   "clipboardCopySuccess": {
     "message": "Folgender Link '$1' wurde in die Zwischenablage kopiert. Sie können dort die Standardeinstellungen ändern. Aufgrund der Chrome-Sicherheit müssen Sie ihn manuell besuchen.",
-    "description": "Alert message when link is copied to clipboard",
     "placeholders": {
       "link": {
         "content": "$1",
@@ -255,7 +193,6 @@
   },
   "clipboardCopyFailed": {
     "message": "Kopieren in die Zwischenablage fehlgeschlagen. Bitte navigieren Sie manuell zu: $1",
-    "description": "Alert message when clipboard copy fails",
     "placeholders": {
       "link": {
         "content": "$1",

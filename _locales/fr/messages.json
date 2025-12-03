@@ -1,251 +1,189 @@
 {
   "extName": {
-    "message": "Recharger Tous les Onglets",
-    "description": "Name of the extension"
+    "message": "Recharger Tous les Onglets"
   },
   "extDescription": {
-    "message": "Rechargez tous les onglets à l'aide d'un raccourci clavier (alt + shift + r), du menu contextuel ou du bouton d'action du navigateur.",
-    "description": "Description of the extension"
+    "message": "Rechargez tous les onglets à l'aide d'un raccourci clavier (alt + shift + r), du menu contextuel ou du bouton d'action du navigateur."
   },
   "extActionTitle": {
-    "message": "Recharger Tous les Onglets",
-    "description": "Title for the browser action button"
+    "message": "Recharger Tous les Onglets"
   },
   "commandToggleReload": {
-    "message": "Activer/désactiver le rechargement",
-    "description": "Description for the keyboard command"
+    "message": "Activer/désactiver le rechargement"
   },
   "optionsTitle": {
-    "message": "Options de Recharger Tous les Onglets",
-    "description": "Title for the options page"
+    "message": "Options de Recharger Tous les Onglets"
   },
   "optionsHeader": {
-    "message": "Recharger Tous les Onglets",
-    "description": "Header text for options page"
+    "message": "Recharger Tous les Onglets"
   },
   "optionsSaveNote": {
-    "message": "Assurez-vous d'enregistrer les paramètres après avoir terminé l'édition !",
-    "description": "Note about saving settings"
+    "message": "Assurez-vous d'enregistrer les paramètres après avoir terminé l'édition !"
   },
   "visitExtensionPage": {
-    "message": "Visiter la page de l'extension",
-    "description": "Link text to visit extension page"
+    "message": "Visiter la page de l'extension"
   },
   "fileBugs": {
-    "message": "Signaler des bugs et des suggestions",
-    "description": "Link text to file bugs"
+    "message": "Signaler des bugs et des suggestions"
   },
   "followOnTwitter": {
-    "message": "Vous devriez me suivre sur Twitter",
-    "description": "Text before Twitter link"
+    "message": "Vous devriez me suivre sur Twitter"
   },
   "forFeatureRequests": {
-    "message": "pour les demandes de fonctionnalités ou le signalement de bugs !",
-    "description": "Text after Twitter handle"
+    "message": "pour les demandes de fonctionnalités ou le signalement de bugs !"
   },
   "browserActionHeading": {
-    "message": "Action du Navigateur",
-    "description": "Heading for browser action section"
+    "message": "Action du Navigateur"
   },
   "hideButtonInstruction": {
-    "message": "Pour supprimer le bouton, cliquez avec le bouton droit sur l'icône et choisissez",
-    "description": "Instructions for hiding the browser action button"
+    "message": "Pour supprimer le bouton, cliquez avec le bouton droit sur l'icône et choisissez"
   },
   "hideButton": {
-    "message": "Masquer le bouton",
-    "description": "Text for hide button option"
+    "message": "Masquer le bouton"
   },
   "showButtonInstruction": {
-    "message": "Pour afficher à nouveau le bouton, visitez la",
-    "description": "Instructions for showing the browser action button"
+    "message": "Pour afficher à nouveau le bouton, visitez la"
   },
   "page": {
-    "message": "page, et",
-    "description": "Text for page reference"
+    "message": "page, et"
   },
   "extensionsPage": {
-    "message": "chrome://extensions/",
-    "description": "Extensions page URL"
+    "message": "chrome://extensions/"
   },
   "showButton": {
-    "message": "Afficher le bouton",
-    "description": "Text for show button option"
+    "message": "Afficher le bouton"
   },
   "clickOn": {
-    "message": "cliquez sur",
-    "description": "Text for click on instruction"
+    "message": "cliquez sur"
   },
   "buttonDefaultActionLabel": {
-    "message": "Lors du clic sur l'action du navigateur, recharger :",
-    "description": "Label for browser action dropdown"
+    "message": "Lors du clic sur l'action du navigateur, recharger :"
   },
   "allWindows": {
-    "message": "Toutes les Fenêtres",
-    "description": "Option to reload all windows"
+    "message": "Toutes les Fenêtres"
   },
   "currentWindow": {
-    "message": "Fenêtre Actuelle",
-    "description": "Option to reload current window"
+    "message": "Fenêtre Actuelle"
   },
   "pinnedTabs": {
-    "message": "Fenêtre Actuelle, Onglets épinglés",
-    "description": "Option to reload pinned tabs"
+    "message": "Fenêtre Actuelle, Onglets épinglés"
   },
   "unpinnedTabs": {
-    "message": "Fenêtre Actuelle, Onglets non épinglés",
-    "description": "Option to reload unpinned tabs"
+    "message": "Fenêtre Actuelle, Onglets non épinglés"
   },
   "contextMenuHeading": {
-    "message": "Menu Contextuel (Clic Droit)",
-    "description": "Heading for context menu section"
+    "message": "Menu Contextuel (Clic Droit)"
   },
   "contextMenuMultipleNote": {
-    "message": "Lorsque vous avez plusieurs cases cochées, tous les menus contextuels seront placés sous un menu parent \"Recharger Tous les Onglets\".",
-    "description": "Note about multiple context menu items"
+    "message": "Lorsque vous avez plusieurs cases cochées, tous les menus contextuels seront placés sous un menu parent \"Recharger Tous les Onglets\"."
   },
   "contextMenuSingleNote": {
-    "message": "Lorsque vous n'avez qu'un seul menu contextuel sélectionné, il n'y aura pas de menu parent.",
-    "description": "Note about single context menu item"
+    "message": "Lorsque vous n'avez qu'un seul menu contextuel sélectionné, il n'y aura pas de menu parent."
   },
   "reloadWindowLabel": {
-    "message": "Recharger tous les onglets de la fenêtre actuelle",
-    "description": "Label for reload window checkbox"
+    "message": "Recharger tous les onglets de la fenêtre actuelle"
   },
   "reloadAllWindowsLabel": {
-    "message": "Recharger tous les onglets de toutes les fenêtres",
-    "description": "Label for reload all windows checkbox"
+    "message": "Recharger tous les onglets de toutes les fenêtres"
   },
   "reloadPinnedOnlyLabel": {
-    "message": "Recharger uniquement les onglets épinglés dans la fenêtre actuelle",
-    "description": "Label for reload pinned only checkbox"
+    "message": "Recharger uniquement les onglets épinglés dans la fenêtre actuelle"
   },
   "reloadUnpinnedOnlyLabel": {
-    "message": "Recharger uniquement les onglets non épinglés dans la fenêtre actuelle",
-    "description": "Label for reload unpinned only checkbox"
+    "message": "Recharger uniquement les onglets non épinglés dans la fenêtre actuelle"
   },
   "reloadGroupedOnlyLabel": {
-    "message": "Recharger uniquement les groupes d'onglets dans la fenêtre actuelle",
-    "description": "Label for reload grouped only checkbox"
+    "message": "Recharger uniquement les groupes d'onglets dans la fenêtre actuelle"
   },
   "reloadAllLeftLabel": {
-    "message": "Recharger tous les onglets à gauche",
-    "description": "Label for reload all left checkbox"
+    "message": "Recharger tous les onglets à gauche"
   },
   "reloadAllRightLabel": {
-    "message": "Recharger tous les onglets à droite",
-    "description": "Label for reload all right checkbox"
+    "message": "Recharger tous les onglets à droite"
   },
   "reloadAllMatchedLabel": {
-    "message": "Recharger tous les onglets qui commencent par des URL (séparées par des virgules) :",
-    "description": "Label for reload matched URLs textarea"
+    "message": "Recharger tous les onglets qui commencent par des URL (séparées par des virgules) :"
   },
   "reloadAllMatchedPlaceholder": {
-    "message": "www.exemple1.com, www.exemple2.com",
-    "description": "Placeholder for matched URLs textarea"
+    "message": "www.exemple1.com, www.exemple2.com"
   },
   "advancedHeading": {
-    "message": "Options Avancées",
-    "description": "Heading for advanced options section"
+    "message": "Options Avancées"
   },
   "bypassCacheLabel": {
-    "message": "Contourner le cache lors du rechargement",
-    "description": "Label for bypass cache checkbox"
+    "message": "Contourner le cache lors du rechargement"
   },
   "excludeActiveTabLabel": {
-    "message": "Exclure l'onglet actif actuel du rechargement",
-    "description": "Label for exclude active tab checkbox"
+    "message": "Exclure l'onglet actif actuel du rechargement"
   },
   "excludeAudioTabsLabel": {
-    "message": "Exclure les onglets lisant de l'audio du rechargement",
-    "description": "Label for exclude audio tabs checkbox"
+    "message": "Exclure les onglets lisant de l'audio du rechargement"
   },
   "reloadDelayLabel": {
-    "message": "Délai entre le rechargement des onglets :",
-    "description": "Label for reload delay dropdown"
+    "message": "Délai entre le rechargement des onglets :"
   },
   "delayNone": {
-    "message": "Aucun",
-    "description": "No delay option"
+    "message": "Aucun"
   },
   "keyboardShortcutHeading": {
-    "message": "Options de Raccourci Clavier",
-    "description": "Heading for keyboard shortcut section"
+    "message": "Options de Raccourci Clavier"
   },
   "keyboardShortcutSetup": {
-    "message": "Pour configurer le raccourci clavier ou le modifier, veuillez visiter la page des raccourcis dans Chrome :",
-    "description": "Instructions for setting up keyboard shortcuts"
+    "message": "Pour configurer le raccourci clavier ou le modifier, veuillez visiter la page des raccourcis dans Chrome :"
   },
   "keyboardShortcutCurrent": {
-    "message": "Raccourci clavier actuel :",
-    "description": "Label for current keyboard shortcut"
+    "message": "Raccourci clavier actuel :"
   },
   "keyboardShortcutNotSet": {
-    "message": "Non Défini",
-    "description": "Text when keyboard shortcut is not set"
+    "message": "Non Défini"
   },
   "closeButton": {
-    "message": "Fermer",
-    "description": "Text for close button"
+    "message": "Fermer"
   },
   "savedMessage": {
-    "message": "Enregistré !",
-    "description": "Message shown when settings are saved"
+    "message": "Enregistré !"
   },
   "extensionDeveloper": {
-    "message": "Extension développée par",
-    "description": "Text before developer name"
+    "message": "Extension développée par"
   },
   "sourceCodeAvailable": {
-    "message": "Code source disponible sur",
-    "description": "Text before GitHub link"
+    "message": "Code source disponible sur"
   },
   "iconBy": {
-    "message": "Icône par",
-    "description": "Text before icon designer name"
+    "message": "Icône par"
   },
   "reloadThisWindow": {
-    "message": "Recharger cette fenêtre",
-    "description": "Context menu item for reloading current window"
+    "message": "Recharger cette fenêtre"
   },
   "reloadAllWindowsContext": {
-    "message": "Recharger toutes les fenêtres",
-    "description": "Context menu item for reloading all windows"
+    "message": "Recharger toutes les fenêtres"
   },
   "reloadPinnedTabsContext": {
-    "message": "Recharger les onglets épinglés",
-    "description": "Context menu item for reloading pinned tabs"
+    "message": "Recharger les onglets épinglés"
   },
   "reloadUnpinnedTabsContext": {
-    "message": "Recharger les onglets non épinglés",
-    "description": "Context menu item for reloading unpinned tabs"
+    "message": "Recharger les onglets non épinglés"
   },
   "reloadAllLeftContext": {
-    "message": "Recharger tous les onglets à gauche",
-    "description": "Context menu item for reloading tabs to the left"
+    "message": "Recharger tous les onglets à gauche"
   },
   "reloadAllRightContext": {
-    "message": "Recharger tous les onglets à droite",
-    "description": "Context menu item for reloading tabs to the right"
+    "message": "Recharger tous les onglets à droite"
   },
   "reloadAllMatchedContext": {
-    "message": "Recharger tous les onglets avec des URL correspondantes",
-    "description": "Context menu item for reloading matched URLs"
+    "message": "Recharger tous les onglets avec des URL correspondantes"
   },
   "reloadAllTabGroups": {
-    "message": "Recharger tous les groupes d'onglets",
-    "description": "Context menu item for reloading tab groups"
+    "message": "Recharger tous les groupes d'onglets"
   },
   "cacheBypassed": {
-    "message": " (cache contourné)",
-    "description": "Suffix for context menu items when cache is bypassed"
+    "message": " (cache contourné)"
   },
   "unnamedGroup": {
-    "message": "Sans nom",
-    "description": "Text for unnamed tab groups"
+    "message": "Sans nom"
   },
   "clipboardCopySuccess": {
     "message": "Copié le lien suivant '$1' dans le presse-papiers. Vous pouvez modifier ses valeurs par défaut là-bas. En raison de la sécurité de Chrome, vous devez le visiter manuellement.",
-    "description": "Alert message when link is copied to clipboard",
     "placeholders": {
       "link": {
         "content": "$1",
@@ -255,7 +193,6 @@
   },
   "clipboardCopyFailed": {
     "message": "Échec de la copie dans le presse-papiers. Veuillez naviguer manuellement vers : $1",
-    "description": "Alert message when clipboard copy fails",
     "placeholders": {
       "link": {
         "content": "$1",
