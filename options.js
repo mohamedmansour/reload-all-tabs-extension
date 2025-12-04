@@ -218,6 +218,9 @@ const onClose = () => {
  */
 const onLoad = () => {
   onRestore();
+
+  document.body.dataset.ready = 'true';
+
   $('button-close').addEventListener('click', onClose);
   $('button-extension').addEventListener('click', onExtension);
   $('keyboardShortcutUpdate').addEventListener('click', onKeyboardShortcut);

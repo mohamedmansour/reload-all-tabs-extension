@@ -72,6 +72,11 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   color-scheme: light dark;
+  display: none;
+
+  &[data-ready="true"] {
+    display: block;
+  }
 }
 
 a {
