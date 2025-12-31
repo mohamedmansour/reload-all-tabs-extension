@@ -1,12 +1,13 @@
 # Reload all Tabs Extension
 
-This Chromium extension reloads or refreshes all tabs.
+This Chromium extension reloads, refreshes, abd schedules all tabs.
 
 ## Features
 
  - Context Menus reload
  - Browser Action reload
  - Over 15+ Reload Strategies
+ - Scheduled reload jobs
 
 ## Download
 
