@@ -13,7 +13,8 @@
     "default_title": "Reload All Tabs"
   },
   "background": {
-    "service_worker": "reload_controller.js"
+    "service_worker": "js/background/index.js",
+    "type": "module"
   },
   "options_page": "options.html",
   "permissions": [
