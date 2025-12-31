@@ -20,7 +20,8 @@
     "storage",
     "tabs",
     "contextMenus",
-    "tabGroups"
+    "tabGroups",
+    "alarms"
   ],
   "commands": {
     "reload": {

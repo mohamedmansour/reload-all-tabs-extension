@@ -15,6 +15,12 @@
   --focus-outline: #0066cc;
   --shadow-color: rgba(0, 0, 0, 0.1);
   
+  /* Job status colors */
+  --job-active-bg: #dcffe4;
+  --job-active-text: #22863a;
+  --job-paused-bg: #ffeef0;
+  --job-paused-text: #cb2431;
+  
   /* Spacing variables */
   --spacing-xs: 0.25em;
   --spacing-sm: 0.5em;
@@ -55,6 +61,10 @@
     --note-text: #ffffff;
     --focus-outline: #4db8ff;
     --shadow-color: rgba(0, 0, 0, 0.3);
+    --job-active-bg: #1f3d29;
+    --job-active-text: #56d364;
+    --job-paused-bg: #3d1f20;
+    --job-paused-text: #f85149;
   }
 }
 
@@ -282,6 +292,159 @@ main {
   margin-inline-end: var(--spacing-sm);
 }
 
+.job-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-block: var(--spacing-sm) var(--spacing-md);
+
+  & .job-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  & .job-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+
+    &[for="job-domain"] {
+      flex: 1;
+    }
+
+    & input[type="text"],
+    & input[type="number"],
+    & select {
+      width: 100%;
+    }
+  }
+
+  & .job-label {
+    font-weight: 600;
+  }
+
+  & .job-switches {
+    gap: var(--spacing-md);
+
+    & label {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+  }
+
+  & .job-form-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+}
+
+.jobs-table-wrapper {
+  margin-block-start: var(--spacing-sm);
+  overflow-x: auto;
+
+  & .jobs-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 32em;
+    background: var(--bg-primary);
+    border: 0.0625em solid var(--border-secondary);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+
+    & th,
+    & td {
+      padding: 0.75em 1em;
+      text-align: left;
+      border-block-end: 0.0625em solid var(--border-tertiary);
+    }
+
+    & th {
+      background-color: var(--bg-header);
+      font-weight: 600;
+      font-size: var(--font-size-small);
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+      color: var(--text-secondary);
+    }
+
+    & tbody tr {
+      transition: background-color var(--transition-fast) ease;
+
+      &:nth-of-type(odd) {
+        background-color: var(--bg-primary);
+      }
+
+      &:nth-of-type(even) {
+        background-color: var(--bg-secondary);
+      }
+
+      &:last-child td {
+        border-block-end: none;
+      }
+    }
+
+    & .jobs-table-actions {
+      width: 6em;
+      text-align: center;
+    }
+
+    & .job-actions-cell {
+      display: flex;
+      gap: var(--spacing-xs);
+
+      & .job-toggle,
+      & .job-remove {
+        padding: 0.25em 0.5em;
+        font-size: var(--font-size-base);
+        min-width: 2em;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      & .job-toggle {
+        &.job-play {
+          background-color: var(--job-active-text);
+          color: var(--bg-primary);
+          border-color: var(--job-active-text);
+        }
+
+        &.job-pause {
+          background-color: var(--job-paused-text);
+          color: var(--bg-primary);
+          border-color: var(--job-paused-text);
+        }
+      }
+    }
+
+    & .job-status {
+      display: inline-block;
+      padding: 0.15em 0.5em;
+      border-radius: var(--border-radius-sm);
+      font-size: var(--font-size-small);
+      font-weight: 500;
+
+      &.job-status-active {
+        background-color: var(--job-active-bg);
+        color: var(--job-active-text);
+      }
+
+      &.job-status-paused {
+        background-color: var(--job-paused-bg);
+        color: var(--job-paused-text);
+      }
+    }
+  }
+
+  & .jobs-empty {
+    margin-block-start: var(--spacing-sm);
+    color: var(--text-secondary);
+  }
+}
+
 #extension-footer {
   display: flex;
   align-items: center;
@@ -358,5 +521,9 @@ main {
   
   .option-group {
     gap: var(--spacing-sm);
+  }
+
+  .job-form-row {
+    flex-direction: column;
   }
 }

@@ -148,6 +148,61 @@
           </div>
         </div>
       </section>
+
+      <section class="extension-template" aria-labelledby="scheduler-heading">
+        <h2 class="extension-header" id="scheduler-heading">Scheduled Reload Jobs</h2>
+        <div class="extension-options">
+          <p>Automatically reload tabs that match a domain or URL pattern on a repeating schedule.</p>
+
+          <form id="job-form" class="job-form" autocomplete="off">
+            <div class="job-form-row">
+              <label class="job-field" for="job-domain">
+                <span class="job-label">Match domain or URL pattern</span>
+                <input id="job-domain" name="job-domain" type="text" placeholder="example.com or https://app.example.com/*" required />
+              </label>
+              <label class="job-field" for="job-interval">
+                <span class="job-label">Interval (minutes)</span>
+                <input id="job-interval" name="job-interval" type="number" min="0.1" step="0.1" value="5" required />
+              </label>
+            </div>
+
+            <div class="job-form-row job-switches">
+              <label for="job-bypassCache">
+                <input id="job-bypassCache" type="checkbox" name="job-bypassCache" />
+                Bypass cache on reload
+              </label>
+              <label for="job-excludeActive">
+                <input id="job-excludeActive" type="checkbox" name="job-excludeActive" />
+                Exclude active tab
+              </label>
+              <label for="job-excludeAudio">
+                <input id="job-excludeAudio" type="checkbox" name="job-excludeAudio" />
+                Exclude tabs playing audio
+              </label>
+            </div>
+
+            <div class="job-form-actions">
+              <button id="job-submit" type="submit">Add job</button>
+            </div>
+          </form>
+
+          <div class="jobs-table-wrapper">
+            <table class="jobs-table" aria-describedby="scheduler-heading">
+              <thead>
+                <tr>
+                  <th scope="col">Match</th>
+                  <th scope="col">Interval</th>
+                  <th scope="col">Options</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" class="jobs-table-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="jobs-table-body"></tbody>
+            </table>
+            <p id="jobs-empty" class="jobs-empty">No scheduled jobs yet.</p>
+          </div>
+        </div>
+      </section>
       
       <section class="extension-template" aria-labelledby="keyboard-heading">
         <h2 class="extension-header" id="keyboard-heading">Keyboard Shortcut Options</h2>
