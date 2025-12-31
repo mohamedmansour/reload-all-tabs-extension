@@ -64,43 +64,39 @@ export const updateContextMenu = async () => {
       const hasTabGroupsPermission = await hasPermission('tabGroups');
       if (hasTabGroupsPermission) {
         const currentTab = await chrome.windows.getCurrent();
-        // Bug in chromium where last opened window overrides the getcurrent only in tab group picker.
-        if (currentTab.focused) {
-          const windowId = currentTab.id;
-          const tabGroups = await chrome.tabGroups.query({ windowId });
-          console.info('Found tab groups for context menu:', tabGroups.length, windowId, currentTab);
-          if (tabGroups.length > 0) {
+        const windowId = currentTab.id;
+        const tabGroups = await chrome.tabGroups.query({ windowId });
+        if (tabGroups.length > 0) {
+          chrome.contextMenus.create({
+            id: 'reloadGroupedOnly',
+            type: 'normal',
+            title: `Reload tab groups${attributions}`,
+            contexts: ['all']
+          });
+
+          const colorEmojis = {
+            grey: '⬛',
+            blue: '🟦',
+            red: '🟥',
+            yellow: '🟨',
+            green: '🟩',
+            pink: '⬜',
+            purple: '🟪',
+            cyan: '🟦',
+            orange: '🟧'
+          };
+
+          for (const tabGroup of tabGroups) {
+            const colorEmoji = colorEmojis[tabGroup.color] || '⬛';
+            const groupTitle = tabGroup.title || 'Unnamed';
+
             chrome.contextMenus.create({
-              id: 'reloadGroupedOnly',
+              id: `${tabGroup.id}`,
+              parentId: 'reloadGroupedOnly',
               type: 'normal',
-              title: `Reload tab groups${attributions}`,
+              title: `${colorEmoji} ${groupTitle}`,
               contexts: ['all']
             });
-
-            const colorEmojis = {
-              grey: '⬛',
-              blue: '🟦',
-              red: '🟥',
-              yellow: '🟨',
-              green: '🟩',
-              pink: '⬜',
-              purple: '🟪',
-              cyan: '🟦',
-              orange: '🟧'
-            };
-
-            for (const tabGroup of tabGroups) {
-              const colorEmoji = colorEmojis[tabGroup.color] || '⬛';
-              const groupTitle = tabGroup.title || 'Unnamed';
-
-              chrome.contextMenus.create({
-                id: `${tabGroup.id}`,
-                parentId: 'reloadGroupedOnly',
-                type: 'normal',
-                title: `${colorEmoji} ${groupTitle}`,
-                contexts: ['all']
-              });
-            }
           }
         }
       }
