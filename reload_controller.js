@@ -52,6 +52,15 @@ const MIN_ALARM_INTERVAL_MINUTES = 0.1;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/**
+ * Check if extension has a specific permission
+ * @param {string} permission Permission name
+ * @returns {Promise<boolean>} Whether permission is granted
+ */
+const hasPermission = async (permission) => {
+  return chrome.permissions.contains({ permissions: [permission] });
+};
+
 // Mutex to prevent concurrent context menu updates.
 let isUpdatingContextMenu = false;
 let pendingContextMenuUpdate = false;
@@ -83,6 +92,12 @@ const matchesJobPattern = (url, pattern) => {
 };
 
 const clearJobAlarms = async () => {
+  // Check if we have alarms permission
+  const hasAlarmsPermission = await hasPermission('alarms');
+  if (!hasAlarmsPermission) {
+    return;
+  }
+
   const alarms = await chrome.alarms.getAll();
   await Promise.all(
     alarms
@@ -92,6 +107,12 @@ const clearJobAlarms = async () => {
 };
 
 const scheduleAllJobs = async () => {
+  // Check if we have alarms permission before scheduling
+  const hasAlarmsPermission = await hasPermission('alarms');
+  if (!hasAlarmsPermission) {
+    return;
+  }
+
   await clearJobAlarms();
 
   const { scheduledJobs } = await getSetting(['scheduledJobs']);
@@ -216,14 +237,60 @@ const executeScheduledJob = async (jobId) => {
   }
 };
 
-chrome.alarms.onAlarm.addListener(async (alarm) => {
-  if (!isJobAlarm(alarm.name)) {
+// Track which permission listeners have been registered to avoid duplicates
+const registeredPermissionListeners = {
+  tabGroups: false,
+  alarms: false
+};
+
+/**
+ * Initialize tabGroups feature (listeners)
+ */
+const initializeTabGroups = () => {
+  if (registeredPermissionListeners.tabGroups) {
     return;
   }
+  registeredPermissionListeners.tabGroups = true;
 
-  const jobId = alarm.name.slice(JOB_ALARM_PREFIX.length);
-  await executeScheduledJob(jobId);
-});
+  chrome.tabGroups.onCreated.addListener(async () => await updateContextMenu());
+  chrome.tabGroups.onRemoved.addListener(async () => await updateContextMenu());
+  chrome.tabGroups.onUpdated.addListener(async () => await updateContextMenu());
+};
+
+/**
+ * Initialize alarms feature (listeners)
+ */
+const initializeAlarms = () => {
+  if (registeredPermissionListeners.alarms) {
+    return;
+  }
+  registeredPermissionListeners.alarms = true;
+
+  chrome.alarms.onAlarm.addListener(async (alarm) => {
+    if (!isJobAlarm(alarm.name)) {
+      return;
+    }
+
+    const jobId = alarm.name.slice(JOB_ALARM_PREFIX.length);
+    await executeScheduledJob(jobId);
+  });
+};
+
+/**
+ * Handle newly granted permissions
+ * @param {chrome.permissions.Permissions} permissions The granted permissions
+ */
+const onPermissionsAdded = async (permissions) => {
+  if (permissions.permissions?.includes('tabGroups')) {
+    initializeTabGroups();
+    await updateContextMenu();
+  }
+
+  if (permissions.permissions?.includes('alarms')) {
+    initializeAlarms();
+    await scheduleAllJobs();
+  }
+};
 
 /**
  * Initializes the reload extension.
@@ -233,11 +300,19 @@ const init = async () => {
   chrome.storage.onChanged.addListener(async (changes) => await onStorageChanged(changes));
   chrome.commands.onCommand.addListener(async () => await reload());
   chrome.contextMenus.onClicked.addListener((info) => onMenuClicked(info));
+  chrome.permissions.onAdded.addListener(onPermissionsAdded);
 
-  // Listen for tab group changes
-  chrome.tabGroups.onCreated.addListener(async () => await updateContextMenu());
-  chrome.tabGroups.onRemoved.addListener(async () => await updateContextMenu());
-  chrome.tabGroups.onUpdated.addListener(async () => await updateContextMenu());
+  // Initialize tabGroups listeners if we already have permission
+  const hasTabGroupsPermission = await hasPermission('tabGroups');
+  if (hasTabGroupsPermission) {
+    initializeTabGroups();
+  }
+
+  // Initialize alarms listeners if we already have permission
+  const hasAlarmsPermission = await hasPermission('alarms');
+  if (hasAlarmsPermission) {
+    initializeAlarms();
+  }
 
   await updateContextMenu();
   await initializeJobScheduler();
@@ -395,40 +470,47 @@ const updateContextMenu = async () => {
     }
 
     if (setting.reloadGroupedOnly) {
-      chrome.contextMenus.create({
-        id: 'reloadGroupedOnly',
-        type: 'normal',
-        title: `Reload tab groups${attributions}`,
-        contexts: ['all']
-      });
+      // Check if we have tabGroups permission
+      const hasTabGroupsPermission = await hasPermission('tabGroups');
+      if (hasTabGroupsPermission) {
+        const { id: windowId } = await chrome.windows.getCurrent();
+        const tabGroups = await chrome.tabGroups.query({ windowId });
 
-      const { id: windowId } = await chrome.windows.getCurrent();
-      const tabGroups = await chrome.tabGroups.query({ windowId });
+        // Only create menu if there are tab groups
+        if (tabGroups.length > 0) {
+          chrome.contextMenus.create({
+            id: 'reloadGroupedOnly',
+            type: 'normal',
+            title: `Reload tab groups${attributions}`,
+            contexts: ['all']
+          });
 
-      // Color emoji mapping for tab groups
-      const colorEmojis = {
-        grey: '⬛',
-        blue: '🟦',
-        red: '🟥',
-        yellow: '🟨',
-        green: '🟩',
-        pink: '⬜',
-        purple: '🟪',
-        cyan: '🟦',
-        orange: '🟧'
-      };
+          // Color emoji mapping for tab groups
+          const colorEmojis = {
+            grey: '⬛',
+            blue: '🟦',
+            red: '🟥',
+            yellow: '🟨',
+            green: '🟩',
+            pink: '⬜',
+            purple: '🟪',
+            cyan: '🟦',
+            orange: '🟧'
+          };
 
-      for (const tabGroup of tabGroups) {
-        const colorEmoji = colorEmojis[tabGroup.color] || '⬛';
-        const groupTitle = tabGroup.title || 'Unnamed';
+          for (const tabGroup of tabGroups) {
+            const colorEmoji = colorEmojis[tabGroup.color] || '⬛';
+            const groupTitle = tabGroup.title || 'Unnamed';
 
-        chrome.contextMenus.create({
-          id: `${tabGroup.id}`,
-          parentId: 'reloadGroupedOnly',
-          type: 'normal',
-          title: `${colorEmoji} ${groupTitle}`,
-          contexts: ['all']
-        });
+            chrome.contextMenus.create({
+              id: `${tabGroup.id}`,
+              parentId: 'reloadGroupedOnly',
+              type: 'normal',
+              title: `${colorEmoji} ${groupTitle}`,
+              contexts: ['all']
+            });
+          }
+        }
       }
     }
 
@@ -599,20 +681,23 @@ const reloadStrategy = async (tab, strategy, options = {}) => {
   }
 
   if (options.reloadAllMatched) {
-    const { reloadAllMatched: urlString } = await getSetting(['reloadAllMatched']);
-    const isUrlMatched = urlString
-      .split(',')
-      .map(url => url.trim())
-      .some(url => tab.url.startsWith(url));
+    const hasTabsPermission = await hasPermission('tabs');
+    if (hasTabsPermission) {
+      const { reloadAllMatched: urlString } = await getSetting(['reloadAllMatched']);
+      const isUrlMatched = urlString
+        .split(',')
+        .map(url => url.trim())
+        .some(url => tab.url.startsWith(url));
 
-    if (!isUrlMatched) {
-      issueReload = false;
+      if (!isUrlMatched) {
+        issueReload = false;
+      }
     }
   }
 
   if (issueReload) {
     const { bypassCache } = await getSetting(['bypassCache']);
-    console.log(`Reloading ${tab.url}, cache bypassed: ${bypassCache}`);
+    console.log(`Reloading ${tab.url || tab.id}, cache bypassed: ${bypassCache}`);
     await chrome.tabs.reload(tab.id, { bypassCache });
   }
 };
@@ -623,6 +708,11 @@ const reloadStrategy = async (tab, strategy, options = {}) => {
  * @param {number} groupId Tab group ID to reload
  */
 const reloadGroupedTabs = async (windowId, groupId) => {
+  const hasTabGroupsPermission = await hasPermission('tabGroups');
+  if (!hasTabGroupsPermission) {
+    return;
+  }
+
   const tabs = await chrome.tabs.query({ windowId, groupId });
   const { reloadDelay } = await getSetting(['reloadDelay']);
   const strategy = {};

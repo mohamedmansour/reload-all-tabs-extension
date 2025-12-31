@@ -20,6 +20,36 @@ const debounce = (func, delay) => {
 };
 
 /**
+ * Check if extension has a specific permission
+ * @param {string} permission Permission name
+ * @returns {Promise<boolean>} Whether permission is granted
+ */
+const hasPermission = async (permission) => {
+  return hasPermissions([permission]);
+};
+
+const hasPermissions = async (permissions) => {
+  return chrome.permissions.contains({ permissions });
+};
+
+/**
+ * Request a permission from the user
+ * @param {string[]} permissions Permission names
+ * @returns {Promise<boolean>} Whether permission was granted
+ */
+const requestPermissions = async (permissions) => {
+  return chrome.permissions.request({ permissions });
+};
+
+/**
+ * Map of settings to their required permissions
+ */
+const PERMISSION_REQUIREMENTS = {
+  reloadGroupedOnly: ['tabGroups'],
+  reloadAllMatched: ['tabs'],
+};
+
+/**
  * Flash a save message near an element using CSS Anchor Positioning
  * @param {HTMLElement} element The element to flash near
  * @returns {Function} Function to stop the flash
@@ -31,28 +61,28 @@ const flashMessage = (() => {
 
   return (element) => {
     const info = $('info-message');
-    
+
     // Clear any existing timeouts
     if (hideTimeout) clearTimeout(hideTimeout);
     if (cleanupTimeout) clearTimeout(cleanupTimeout);
-    
+
     // Clean up previous anchor immediately if switching elements
     if (currentAnchor && currentAnchor !== element) {
       currentAnchor.style.removeProperty('anchor-name');
     }
-    
+
     // Set the new anchor
     element.style.setProperty('anchor-name', '--save-anchor');
     currentAnchor = element;
-    
+
     // Show the message
     info.dataset.visible = 'true';
-    
+
     return () => {
       // Hide after 1 second
       hideTimeout = setTimeout(() => {
         info.dataset.visible = 'false';
-        
+
         // Clean up anchor after fade-out animation completes (300ms)
         cleanupTimeout = setTimeout(() => {
           if (currentAnchor === element) {
@@ -145,7 +175,7 @@ const renderScheduledJobs = (jobs = []) => {
 
     const actionsCell = document.createElement('td');
     actionsCell.className = 'job-actions-cell';
-    
+
     const toggleButton = document.createElement('button');
     toggleButton.type = 'button';
     toggleButton.className = `job-toggle ${isEnabled ? 'job-pause' : 'job-play'}`;
@@ -215,6 +245,16 @@ const attachJobHandlers = () => {
         return;
       }
 
+      // Request alarms permission if not already granted
+      const hasAlarmsPermission = await hasPermission('alarms');
+      if (!hasAlarmsPermission) {
+        const granted = await requestPermissions(['alarms', 'tabs']);
+        if (!granted) {
+          alert('The alarms permission is required to schedule automatic tab reloads.');
+          return;
+        }
+      }
+
       const updatedJobs = [...scheduledJobsState, newJob];
       await saveScheduledJobs(updatedJobs);
       renderScheduledJobs(updatedJobs);
@@ -267,6 +307,34 @@ const attachJobHandlers = () => {
 };
 
 /**
+ * Check and request required permissions for a setting
+ * @param {string} id Setting ID
+ * @param {*} newValue The new value being set
+ * @returns {Promise<boolean>} Whether to proceed with saving (true) or abort (false)
+ */
+const ensurePermissions = async (id, newValue) => {
+  const requiredPermissions = PERMISSION_REQUIREMENTS[id];
+  if (!requiredPermissions) {
+    return true;
+  }
+
+  // For checkboxes, only request permission when enabling
+  // For other inputs, request permission if there's a truthy value
+  const needsPermission = typeof newValue === 'boolean' ? newValue : !!newValue;
+  if (!needsPermission) {
+    return true;
+  }
+
+  const hasIt = await hasPermissions(requiredPermissions);
+  if (hasIt) {
+    return true;
+  }
+
+  const granted = await requestPermissions(requiredPermissions);
+  return granted;
+};
+
+/**
  * Setup a checkbox with storage sync
  * @param {string} id Element ID
  * @param {boolean} storedValue Current stored value
@@ -276,15 +344,24 @@ const setupCheckbox = async (id, storedValue, defaultValue = false) => {
   const element = $(id);
   const value = storedValue ?? defaultValue;
   element.checked = value;
-  
+
   // Save default value to storage if not set
   if (storedValue === undefined && defaultValue !== false) {
     await chrome.storage.sync.set({ [id]: defaultValue });
   }
-  
+
   element.addEventListener('change', async (e) => {
+    const isChecked = e.target.checked;
+
+    // Check if this setting requires a permission
+    const canProceed = await ensurePermissions(id, isChecked);
+    if (!canProceed) {
+      e.target.checked = false;
+      return;
+    }
+
     const stopFlashing = flashMessage(e.target);
-    await chrome.storage.sync.set({ [id]: e.target.checked });
+    await chrome.storage.sync.set({ [id]: isChecked });
     stopFlashing();
   });
 };
@@ -299,15 +376,24 @@ const setupDropdown = async (id, storedValue, defaultValue = '') => {
   const element = $(id);
   const value = storedValue ?? defaultValue;
   element.value = value;
-  
+
   // Save default value to storage if not set
   if (storedValue === undefined && defaultValue !== '') {
     await chrome.storage.sync.set({ [id]: defaultValue });
   }
-  
+
   element.addEventListener('change', async (e) => {
+    const newValue = e.target.value;
+
+    // Check if this setting requires a permission
+    const canProceed = await ensurePermissions(id, newValue);
+    if (!canProceed) {
+      e.target.value = value; // Revert to previous value
+      return;
+    }
+
     const stopFlashing = flashMessage(e.target);
-    await chrome.storage.sync.set({ [id]: e.target.value });
+    await chrome.storage.sync.set({ [id]: newValue });
     stopFlashing();
   });
 };
@@ -322,18 +408,25 @@ const setupTextarea = async (id, storedValue, defaultValue = '') => {
   const element = $(id);
   const value = storedValue ?? defaultValue;
   element.value = value;
-  
+
   // Save default value to storage if not set
   if (storedValue === undefined && defaultValue !== '') {
     await chrome.storage.sync.set({ [id]: defaultValue });
   }
-  
-  const debouncedSave = debounce(async (value) => {
+
+  const debouncedSave = debounce(async (newValue) => {
+    // Check if this setting requires a permission
+    const canProceed = await ensurePermissions(id, newValue);
+    if (!canProceed) {
+      element.value = value; // Revert to previous value
+      return;
+    }
+
     const stopFlashing = flashMessage(element);
-    await chrome.storage.sync.set({ [id]: value });
+    await chrome.storage.sync.set({ [id]: newValue });
     stopFlashing();
   }, 300);
-  
+
   element.addEventListener('input', (e) => {
     debouncedSave(e.target.value);
   });
@@ -353,7 +446,7 @@ const onExtension = () => {
  */
 const onKeyboardShortcut = async (e) => {
   const text = e.target.innerText;
-  
+
   try {
     await navigator.clipboard.writeText(text);
     alert(`Copied the following link '${text}' to clipboard. You can change its defaults there. Due to Chrome security, you need to visit it manually.`);
@@ -386,7 +479,7 @@ const onRestore = async () => {
   ];
 
   const settings = await chrome.storage.sync.get(settingsToFetch);
-  
+
   $('version').innerText = ` (v${settings.version ?? 'Unknown'})`;
 
   await setupCheckbox('reloadWindow', settings.reloadWindow, true);
