@@ -79,16 +79,18 @@ const reloadStrategy = async (tab, strategy, options = {}) => {
     }
   }
 
-  if (options.reloadAllMatched) {
+  if (options.reloadAllMatched || options.excludeAllMatched) {
     const hasTabsPermission = await hasPermission('tabs');
     if (hasTabsPermission) {
-      const { reloadAllMatched: urlString } = await getSetting(['reloadAllMatched']);
+      const settingKey = options.reloadAllMatched ? 'reloadAllMatched' : 'excludeAllMatched';
+      const { [settingKey]: urlString } = await getSetting([settingKey]);
       const isUrlMatched = urlString
         .split(',')
         .map(url => url.trim())
         .some(url => tab.url.startsWith(url));
 
-      if (!isUrlMatched) {
+      // reloadAllMatched: only reload if matched; excludeAllMatched: skip if matched.
+      if (options.reloadAllMatched ? !isUrlMatched : isUrlMatched) {
         issueReload = false;
       }
     }

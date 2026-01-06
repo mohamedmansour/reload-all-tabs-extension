@@ -34,6 +34,7 @@ export const updateContextMenu = async () => {
       'reloadAllLeft',
       'reloadAllRight',
       'reloadAllMatched',
+      'excludeAllMatched',
       'reloadGroupedOnly'
     ]);
 
@@ -46,7 +47,8 @@ export const updateContextMenu = async () => {
       { id: 'reloadUnpinnedOnly', enabled: setting.reloadUnpinnedOnly, title: `Reload unpinned tabs${attributions}` },
       { id: 'reloadAllLeft', enabled: setting.reloadAllLeft, title: `Reload all tabs to the left${attributions}` },
       { id: 'reloadAllRight', enabled: setting.reloadAllRight, title: `Reload all tabs to the right${attributions}` },
-      { id: 'reloadAllMatched', enabled: setting.reloadAllMatched, title: `Reload all tabs with matched urls${attributions}` }
+      { id: 'reloadAllMatched', enabled: setting.reloadAllMatched, title: `Reload all tabs with matched urls${attributions}` },
+      { id: 'excludeAllMatched', enabled: setting.excludeAllMatched, title: `Reload all tabs except matched urls${attributions}` }
     ];
 
     for (const item of menuItems) {
@@ -207,6 +209,7 @@ export const onMenuClicked = async (info, tab) => {
     reloadAllLeft: () => reloadWindow({ id: windowId }, { reloadAllLeft: true }),
     reloadAllRight: () => reloadWindow({ id: windowId }, { reloadAllRight: true }),
     reloadAllMatched: () => reloadWindow({ id: windowId }, { reloadAllMatched: true }),
+    excludeAllMatched: () => reloadWindow({ id: windowId }, { excludeAllMatched: true }),
     reloadGroupedOnly: () => reloadGroupedTabs(windowId, +menuItemId),
     jobsStartAll: async () => await setAllJobsEnabled(true),
     jobsStopAll: async () => await setAllJobsEnabled(false),

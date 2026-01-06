@@ -13,9 +13,6 @@ export const getSetting = async (keys) => {
 
   for (const key of keys) {
     switch (key) {
-      case 'version':
-        results[key] = values[key];
-        break;
       case 'buttonDefaultAction':
         results[key] = values[key] ?? 'window';
         break;
@@ -23,6 +20,8 @@ export const getSetting = async (keys) => {
         results[key] = values[key] === undefined ? true : values[key] === true;
         break;
       case 'reloadAllMatched':
+      case 'excludeAllMatched':
+      case 'version':
         results[key] = values[key];
         break;
       case 'reloadDelay':

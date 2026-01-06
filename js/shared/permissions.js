@@ -35,4 +35,5 @@ export const requestPermissions = async (permissions) => {
 export const PERMISSION_REQUIREMENTS = {
   reloadGroupedOnly: ['tabGroups'],
   reloadAllMatched: ['tabs'],
+  excludeAllMatched: ['tabs'],
 };
