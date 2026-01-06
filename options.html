@@ -103,15 +103,15 @@
           </div>
           <div class="option-group">
             <label for="reloadAllMatched">
-              Reload all tabs that starts with urls (comma separated):
+              Reload all tabs matching URL patterns (comma separated, * for wildcard):
             </label>
-            <textarea id="reloadAllMatched" name="reloadAllMatched" placeholder="www.example1.com, www.example2.com" maxlength="1000" rows="3"></textarea>
+            <textarea id="reloadAllMatched" name="reloadAllMatched" placeholder="example.com, *.github.com/*, https://app.example.com/*" maxlength="1000" rows="3"></textarea>
           </div>
           <div class="option-group">
-            <label for="excludeAllMatched">
-              Exclude all tabs that starts with urls (comma separated):
+            <label for="reloadSkipMatched">
+              Skip all tabs matching URL patterns (comma separated, * for wildcard):
             </label>
-            <textarea id="excludeAllMatched" name="excludeAllMatched" placeholder="www.example1.com, www.example2.com" maxlength="1000" rows="3"></textarea>
+            <textarea id="reloadSkipMatched" name="reloadSkipMatched" placeholder="example.com, *.github.com/*, https://app.example.com/*" maxlength="1000" rows="3"></textarea>
           </div>
         </div>
       </section>

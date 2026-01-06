@@ -42,7 +42,7 @@ const onRestore = async () => {
     'reloadAllLeft',
     'reloadAllRight',
     'reloadAllMatched',
-    'excludeAllMatched',
+    'reloadSkipMatched',
     'reloadGroupedOnly',
     'bypassCache',
     'excludeActiveTab',
@@ -71,7 +71,7 @@ const onRestore = async () => {
   await setupDropdown('buttonDefaultAction', settings.buttonDefaultAction, 'window');
   await setupDropdown('reloadDelay', settings.reloadDelay, '0');
   await setupTextarea('reloadAllMatched', settings.reloadAllMatched);
-  await setupTextarea('excludeAllMatched', settings.excludeAllMatched);
+  await setupTextarea('reloadSkipMatched', settings.reloadSkipMatched);
 
   renderScheduledJobs(settings.scheduledJobs);
 

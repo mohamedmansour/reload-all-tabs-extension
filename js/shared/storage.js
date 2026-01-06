@@ -20,7 +20,7 @@ export const getSetting = async (keys) => {
         results[key] = values[key] === undefined ? true : values[key] === true;
         break;
       case 'reloadAllMatched':
-      case 'excludeAllMatched':
+      case 'reloadSkipMatched':
       case 'version':
         results[key] = values[key];
         break;

@@ -4,6 +4,7 @@
 
 import { getSetting } from '../shared/storage.js';
 import { hasPermission } from '../shared/permissions.js';
+import { matchesPattern } from '../shared/matching.js';
 
 const JOB_ALARM_PREFIX = 'reload-job:';
 const MIN_ALARM_INTERVAL_MINUTES = 0.1;
@@ -13,28 +14,6 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const isJobAlarm = (name) => typeof name === 'string' && name.startsWith(JOB_ALARM_PREFIX);
 
 const getJobAlarmName = (jobId) => `${JOB_ALARM_PREFIX}${jobId}`;
-
-const escapeForRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-const matchesJobPattern = (url, pattern) => {
-  if (!pattern || !url) {
-    return false;
-  }
-
-  const normalizedPattern = pattern.trim().toLowerCase();
-  const normalizedUrl = url.toLowerCase();
-
-  if (!normalizedPattern) {
-    return false;
-  }
-
-  if (normalizedPattern.includes('*')) {
-    const regex = new RegExp(`^${normalizedPattern.split('*').map(escapeForRegex).join('.*')}$`);
-    return regex.test(normalizedUrl);
-  }
-
-  return normalizedUrl.includes(normalizedPattern);
-};
 
 const clearJobAlarms = async () => {
   const hasAlarmsPermission = await hasPermission('alarms');
@@ -155,7 +134,7 @@ export const executeScheduledJob = async (jobId) => {
   }
 
   const allTabs = await chrome.tabs.query({});
-  const matchedTabs = allTabs.filter((tab) => matchesJobPattern(tab.url ?? '', job.domain));
+  const matchedTabs = allTabs.filter((tab) => matchesPattern(tab.url ?? '', job.domain));
 
   if (matchedTabs.length === 0) {
     return;

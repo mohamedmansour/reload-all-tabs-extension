@@ -4,6 +4,7 @@
 
 import { getSetting } from '../shared/storage.js';
 import { hasPermission } from '../shared/permissions.js';
+import { matchesAnyPattern } from '../shared/matching.js';
 
 /**
  * Reload all tabs in a window based on options
@@ -79,17 +80,14 @@ const reloadStrategy = async (tab, strategy, options = {}) => {
     }
   }
 
-  if (options.reloadAllMatched || options.excludeAllMatched) {
+  if (options.reloadAllMatched || options.reloadSkipMatched) {
     const hasTabsPermission = await hasPermission('tabs');
     if (hasTabsPermission) {
-      const settingKey = options.reloadAllMatched ? 'reloadAllMatched' : 'excludeAllMatched';
-      const { [settingKey]: urlString } = await getSetting([settingKey]);
-      const isUrlMatched = urlString
-        .split(',')
-        .map(url => url.trim())
-        .some(url => tab.url.startsWith(url));
+      const settingKey = options.reloadAllMatched ? 'reloadAllMatched' : 'reloadSkipMatched';
+      const { [settingKey]: patternList } = await getSetting([settingKey]);
+      const isUrlMatched = matchesAnyPattern(tab.url, patternList);
 
-      // reloadAllMatched: only reload if matched; excludeAllMatched: skip if matched.
+      // reloadAllMatched: only reload if matched; reloadSkipMatched: skip if matched.
       if (options.reloadAllMatched ? !isUrlMatched : isUrlMatched) {
         issueReload = false;
       }
