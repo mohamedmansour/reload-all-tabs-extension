@@ -1,0 +1,23 @@
+{
+  "name": "reload-all-tabs-extension",
+  "version": "6.5.0",
+  "description": "Reload All tabs using keyboard shortcut, context menu, browser action button, or by schedule.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "test:watch": "node --test --watch",
+    "test:coverage": "node --test --experimental-test-coverage"
+  },
+  "author": "Mohamed Mansour",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mohamedmansour/reload-all-tabs-extension"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "jsdom": "^27.4.0"
+  }
+}
