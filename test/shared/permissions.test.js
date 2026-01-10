@@ -23,6 +23,7 @@ const PERMISSION_REQUIREMENT_CASES = [
   { setting: 'reloadGroupedOnly', permissions: ['tabGroups'] },
   { setting: 'reloadAllMatched', permissions: ['tabs'] },
   { setting: 'reloadSkipMatched', permissions: ['tabs'] },
+  { setting: 'skipMatchedTabs', permissions: ['tabs'] },
 ];
 
 /** hasPermission test cases */

@@ -165,6 +165,71 @@ describe('reloadWindow', () => {
     assert.equal(reloadSpy.mock.calls[0].arguments[0], 2);
   });
 
+  it('should globally skip tabs matching skipMatchedTabs setting', async () => {
+    chromeMock._addPermission('tabs');
+    const reloadSpy = mock.fn(() => Promise.resolve());
+    chromeMock.tabs.reload = reloadSpy;
+    chromeMock.tabs.query = async () => [
+      { id: 1, url: 'https://example.com/page' },
+      { id: 2, url: 'https://other.com/page' },
+      { id: 3, url: 'https://github.com/repo' }
+    ];
+    chromeMock._setStorage('skipMatchedTabs', 'example.com, github.com');
+
+    await reloadWindow({ id: 1 });
+
+    assert.equal(reloadSpy.mock.callCount(), 1);
+    assert.equal(reloadSpy.mock.calls[0].arguments[0], 2);
+  });
+
+  it('should apply skipMatchedTabs with pinned tabs filter', async () => {
+    chromeMock._addPermission('tabs');
+    const reloadSpy = mock.fn(() => Promise.resolve());
+    chromeMock.tabs.reload = reloadSpy;
+    chromeMock.tabs.query = async () => [
+      { id: 1, url: 'https://example.com/page', pinned: true },
+      { id: 2, url: 'https://other.com/page', pinned: true },
+      { id: 3, url: 'https://third.com/page', pinned: false }
+    ];
+    chromeMock._setStorage('skipMatchedTabs', 'example.com');
+
+    await reloadWindow({ id: 1 }, { reloadPinnedOnly: true });
+
+    // Only tab 2 should reload (pinned and not skipped)
+    assert.equal(reloadSpy.mock.callCount(), 1);
+    assert.equal(reloadSpy.mock.calls[0].arguments[0], 2);
+  });
+
+  it('should not skip tabs when skipMatchedTabs is not set', async () => {
+    chromeMock._addPermission('tabs');
+    const reloadSpy = mock.fn(() => Promise.resolve());
+    chromeMock.tabs.reload = reloadSpy;
+    chromeMock.tabs.query = async () => [
+      { id: 1, url: 'https://example.com/page' },
+      { id: 2, url: 'https://other.com/page' }
+    ];
+
+    await reloadWindow({ id: 1 });
+
+    assert.equal(reloadSpy.mock.callCount(), 2);
+  });
+
+  it('should not apply skipMatchedTabs without tabs permission', async () => {
+    // Note: tabs permission NOT added
+    const reloadSpy = mock.fn(() => Promise.resolve());
+    chromeMock.tabs.reload = reloadSpy;
+    chromeMock.tabs.query = async () => [
+      { id: 1, url: 'https://example.com/page' },
+      { id: 2, url: 'https://other.com/page' }
+    ];
+    chromeMock._setStorage('skipMatchedTabs', 'example.com');
+
+    await reloadWindow({ id: 1 });
+
+    // Both tabs should reload since permission check fails
+    assert.equal(reloadSpy.mock.callCount(), 2);
+  });
+
   it('should use bypassCache setting when reloading', async () => {
     const reloadSpy = mock.fn(() => Promise.resolve());
     chromeMock.tabs.reload = reloadSpy;

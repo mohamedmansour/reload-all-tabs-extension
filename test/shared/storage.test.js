@@ -35,7 +35,7 @@ const BOOLEAN_FALSE_DEFAULT_SETTINGS = [
 /**
  * String/raw settings that return undefined when not set
  */
-const RAW_SETTINGS = ['reloadAllMatched', 'reloadSkipMatched', 'version'];
+const RAW_SETTINGS = ['reloadAllMatched', 'reloadSkipMatched', 'skipMatchedTabs', 'version'];
 
 /**
  * Special case settings with unique behavior

@@ -36,4 +36,5 @@ export const PERMISSION_REQUIREMENTS = {
   reloadGroupedOnly: ['tabGroups'],
   reloadAllMatched: ['tabs'],
   reloadSkipMatched: ['tabs'],
+  skipMatchedTabs: ['tabs'],
 };

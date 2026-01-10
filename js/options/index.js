@@ -47,6 +47,7 @@ const onRestore = async () => {
     'bypassCache',
     'excludeActiveTab',
     'excludeAudioTabs',
+    'skipMatchedTabs',
     'scheduledJobs',
     'reloadDelay',
     'buttonDefaultAction',
@@ -72,6 +73,7 @@ const onRestore = async () => {
   await setupDropdown('reloadDelay', settings.reloadDelay, '0');
   await setupTextarea('reloadAllMatched', settings.reloadAllMatched);
   await setupTextarea('reloadSkipMatched', settings.reloadSkipMatched);
+  await setupTextarea('skipMatchedTabs', settings.skipMatchedTabs);
 
   renderScheduledJobs(settings.scheduledJobs);
 

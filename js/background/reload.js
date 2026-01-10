@@ -95,6 +95,16 @@ const reloadStrategy = async (tab, strategy, options = {}) => {
   }
 
   if (issueReload) {
+    const hasTabsPermission = await hasPermission('tabs');
+    if (hasTabsPermission) {
+      const { skipMatchedTabs } = await getSetting(['skipMatchedTabs']);
+      if (skipMatchedTabs && matchesAnyPattern(tab.url, skipMatchedTabs)) {
+        issueReload = false;
+      }
+    }
+  }
+
+  if (issueReload) {
     const { bypassCache } = await getSetting(['bypassCache']);
     console.log(`Reloading ${tab.url || tab.id}, cache bypassed: ${bypassCache}`);
     await chrome.tabs.reload(tab.id, { bypassCache });

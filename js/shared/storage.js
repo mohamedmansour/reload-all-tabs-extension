@@ -21,6 +21,7 @@ export const getSetting = async (keys) => {
         break;
       case 'reloadAllMatched':
       case 'reloadSkipMatched':
+      case 'skipMatchedTabs':
       case 'version':
         results[key] = values[key];
         break;
