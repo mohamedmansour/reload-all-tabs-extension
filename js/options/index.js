@@ -47,6 +47,7 @@ const onRestore = async () => {
     'bypassCache',
     'excludeActiveTab',
     'excludeAudioTabs',
+    'reloadOnStartup',
     'skipMatchedTabs',
     'scheduledJobs',
     'reloadDelay',
@@ -68,6 +69,7 @@ const onRestore = async () => {
   await setupCheckbox('bypassCache', settings.bypassCache);
   await setupCheckbox('excludeActiveTab', settings.excludeActiveTab);
   await setupCheckbox('excludeAudioTabs', settings.excludeAudioTabs);
+  await setupCheckbox('reloadOnStartup', settings.reloadOnStartup);
 
   await setupDropdown('buttonDefaultAction', settings.buttonDefaultAction, 'window');
   await setupDropdown('reloadDelay', settings.reloadDelay, '0');

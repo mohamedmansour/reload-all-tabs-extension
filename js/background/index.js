@@ -4,7 +4,7 @@
 
 import { getSetting } from '../shared/storage.js';
 import { hasPermission } from '../shared/permissions.js';
-import { reload } from './reload.js';
+import { reload, reloadAllWindows } from './reload.js';
 import { updateContextMenu, onMenuClicked } from './context-menu.js';
 import {
   scheduleAllJobs,
@@ -109,6 +109,16 @@ const onInstall = () => {
 };
 
 /**
+ * When the browser starts up, reload all tabs if the option is enabled
+ */
+export const onStartup = async () => {
+  const { reloadOnStartup } = await getSetting(['reloadOnStartup']);
+  if (reloadOnStartup) {
+    await reloadAllWindows();
+  }
+};
+
+/**
  * Initializes the reload extension
  */
 const init = async () => {
@@ -117,6 +127,7 @@ const init = async () => {
   chrome.commands.onCommand.addListener(async () => await reload());
   chrome.contextMenus.onClicked.addListener((info, tab) => onMenuClicked(info, tab));
   chrome.permissions.onAdded.addListener(onPermissionsAdded);
+  chrome.runtime.onStartup.addListener(onStartup);
 
   // Initialize tabGroups listeners if we already have permission
   const hasTabGroupsPermission = await hasPermission('tabGroups');

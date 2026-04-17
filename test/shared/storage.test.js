@@ -30,6 +30,7 @@ const BOOLEAN_FALSE_DEFAULT_SETTINGS = [
   'bypassCache',
   'excludeActiveTab',
   'excludeAudioTabs',
+  'reloadOnStartup',
 ];
 
 /**

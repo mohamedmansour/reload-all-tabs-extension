@@ -93,6 +93,9 @@ export function createChromeMock() {
     runtime: {
       getManifest: () => ({ version: '1.0.0' }),
       openOptionsPage: () => { },
+      onStartup: {
+        addListener: () => { }
+      },
       lastError: null
     },
 
