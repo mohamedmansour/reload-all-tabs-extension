@@ -37,6 +37,7 @@ export const getSetting = async (keys) => {
       case 'bypassCache':
       case 'excludeActiveTab':
       case 'excludeAudioTabs':
+      case 'reloadOnStartup':
         results[key] = values[key] === true;
         break;
       case 'scheduledJobs':
