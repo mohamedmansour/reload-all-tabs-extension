@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node --test",
     "test:watch": "node --test --watch",
-    "test:coverage": "node --test --experimental-test-coverage"
+    "test:coverage": "node --test --experimental-test-coverage",
+    "package": "git archive --format=zip --output=reload-all-tabs-extension.zip HEAD css img js manifest.json options.html"
   },
   "author": "Mohamed Mansour",
   "license": "MIT",
