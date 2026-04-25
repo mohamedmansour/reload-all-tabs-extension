@@ -1,6 +1,6 @@
 {
   "name": "reload-all-tabs-extension",
-  "version": "6.5.0",
+  "version": "6.6.0",
   "description": "Reload All tabs using keyboard shortcut, context menu, browser action button, or by schedule.",
   "type": "module",
   "scripts": {
@@ -18,6 +18,6 @@
     "node": ">=20.0.0"
   },
   "devDependencies": {
-    "jsdom": "^27.4.0"
+    "jsdom": "^29.0.2"
   }
 }
